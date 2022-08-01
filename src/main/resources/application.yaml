@@ -1,0 +1,3 @@
+movie:
+  api:
+    url: http://www.omdbapi.com/
