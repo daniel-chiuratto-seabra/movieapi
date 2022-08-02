@@ -1,21 +1,21 @@
-package nl.backbase.model;
+package nl.backbase.dto.source;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieSourceDTO implements Serializable {
     @JsonProperty(value = "Title")
     String title;
     @JsonProperty(value = "Year")
-    Integer year;
+    String year;
     @JsonProperty(value = "Rated")
     String rated;
     @JsonProperty(value = "Released")
@@ -41,25 +41,25 @@ public class MovieSourceDTO implements Serializable {
     @JsonProperty(value = "Poster")
     String poster;
     @JsonProperty(value = "Ratings")
-    Collection<Map.Entry<String, String>> ratings;
+    Collection<RatingSourceDTO> ratings;
     @JsonProperty(value = "Metascore")
-    Integer metascore;
+    String metascore;
     @JsonProperty(value = "imdbRating")
-    Double imdbRating;
-    @JsonProperty(value = "imdbRating")
-    BigDecimal imdbVotes;
+    String imdbRating;
+    @JsonProperty(value = "imdbVotes")
+    String imdbVotes;
     @JsonProperty(value = "imdbID")
     String imdbID;
     @JsonProperty(value = "Type")
     String type;
     @JsonProperty(value = "DVD")
-    LocalDate dvd;
+    String dvd;
     @JsonProperty(value = "BoxOffice")
-    BigDecimal boxOffice;
+    String boxOffice;
     @JsonProperty(value = "Production")
     String production;
     @JsonProperty(value = "Website")
     String website;
     @JsonProperty(value = "Response")
-    Boolean response;
+    String response;
 }
