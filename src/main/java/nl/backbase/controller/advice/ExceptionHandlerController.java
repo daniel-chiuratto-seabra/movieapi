@@ -1,5 +1,6 @@
 package nl.backbase.controller.advice;
 
+import nl.backbase.controller.exception.MovieServiceAuthenticationException;
 import nl.backbase.controller.exception.MovieServiceFileLoadErrorException;
 import nl.backbase.controller.exception.MovieSourceNotFoundException;
 import nl.backbase.controller.exception.MovieSourceServiceException;
@@ -34,5 +35,11 @@ public class ExceptionHandlerController {
         final var message = String.format("An error occurred while loading the CSV file%n%s", movieServiceFileLoadErrorException.getMessage());
         LOGGER.error(message);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> movieServiceAuthenticationException(final MovieServiceAuthenticationException movieServiceAuthenticationException) {
+        LOGGER.error(movieServiceAuthenticationException.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(movieServiceAuthenticationException.getMessage());
     }
 }

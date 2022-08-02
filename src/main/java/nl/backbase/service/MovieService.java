@@ -1,5 +1,6 @@
 package nl.backbase.service;
 
+import lombok.RequiredArgsConstructor;
 import nl.backbase.csv.CSVData;
 import nl.backbase.csv.CSVFileLoaderHelper;
 import nl.backbase.dto.MovieDTO;
@@ -21,24 +22,13 @@ import java.util.Collection;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieSourceService movieSourceService;
     private final Mapper<MovieSourceDTO, MovieEntity> movieSourceDTOMovieEntityMapper;
     private final Mapper<MovieTop10Entity, MovieTop10DTO> movieTop10EntityMovieTop10DTOMapper;
     private final Mapper<MovieEntity, MovieDTO> movieEntityMovieDTOMapper;
-
-    public MovieService(final MovieRepository movieRepository,
-                        final MovieSourceService movieSourceService,
-                        final Mapper<MovieSourceDTO, MovieEntity> movieSourceDTOMovieEntityMapper,
-                        final Mapper<MovieTop10Entity, MovieTop10DTO> movieTop10EntityMovieTop10DTOMapper,
-                        final Mapper<MovieEntity, MovieDTO> movieEntityMovieDTOMapper) {
-        this.movieRepository = movieRepository;
-        this.movieSourceService = movieSourceService;
-        this.movieSourceDTOMovieEntityMapper = movieSourceDTOMovieEntityMapper;
-        this.movieTop10EntityMovieTop10DTOMapper = movieTop10EntityMovieTop10DTOMapper;
-        this.movieEntityMovieDTOMapper = movieEntityMovieDTOMapper;
-    }
 
     public Collection<MovieTop10DTO> getMovieTop10() {
         final Collection<MovieTop10Entity> top10Collection = this.movieRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
