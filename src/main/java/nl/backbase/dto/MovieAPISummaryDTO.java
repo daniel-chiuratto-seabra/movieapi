@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class MovieTop10DTO implements Serializable {
+public class MovieAPISummaryDTO implements Serializable {
     @JsonProperty
     private String title;
     @JsonProperty

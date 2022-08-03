@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(title = "Movie API",
-                     version = "${api.version}",
+                     version = "v1",
                      contact = @Contact(name = "Daniel Chiuratto Seabra", email = "dseabra84@hotmail.com"),
                      description = "This is an API implemented for a Backbase assessment"),
         servers = @Server(url = "${api.server.url}")

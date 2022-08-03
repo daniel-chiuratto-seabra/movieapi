@@ -16,7 +16,4 @@ public class UserDTO implements Serializable {
     @NotEmpty
     @JsonProperty
     private String password;
-    @NotEmpty
-    @JsonProperty
-    private String apiKey;
 }

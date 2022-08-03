@@ -1,8 +1,8 @@
 package nl.backbase.service;
 
-import nl.backbase.controller.exception.MovieSourceNotFoundException;
-import nl.backbase.controller.exception.MovieSourceServiceException;
-import nl.backbase.dto.source.MovieSourceDTO;
+import nl.backbase.controller.exception.MovieAPISourceNotFoundException;
+import nl.backbase.controller.exception.MovieAPISourceServiceException;
+import nl.backbase.dto.source.MovieAPISourceDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static java.util.Map.entry;
 
 @Service
-public class MovieSourceService {
+public class MovieAPISourceService {
 
     private static final String API_KEY_PARAM_NAME = "apiKey";
     private static final String MOVIE_TITLE_PARAM_NAME = "t";
@@ -26,22 +26,22 @@ public class MovieSourceService {
     private final String movieSourceApiUrl;
     private final RestTemplate restTemplate;
 
-    public MovieSourceService(@Value("${movie.api.url}") final String movieSourceApiUrl, final RestTemplateBuilder restTemplateBuilder) {
+    public MovieAPISourceService(@Value("${movie.api.url}") final String movieSourceApiUrl, final RestTemplateBuilder restTemplateBuilder) {
         this.movieSourceApiUrl = movieSourceApiUrl;
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public MovieSourceDTO getMovieSourceDTO(final String apiKey, final String movieTitle) {
+    public MovieAPISourceDTO getMovieSourceDTO(final String apiKey, final String movieTitle) {
         return getMovieSourceDTO(apiKey, movieTitle, null);
     }
-    public MovieSourceDTO getMovieSourceDTO(final String apiKey, final String movieTitle, final String additionalInfo) {
+    public MovieAPISourceDTO getMovieSourceDTO(final String apiKey, final String movieTitle, final String additionalInfo) {
         final var httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         final var requestEntity = new HttpEntity<>(httpHeaders);
 
         var urlParametersMap = Map.ofEntries(entry(API_KEY_PARAM_NAME, apiKey), entry(MOVIE_TITLE_PARAM_NAME, movieTitle), entry(DATA_TYPE_PARAM_NAME, MOVIE_DATA_TYPE));
         final var urlParams = buildParamsPlaceholders(urlParametersMap);
-        var responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, requestEntity, MovieSourceDTO.class, urlParametersMap);
+        var responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, requestEntity, MovieAPISourceDTO.class, urlParametersMap);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             var movieSourceDTO = responseEntity.getBody();
             if (movieSourceDTO != null && movieSourceDTO.getResponse() != null && Boolean.TRUE == Boolean.valueOf(movieSourceDTO.getResponse())) {
@@ -49,18 +49,18 @@ public class MovieSourceService {
             } else if (movieSourceDTO != null && Boolean.FALSE == Boolean.valueOf(movieSourceDTO.getResponse())) {
                 urlParametersMap = new HashMap<>(urlParametersMap);
                 urlParametersMap.put(MOVIE_TITLE_PARAM_NAME, additionalInfo);
-                responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, requestEntity, MovieSourceDTO.class, urlParametersMap);
+                responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, requestEntity, MovieAPISourceDTO.class, urlParametersMap);
                 if (responseEntity.getStatusCode() == HttpStatus.OK) {
                     movieSourceDTO = responseEntity.getBody();
                     if (movieSourceDTO != null && movieSourceDTO.getResponse() != null && Boolean.TRUE == Boolean.valueOf(movieSourceDTO.getResponse())) {
                         return movieSourceDTO;
                     } else {
-                        throw new MovieSourceNotFoundException(movieTitle);
+                        throw new MovieAPISourceNotFoundException(movieTitle);
                     }
                 }
             }
         }
-        throw new MovieSourceServiceException(String.format("The Movie external API did not return any body. It returned Http Status %d: %s", responseEntity.getStatusCode().value(), responseEntity.getStatusCode().name()));
+        throw new MovieAPISourceServiceException(String.format("The external Movie API did not return any body. It returned Http Status %d: %s", responseEntity.getStatusCode().value(), responseEntity.getStatusCode().name()));
     }
 
     private String buildParamsPlaceholders(final Map<String, String> urlParametersMap) {

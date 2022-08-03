@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
-public class MovieTop10Entity {
+public class MovieAPISummaryEntity {
     private String title;
     private Double average;
     private BigDecimal boxOffice;

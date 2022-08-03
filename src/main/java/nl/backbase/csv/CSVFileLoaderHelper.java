@@ -1,7 +1,7 @@
 package nl.backbase.csv;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import nl.backbase.controller.exception.MovieServiceFileLoadErrorException;
+import nl.backbase.controller.exception.MovieAPPIServiceFileLoadErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -27,7 +27,7 @@ public interface CSVFileLoaderHelper {
                                                       BEST_PICTURE_OSCAR.equals(csvData.getCategory()))
                                    .collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new MovieServiceFileLoadErrorException(e);
+            throw new MovieAPPIServiceFileLoadErrorException(e);
         }
     }
 }

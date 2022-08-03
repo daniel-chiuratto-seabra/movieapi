@@ -22,7 +22,4 @@ public class UserEntity {
 
     @Column(name = "PASSWORD", nullable = false)
     public String password;
-
-    @Column(name = "APIKEY", nullable = false)
-    public String apiKey;
 }

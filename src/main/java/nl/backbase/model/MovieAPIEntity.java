@@ -13,7 +13,7 @@ import java.util.Collection;
 @Table(name = "MOVIE")
 @NoArgsConstructor
 @EqualsAndHashCode
-public class MovieEntity {
+public class MovieAPIEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)

@@ -17,7 +17,6 @@ public class UserDTOUserEntityMapper implements Mapper<UserDTO, UserEntity> {
         final var userEntity = new UserEntity();
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setPassword(this.bCryptPasswordEncoder.encode(userDTO.getPassword()));
-        userEntity.setApiKey(this.bCryptPasswordEncoder.encode(userDTO.getApiKey()));
         return userEntity;
     }
 }

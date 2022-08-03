@@ -2,11 +2,11 @@ package nl.backbase.controller;
 
 import lombok.RequiredArgsConstructor;
 import nl.backbase.csv.CSVData;
-import nl.backbase.dto.MovieDTO;
-import nl.backbase.dto.MovieTop10DTO;
+import nl.backbase.dto.MovieAPIDTO;
+import nl.backbase.dto.MovieAPISummaryDTO;
 import nl.backbase.dto.RatingRequestDTO;
-import nl.backbase.model.MovieEntity;
-import nl.backbase.service.MovieService;
+import nl.backbase.model.MovieAPIEntity;
+import nl.backbase.service.MovieAPIService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +17,18 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
-public class MovieRestController {
-    private final MovieService movieService;
+public class MovieAPIRestController {
+    private final MovieAPIService movieService;
 
     @ResponseBody
     @GetMapping(value = "/movies", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<MovieDTO> getMovie(@RequestParam("apiKey") final String apiKey, @RequestParam("movieTitle") final String movieTitle) {
+    public ResponseEntity<MovieAPIDTO> getMovie(@RequestParam("apiKey") final String apiKey, @RequestParam("movieTitle") final String movieTitle) {
         return ResponseEntity.ok(this.movieService.getMovie(apiKey, movieTitle));
     }
 
     @ResponseBody
     @GetMapping(value = "/movies/top10", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Collection<MovieTop10DTO>> getMovieTop10() {
+    public ResponseEntity<Collection<MovieAPISummaryDTO>> getMovieTop10() {
         return ResponseEntity.ok(this.movieService.getMovieTop10());
     }
 
@@ -46,7 +46,7 @@ public class MovieRestController {
     // TODO REMOVE AFTER IMPLEMENTATION
     @ResponseBody
     @GetMapping(value = "/movies/all", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Collection<MovieEntity>> getAllMovies() {
+    public ResponseEntity<Collection<MovieAPIEntity>> getAllMovies() {
         return ResponseEntity.ok(this.movieService.getAllMovies());
     }
 }

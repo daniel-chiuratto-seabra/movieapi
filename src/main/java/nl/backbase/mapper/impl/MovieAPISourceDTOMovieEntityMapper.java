@@ -1,9 +1,9 @@
 package nl.backbase.mapper.impl;
 
-import nl.backbase.dto.source.MovieSourceDTO;
+import nl.backbase.dto.source.MovieAPISourceDTO;
 import nl.backbase.dto.source.RatingSourceDTO;
 import nl.backbase.mapper.Mapper;
-import nl.backbase.model.MovieEntity;
+import nl.backbase.model.MovieAPIEntity;
 import nl.backbase.model.RatingEntity;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -16,15 +16,15 @@ import java.util.ArrayList;
 import static ch.qos.logback.core.CoreConstants.EMPTY_STRING;
 
 @Component
-public class MovieSourceDTOMovieEntityMapper implements Mapper<MovieSourceDTO, MovieEntity> {
-    public static final Logger LOGGER = LoggerFactory.getLogger(MovieSourceDTOMovieEntityMapper.class);
+public class MovieAPISourceDTOMovieEntityMapper implements Mapper<MovieAPISourceDTO, MovieAPIEntity> {
+    public static final Logger LOGGER = LoggerFactory.getLogger(MovieAPISourceDTOMovieEntityMapper.class);
 
     private static final String DOLLAR_SIGN = "$";
     private static final String COMMA_STRING = ",";
 
     @Override
-    public MovieEntity map(final MovieSourceDTO movieSourceDTO) {
-        final var movieEntity = new MovieEntity();
+    public MovieAPIEntity map(final MovieAPISourceDTO movieSourceDTO) {
+        final var movieEntity = new MovieAPIEntity();
         movieEntity.setBoxOffice(getBigDecimalFromString(movieSourceDTO.getBoxOffice()));
         movieEntity.setTitle(movieSourceDTO.getTitle());
 

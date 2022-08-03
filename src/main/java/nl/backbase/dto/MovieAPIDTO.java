@@ -9,7 +9,7 @@ import java.util.Collection;
 
 @Data
 @NoArgsConstructor
-public class MovieDTO implements Serializable {
+public class MovieAPIDTO implements Serializable {
     @JsonProperty
     private String title;
     @JsonProperty

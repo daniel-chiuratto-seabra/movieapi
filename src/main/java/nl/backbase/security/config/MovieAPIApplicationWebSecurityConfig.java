@@ -1,55 +1,84 @@
 package nl.backbase.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.backbase.security.JWTMovieApiApplicationAuthenticationFilter;
-import nl.backbase.security.JWTMovieApiApplicationAuthorizationFilter;
+import lombok.extern.slf4j.Slf4j;
+import nl.backbase.repository.UserRepository;
+import nl.backbase.security.JWTServiceAuthenticationFilter;
+import nl.backbase.security.JWTSignUpFilter;
+import nl.backbase.security.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
-public class MovieAPIApplicationWebSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true) // allows @Secured annotation
+public class MovieAPIApplicationWebSecurityConfig {
 
-    private final UserDetailsService userDetailsService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final ObjectMapper objectMapper;
-    private final String base64Secret;
-    private final long tokenValidityInSeconds;
+    private final String signInUrl;
+    private final String signUpUrl;
 
-    public MovieAPIApplicationWebSecurityConfig(final UserDetailsService userDetailsService,
-                                                final BCryptPasswordEncoder bCryptPasswordEncoder,
-                                                final ObjectMapper objectMapper,
-                                                @Value("${jwt.base64-secret}") final String base64Secret,
-                                                @Value("${jwt.token-validity-in-seconds}") final long tokenValidityInSeconds) {
-        this.userDetailsService = userDetailsService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.objectMapper = objectMapper;
-        this.base64Secret = base64Secret;
-        this.tokenValidityInSeconds = tokenValidityInSeconds;
+    public MovieAPIApplicationWebSecurityConfig(@Value("${security.jwt.url.signin}") final String signInUrl,
+                                                @Value("${security.jwt.url.signup}") final String signUpUrl) {
+        this.signInUrl = signInUrl;
+        this.signUpUrl = signUpUrl;
     }
 
-    @Override
-    protected void configure(final HttpSecurity http) throws Exception {
-            http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, JWTMovieApiApplicationAuthenticationFilter.SIGNUP_URL).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilter(new JWTMovieApiApplicationAuthenticationFilter(authenticationManager(), this.objectMapper, this.base64Secret, this.tokenValidityInSeconds))
-                .addFilter(new JWTMovieApiApplicationAuthorizationFilter(authenticationManager(), this.base64Secret))
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    @Bean
+    public JWTSignUpFilter jwtSignUpFilter(final AuthenticationManager authManager,
+                                           final TokenAuthenticationService tokenAuthenticationService,
+                                           final ObjectMapper objectMapper) {
+        return new JWTSignUpFilter(this.signUpUrl, authManager, tokenAuthenticationService, objectMapper);
     }
 
-    @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.bCryptPasswordEncoder);
+    @Bean
+    public TokenAuthenticationService tokenAuthenticationService() {
+        return new TokenAuthenticationService();
+    }
+
+    @Bean
+    public JWTServiceAuthenticationFilter jwtServiceAuthenticationFilter(final TokenAuthenticationService tokenAuthenticationService) {
+        return new JWTServiceAuthenticationFilter(tokenAuthenticationService);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
+        return new JWTMovieAPIAuthenticationManager(userRepository, passwordEncoder);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(final HttpSecurity http,
+                                           final JWTSignUpFilter loginFilter,
+                                           final JWTServiceAuthenticationFilter authenticationFilter) throws Exception {
+        return http.csrf().disable()
+                   .authorizeRequests()
+
+                   // Allows Signup and Signin urls
+                   .antMatchers(HttpMethod.POST, this.signUpUrl).permitAll()
+                   .antMatchers(HttpMethod.POST, this.signInUrl).permitAll()
+
+                   // Swagger is permitted here but it is configured to try to access the
+                   // API only with a JWT Token set
+                   .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                   .antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+
+                   // Requires Authentication
+                   .anyRequest().authenticated()
+
+                   // Session
+                   .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                   .and().addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                   .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                   .build();
     }
 }

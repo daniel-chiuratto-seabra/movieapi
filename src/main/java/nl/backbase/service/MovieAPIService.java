@@ -3,15 +3,15 @@ package nl.backbase.service;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.csv.CSVData;
 import nl.backbase.csv.CSVFileLoaderHelper;
-import nl.backbase.dto.MovieDTO;
-import nl.backbase.dto.MovieTop10DTO;
+import nl.backbase.dto.MovieAPIDTO;
+import nl.backbase.dto.MovieAPISummaryDTO;
 import nl.backbase.dto.RatingRequestDTO;
-import nl.backbase.dto.source.MovieSourceDTO;
+import nl.backbase.dto.source.MovieAPISourceDTO;
 import nl.backbase.mapper.Mapper;
-import nl.backbase.model.MovieEntity;
-import nl.backbase.model.MovieTop10Entity;
+import nl.backbase.model.MovieAPIEntity;
+import nl.backbase.model.MovieAPISummaryEntity;
 import nl.backbase.model.RatingEntity;
-import nl.backbase.repository.MovieRepository;
+import nl.backbase.repository.MovieAPIRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,15 +23,15 @@ import java.util.Collection;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MovieService {
-    private final MovieRepository movieRepository;
-    private final MovieSourceService movieSourceService;
-    private final Mapper<MovieSourceDTO, MovieEntity> movieSourceDTOMovieEntityMapper;
-    private final Mapper<MovieTop10Entity, MovieTop10DTO> movieTop10EntityMovieTop10DTOMapper;
-    private final Mapper<MovieEntity, MovieDTO> movieEntityMovieDTOMapper;
+public class MovieAPIService {
+    private final MovieAPIRepository movieRepository;
+    private final MovieAPISourceService movieSourceService;
+    private final Mapper<MovieAPISourceDTO, MovieAPIEntity> movieSourceDTOMovieEntityMapper;
+    private final Mapper<MovieAPISummaryEntity, MovieAPISummaryDTO> movieTop10EntityMovieTop10DTOMapper;
+    private final Mapper<MovieAPIEntity, MovieAPIDTO> movieEntityMovieDTOMapper;
 
-    public Collection<MovieTop10DTO> getMovieTop10() {
-        final Collection<MovieTop10Entity> top10Collection = this.movieRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
+    public Collection<MovieAPISummaryDTO> getMovieTop10() {
+        final Collection<MovieAPISummaryEntity> top10Collection = this.movieRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
         return this.movieTop10EntityMovieTop10DTOMapper.map(top10Collection);
     }
 
@@ -68,7 +68,7 @@ public class MovieService {
         return csvCollection;
     }
 
-    public MovieDTO getMovie(final String apiKey, final String movieTitle) {
+    public MovieAPIDTO getMovie(final String apiKey, final String movieTitle) {
         var movieEntity = this.movieRepository.findByTitleIgnoreCase(movieTitle);
         if (movieEntity == null) {
             final var movieSourceDTO = this.movieSourceService.getMovieSourceDTO(apiKey, movieTitle);
@@ -79,7 +79,7 @@ public class MovieService {
     }
 
     // TODO REMOVE THIS METHOD ONCE THE IMPLEMENTATION FINISHES
-    public Collection<MovieEntity> getAllMovies() {
+    public Collection<MovieAPIEntity> getAllMovies() {
         return this.movieRepository.findAll();
     }
 }

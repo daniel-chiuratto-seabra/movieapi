@@ -1,15 +1,15 @@
 package nl.backbase.mapper.impl;
 
 import nl.backbase.mapper.Mapper;
-import nl.backbase.dto.MovieTop10DTO;
-import nl.backbase.model.MovieTop10Entity;
+import nl.backbase.dto.MovieAPISummaryDTO;
+import nl.backbase.model.MovieAPISummaryEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MovieTop10EntityMovieTop10DTOMapper implements Mapper<MovieTop10Entity, MovieTop10DTO> {
+public class MovieAPISummaryEntityMovieAPISummaryDTOMapper implements Mapper<MovieAPISummaryEntity, MovieAPISummaryDTO> {
     @Override
-    public MovieTop10DTO map(final MovieTop10Entity movieTop10Entity) {
-        final var movieTop10DTO = new MovieTop10DTO();
+    public MovieAPISummaryDTO map(final MovieAPISummaryEntity movieTop10Entity) {
+        final var movieTop10DTO = new MovieAPISummaryDTO();
         movieTop10DTO.setTitle(movieTop10Entity.getTitle());
 
         Double average = movieTop10Entity.getAverage();
