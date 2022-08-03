@@ -47,8 +47,9 @@ public class MovieAPIApplicationWebSecurityConfig {
     }
 
     @Bean
-    public JWTServiceAuthenticationFilter jwtServiceAuthenticationFilter(final TokenAuthenticationService tokenAuthenticationService) {
-        return new JWTServiceAuthenticationFilter(tokenAuthenticationService);
+    public JWTServiceAuthenticationFilter jwtServiceAuthenticationFilter(final TokenAuthenticationService tokenAuthenticationService,
+                                                                         final ObjectMapper objectMapper) {
+        return new JWTServiceAuthenticationFilter(tokenAuthenticationService, objectMapper);
     }
 
     @Bean
@@ -63,11 +64,11 @@ public class MovieAPIApplicationWebSecurityConfig {
         return http.csrf().disable()
                    .authorizeRequests()
 
-                   // Allows Signup and Signin urls
+                   // Allows SignUp and SignIn urls
                    .antMatchers(HttpMethod.POST, this.signUpUrl).permitAll()
                    .antMatchers(HttpMethod.POST, this.signInUrl).permitAll()
 
-                   // Swagger is permitted here but it is configured to try to access the
+                   // Swagger is permitted here, but it is configured to try to access the
                    // API only with a JWT Token set
                    .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                    .antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()

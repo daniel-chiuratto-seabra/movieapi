@@ -1,6 +1,5 @@
 package nl.backbase.controller.advice;
 
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import nl.backbase.controller.exception.*;
 import org.springframework.http.HttpStatus;
@@ -40,20 +39,8 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> jwtServiceAuthenticationException(final JWTServiceAuthenticationException jwtServiceAuthenticationException) {
-        log.error("Error during the JWT Service Authentication Servlet Filter", jwtServiceAuthenticationException);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(jwtServiceAuthenticationException.getMessage());
-    }
-
-    @ExceptionHandler
     public ResponseEntity<?> invalidPasswordException(final InvalidPasswordException invalidPasswordException) {
         log.warn(invalidPasswordException.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(invalidPasswordException.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<?> malformedJWTException(final MalformedJwtException malformedJwtException) {
-        log.error(malformedJwtException.getMessage());
-        return ResponseEntity.badRequest().body(malformedJwtException.getMessage());
     }
 }

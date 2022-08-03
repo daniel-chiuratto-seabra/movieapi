@@ -12,9 +12,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Component
-public class MovieAPIEntityMovieDTOMapper implements Mapper<MovieAPIEntity, MovieAPIDTO> {
+public class MovieAPIEntityMovieAPIDTOMapper implements Mapper<MovieAPIEntity, MovieAPIDTO> {
     @Override
     public MovieAPIDTO map(final MovieAPIEntity movieEntity) {
+        if (movieEntity == null) {
+            return null;
+        }
+
         final var movieDTO = new MovieAPIDTO();
         movieDTO.setTitle(movieEntity.getTitle());
         movieDTO.setRatings(parseRatingEntityCollectionToRatingDTOCollection(movieEntity.getRatings()));

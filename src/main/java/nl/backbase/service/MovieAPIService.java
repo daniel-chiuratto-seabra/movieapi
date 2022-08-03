@@ -2,7 +2,7 @@ package nl.backbase.service;
 
 import lombok.RequiredArgsConstructor;
 import nl.backbase.csv.CSVData;
-import nl.backbase.csv.CSVFileLoaderHelper;
+import nl.backbase.csv.ValueParserHelper;
 import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
 import nl.backbase.dto.RatingRequestDTO;
@@ -55,7 +55,7 @@ public class MovieAPIService {
     }
 
     public Collection<CSVData> saveCSVFile(final String apiKey, final MultipartFile multipartFile) {
-        final var csvCollection = CSVFileLoaderHelper.loadFileContent(multipartFile);
+        final var csvCollection = ValueParserHelper.loadFileContent(multipartFile);
         csvCollection.forEach(csvMovie -> {
             var movieEntity = this.movieRepository.findByTitleIgnoreCase(csvMovie.getNominee());
             if (movieEntity == null)
@@ -76,10 +76,5 @@ public class MovieAPIService {
             movieEntity = this.movieRepository.save(movieEntity);
         }
         return this.movieEntityMovieDTOMapper.map(movieEntity);
-    }
-
-    // TODO REMOVE THIS METHOD ONCE THE IMPLEMENTATION FINISHES
-    public Collection<MovieAPIEntity> getAllMovies() {
-        return this.movieRepository.findAll();
     }
 }

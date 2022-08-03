@@ -5,7 +5,6 @@ import nl.backbase.csv.CSVData;
 import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
 import nl.backbase.dto.RatingRequestDTO;
-import nl.backbase.model.MovieAPIEntity;
 import nl.backbase.service.MovieAPIService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,12 +40,5 @@ public class MovieAPIRestController {
     @PostMapping(value = "/movies", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Collection<CSVData>> postCSVFile(@RequestParam final String apiKey, @RequestParam("file") final MultipartFile multipartFile) {
         return ResponseEntity.ok(this.movieService.saveCSVFile(apiKey, multipartFile));
-    }
-
-    // TODO REMOVE AFTER IMPLEMENTATION
-    @ResponseBody
-    @GetMapping(value = "/movies/all", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Collection<MovieAPIEntity>> getAllMovies() {
-        return ResponseEntity.ok(this.movieService.getAllMovies());
     }
 }
