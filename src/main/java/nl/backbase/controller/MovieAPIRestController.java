@@ -18,13 +18,13 @@ public class MovieAPIRestController {
 
     @ResponseBody
     @GetMapping(value="bestpicture", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<MovieAPIDTO> bestPicute(@RequestParam("movieTitle") final String movieTitle) {
-        return ResponseEntity.ok(this.movieService.getMovie(movieTitle));
+    public ResponseEntity<MovieAPIDTO> bestpicture(@RequestParam("movieTitle") final String movieTitle) {
+        return ResponseEntity.ok(this.movieService.getBestPictureMovieAPIDTO(movieTitle));
     }
 
     @ResponseBody
     @GetMapping(value = "/top10", produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Collection<MovieAPISummaryDTO>> getMovieTop10() {
-        return ResponseEntity.ok(this.movieService.getMovieTop10());
+    public ResponseEntity<Collection<MovieAPISummaryDTO>> top10() {
+        return ResponseEntity.ok(this.movieService.getMovieAPISummaryDTOCollection());
     }
 }

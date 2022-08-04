@@ -17,7 +17,7 @@ public class UserRestController {
     private final UserService userService;
 
     @PostMapping(value = "/signup", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<?> postUserDTO(@RequestBody final UserDTO userDTO) {
+    public ResponseEntity<?> signup(@RequestBody final UserDTO userDTO) {
         this.userService.saveUserDTO(userDTO);
         return ResponseEntity.ok().build();
     }

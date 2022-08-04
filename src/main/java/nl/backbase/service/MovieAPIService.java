@@ -1,14 +1,15 @@
 package nl.backbase.service;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.backbase.controller.exception.MovieAPINotFoundException;
 import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.helper.ValueParserHelper;
 import nl.backbase.helper.csv.CSVData;
 import nl.backbase.mapper.MovieMappers;
+import nl.backbase.mapper.RatingMappers;
 import nl.backbase.model.MovieAPISummaryEntity;
-import nl.backbase.model.RatingEntity;
 import nl.backbase.repository.MovieAPIRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -28,24 +29,27 @@ public class MovieAPIService {
     private final MovieAPIRepository movieRepository;
     private final MovieAPISourceService movieSourceService;
     private final MovieMappers movieMappers;
+    private final RatingMappers ratingMappers;
     private final String apiKey;
 
     public MovieAPIService(final MovieAPIRepository movieRepository,
                            final MovieAPISourceService movieSourceService,
                            final MovieMappers movieMappers,
+                           final RatingMappers ratingMappers,
                            @Value("${omdbapi.api.key}") final String apiKey) {
         this.movieRepository = movieRepository;
         this.movieSourceService = movieSourceService;
         this.movieMappers = movieMappers;
+        this.ratingMappers = ratingMappers;
         this.apiKey = apiKey;
     }
 
-    public Collection<MovieAPISummaryDTO> getMovieTop10() {
+    public Collection<MovieAPISummaryDTO> getMovieAPISummaryDTOCollection() {
         final Collection<MovieAPISummaryEntity> top10Collection = this.movieRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
         return this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(top10Collection);
     }
 
-    public RatingRequestDTO postRating(final RatingRequestDTO ratingRequestDTO) {
+    public RatingRequestDTO saveRatingDTO(final RatingRequestDTO ratingRequestDTO) {
         var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(ratingRequestDTO.getMovieTitle());
         if (movieAPIEntity == null) {
             final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(this.apiKey, ratingRequestDTO.getMovieTitle());
@@ -53,24 +57,17 @@ public class MovieAPIService {
         }
 
         final var authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        final var ratingEntity = new RatingEntity();
-        ratingEntity.setSource(authentication.getName());
-        ratingEntity.setValue(ratingRequestDTO.getValue());
-        ratingEntity.setMovieAPIEntity(movieAPIEntity);
-
+        final var ratingEntity = this.ratingMappers.ratingRequestDTORatingEntity(ratingRequestDTO, authentication, movieAPIEntity);
         movieAPIEntity.getRatings().add(ratingEntity);
         this.movieRepository.save(movieAPIEntity);
 
         return ratingRequestDTO;
     }
 
-    public MovieAPIDTO getMovie(final String movieTitle) {
+    public MovieAPIDTO getBestPictureMovieAPIDTO(final String movieTitle) {
         var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(movieTitle);
         if (movieAPIEntity == null) {
-            final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(this.apiKey, movieTitle);
-            movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
-            movieAPIEntity = this.movieRepository.save(movieAPIEntity);
+            throw new MovieAPINotFoundException(movieTitle);
         }
         return this.movieMappers.movieAPITEntityToMovieAPIDTO(movieAPIEntity);
     }

@@ -17,9 +17,8 @@ public class RatingAPIRestController {
     private final MovieAPIService movieAPIService;
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<?> postRating(@RequestBody final RatingRequestDTO ratingDTO) {
-        final var ratingRequestDTO = this.movieAPIService.postRating(ratingDTO);
-        return ResponseEntity.ok().body(ratingRequestDTO);
+    public ResponseEntity<?> saveRatingDTO(@RequestBody final RatingRequestDTO ratingRequestDTO) {
+        return ResponseEntity.ok().body(this.movieAPIService.saveRatingDTO(ratingRequestDTO));
     }
 
 }

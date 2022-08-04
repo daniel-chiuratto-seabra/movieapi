@@ -20,9 +20,9 @@ public class ExceptionHandlerController {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> movieSourceNotFoundException(final MovieAPISourceNotFoundException movieSourceNotFoundException) {
-        log.warn("The movie {} has not been found", movieSourceNotFoundException.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.ofEntries(Map.entry("movieTitle", movieSourceNotFoundException.getMessage())));
+    public ResponseEntity<?> movieSourceNotFoundException(final MovieAPINotFoundException movieNotFoundException) {
+        log.warn("The movie {} has not been found", movieNotFoundException.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.ofEntries(Map.entry("movieTitle", movieNotFoundException.getMessage())));
     }
 
     @ExceptionHandler

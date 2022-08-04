@@ -14,4 +14,6 @@ public class MovieAPIDTO implements Serializable {
     private String title;
     @JsonProperty
     private Collection<RatingDTO> ratings;
+    @JsonProperty
+    private String oscarWinner;
 }
