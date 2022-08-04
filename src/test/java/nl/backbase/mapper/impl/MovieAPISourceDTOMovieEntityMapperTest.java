@@ -3,6 +3,7 @@ package nl.backbase.mapper.impl;
 import nl.backbase.helper.ValueParserHelper;
 import nl.backbase.dto.source.MovieAPISourceDTO;
 import nl.backbase.dto.source.RatingSourceDTO;
+import nl.backbase.mapper.MovieMappers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;

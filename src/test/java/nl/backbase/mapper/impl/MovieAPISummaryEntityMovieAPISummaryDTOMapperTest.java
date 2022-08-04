@@ -1,5 +1,6 @@
 package nl.backbase.mapper.impl;
 
+import nl.backbase.mapper.MovieMappers;
 import nl.backbase.model.MovieAPISummaryEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

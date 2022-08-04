@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/v1/movies")
+@RequestMapping("/v1/movie")
 @RequiredArgsConstructor
 public class MovieAPIRestController {
     private final MovieAPIService movieService;
@@ -29,16 +29,5 @@ public class MovieAPIRestController {
     @GetMapping(value = "/top10", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<Collection<MovieAPISummaryDTO>> getMovieTop10() {
         return ResponseEntity.ok(this.movieService.getMovieTop10());
-    }
-
-    @PostMapping(value = "/ratings", consumes = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<?> postRating(@RequestBody final RatingRequestDTO ratingDTO) {
-        this.movieService.postRating(ratingDTO);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Collection<CSVData>> postCSVFile(@RequestParam("file") final MultipartFile multipartFile) {
-        return ResponseEntity.ok(this.movieService.saveCSVFile(multipartFile));
     }
 }

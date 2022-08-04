@@ -1,7 +1,7 @@
 package nl.backbase.config;
 
-import nl.backbase.mapper.impl.MovieMappers;
-import nl.backbase.mapper.impl.UserMappers;
+import nl.backbase.mapper.MovieMappers;
+import nl.backbase.mapper.UserMappers;
 import org.mapstruct.factory.Mappers;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

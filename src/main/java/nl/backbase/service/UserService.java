@@ -2,7 +2,7 @@ package nl.backbase.service;
 
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.UserDTO;
-import nl.backbase.mapper.impl.UserMappers;
+import nl.backbase.mapper.UserMappers;
 import nl.backbase.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

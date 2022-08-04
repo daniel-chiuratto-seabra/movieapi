@@ -6,12 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.backbase.controller.exception.MovieAPPIServiceFileLoadErrorException;
 import nl.backbase.helper.csv.CSVData;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -26,8 +22,8 @@ public class ValueParserHelper {
     private static final String OSCAR_WINNER_YES = "YES";
     private static final String BEST_PICTURE_OSCAR = "Best Picture";
 
-    public static Collection<CSVData> loadFileContent(final MultipartFile file) {
-        try (final Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+    public static Collection<CSVData> loadFileContent(final InputStream inputStream) {
+        try (final Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             final var csvToBeanBuilder = new CsvToBeanBuilder<CSVData>(reader)
                     .withType(CSVData.class)
                     .withIgnoreLeadingWhiteSpace(true)

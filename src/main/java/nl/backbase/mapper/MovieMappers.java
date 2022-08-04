@@ -1,4 +1,4 @@
-package nl.backbase.mapper.impl;
+package nl.backbase.mapper;
 
 import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
@@ -11,7 +11,6 @@ import nl.backbase.model.MovieAPISummaryEntity;
 import nl.backbase.model.RatingEntity;
 import org.mapstruct.Mapper;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ public abstract class MovieMappers {
     public MovieAPIEntity movieAPISourceDTOToMovieAPIEntity(final MovieAPISourceDTO movieAPISourceDTO) {
         final var movieAPIEntity = new MovieAPIEntity();
         movieAPIEntity.setTitle(movieAPISourceDTO.getTitle());
-        movieAPIEntity.setBoxOffice(new BigDecimal(movieAPISourceDTO.getBoxOffice().replace("$", "")));
+        movieAPIEntity.setBoxOffice(ValueParserHelper.getBigDecimalFromString(movieAPISourceDTO.getBoxOffice()));
         movieAPIEntity.setRatings(this.ratingSourceDTOToRatingEntity(movieAPISourceDTO.getRatings()));
         return movieAPIEntity;
     }

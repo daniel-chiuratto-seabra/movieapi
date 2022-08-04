@@ -1,4 +1,4 @@
-package nl.backbase.service;
+package nl.backbase.security.service;
 
 import lombok.RequiredArgsConstructor;
 import nl.backbase.repository.UserRepository;

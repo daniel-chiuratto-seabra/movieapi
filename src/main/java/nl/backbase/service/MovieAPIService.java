@@ -4,8 +4,7 @@ import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.helper.ValueParserHelper;
-import nl.backbase.helper.csv.CSVData;
-import nl.backbase.mapper.impl.MovieMappers;
+import nl.backbase.mapper.MovieMappers;
 import nl.backbase.model.MovieAPISummaryEntity;
 import nl.backbase.model.RatingEntity;
 import nl.backbase.repository.MovieAPIRepository;
@@ -13,8 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -42,7 +41,7 @@ public class MovieAPIService {
         return this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(top10Collection);
     }
 
-    public void postRating(final RatingRequestDTO ratingRequestDTO) {
+    public RatingRequestDTO postRating(final RatingRequestDTO ratingRequestDTO) {
         var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(ratingRequestDTO.getMovieTitle());
         if (movieAPIEntity == null) {
             final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(ratingRequestDTO.getApiKey(), ratingRequestDTO.getMovieTitle());
@@ -59,20 +58,7 @@ public class MovieAPIService {
 
         movieAPIEntity.getRatings().add(ratingEntity);
         this.movieRepository.save(movieAPIEntity);
-    }
-
-    public Collection<CSVData> saveCSVFile(final MultipartFile multipartFile) {
-        final var csvCollection = ValueParserHelper.loadFileContent(multipartFile);
-        csvCollection.forEach(csvMovie -> {
-            var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(csvMovie.getNominee());
-            if (movieAPIEntity == null)
-            {
-                final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
-                movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
-                this.movieRepository.save(movieAPIEntity);
-            }
-        });
-        return csvCollection;
+        return ratingRequestDTO;
     }
 
     public MovieAPIDTO getMovie(final String movieTitle) {
@@ -83,5 +69,21 @@ public class MovieAPIService {
             movieAPIEntity = this.movieRepository.save(movieAPIEntity);
         }
         return this.movieMappers.movieAPITEntityToMovieAPIDTO(movieAPIEntity);
+    }
+
+    @PostConstruct
+    private void loadMoviesCSVContent() {
+        final var csvFileContentInputStream = this.getClass().getClassLoader().getResourceAsStream("academy_awards.csv");
+        final var csvCollection = ValueParserHelper.loadFileContent(csvFileContentInputStream);
+
+        csvCollection.forEach(csvMovie -> {
+            var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(csvMovie.getNominee());
+            if (movieAPIEntity == null)
+            {
+                final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
+                movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
+                this.movieRepository.save(movieAPIEntity);
+            }
+        });
     }
 }

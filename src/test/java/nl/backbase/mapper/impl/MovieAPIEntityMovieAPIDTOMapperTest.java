@@ -1,6 +1,7 @@
 package nl.backbase.mapper.impl;
 
 import nl.backbase.dto.RatingDTO;
+import nl.backbase.mapper.MovieMappers;
 import nl.backbase.model.MovieAPIEntity;
 import nl.backbase.model.RatingEntity;
 import org.junit.jupiter.api.DisplayName;

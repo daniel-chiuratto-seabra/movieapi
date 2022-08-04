@@ -1,4 +1,4 @@
-package nl.backbase.mapper.impl;
+package nl.backbase.mapper;
 
 import nl.backbase.dto.UserDTO;
 import nl.backbase.model.UserEntity;
