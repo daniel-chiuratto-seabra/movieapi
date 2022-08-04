@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
     private final UserService userService;
 
-    @PostMapping(value = "/signin", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(value = "/signup", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> postUserDTO(@RequestBody final UserDTO userDTO) {
         this.userService.saveUserDTO(userDTO);
         return ResponseEntity.ok().build();

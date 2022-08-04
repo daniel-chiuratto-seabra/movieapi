@@ -14,7 +14,7 @@ public interface MovieAPIRepository extends JpaRepository<MovieAPIEntity, Long> 
     MovieAPIEntity findByTitleIgnoreCase(String title);
 
     @Query(value = "SELECT new nl.backbase.model.MovieAPISummaryEntity(m.title, ROUND(AVG(r.value),2), m.boxOffice) " +
-                     "FROM MovieAPIEntity m LEFT JOIN RatingEntity r " +
+                     "FROM RatingEntity r RIGHT JOIN MovieAPIEntity m " +
                        "ON m.id = r.movieId " +
                  "GROUP BY m.title " +
                  "ORDER BY m.boxOffice DESC")

@@ -1,10 +1,11 @@
 package nl.backbase.mapper.impl;
 
-import nl.backbase.csv.ValueParserHelper;
+import nl.backbase.helper.ValueParserHelper;
 import nl.backbase.dto.source.MovieAPISourceDTO;
 import nl.backbase.dto.source.RatingSourceDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,19 +17,19 @@ class MovieAPISourceDTOMovieEntityMapperTest {
 
     private static final int COLLECTION_SIZE = 5;
 
-    private final MovieAPISourceDTOMovieEntityMapper movieAPISourceDTOMovieEntityMapper = new MovieAPISourceDTOMovieEntityMapper();
+    private final MovieMappers movieMappers = Mappers.getMapper(MovieMappers.class);
 
     @Test
     @DisplayName("GIVEN a null fake MovieAPISourceDTO, WHEN the mapper tries to map it, THEN it should return null")
     public void givenANullFakeMovieAPISourceDTOWhenTheMapperTriesToMapItThenItShouldReturnNull() {
-        final var actualMovieAPIEntity = this.movieAPISourceDTOMovieEntityMapper.map((MovieAPISourceDTO) null);
+        final var actualMovieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity((MovieAPISourceDTO) null);
         assertNull(actualMovieAPIEntity);
     }
 
     @Test
     @DisplayName("GIVEN a null fake MovieAPISourceDTO collection, WHEN the mapper tries to map it, THEN it should return an empty MovieAPIEntity collection")
     public void givenANullFakeMovieAPISourceDTOCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnEmptyMovieAPIEntityCollection() {
-        final var actualMovieAPIEntityCollection = this.movieAPISourceDTOMovieEntityMapper.map((Collection<MovieAPISourceDTO>) null);
+        final var actualMovieAPIEntityCollection = this.movieMappers.movieAPISourceDTOToMovieAPIEntity((Collection<MovieAPISourceDTO>) null);
         assertNotNull(actualMovieAPIEntityCollection);
         assertTrue(actualMovieAPIEntityCollection.isEmpty());
     }
@@ -49,7 +50,7 @@ class MovieAPISourceDTOMovieEntityMapperTest {
         });
         expectedFakeMovieAPISourceDTO.setRatings(expectedFakeMovieAPISourceRatingSourceDTOCollection);
 
-        final var actualMovieAPIEntity = this.movieAPISourceDTOMovieEntityMapper.map(expectedFakeMovieAPISourceDTO);
+        final var actualMovieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(expectedFakeMovieAPISourceDTO);
         assertNotNull(actualMovieAPIEntity);
         assertEquals(expectedFakeMovieAPISourceDTO.getTitle(), actualMovieAPIEntity.getTitle());
         assertNotNull(actualMovieAPIEntity.getBoxOffice());
@@ -85,7 +86,7 @@ class MovieAPISourceDTOMovieEntityMapperTest {
             expectedFakeMovieAPISourceDTO.setRatings(expectedFakeMovieAPISourceRatingSourceDTOCollection);
         });
 
-        final var actualMovieAPIEntityList = new ArrayList<>(this.movieAPISourceDTOMovieEntityMapper.map(expectedFakeMovieAPISourceDTOList));
+        final var actualMovieAPIEntityList = new ArrayList<>(this.movieMappers.movieAPISourceDTOToMovieAPIEntity(expectedFakeMovieAPISourceDTOList));
         assertFalse(actualMovieAPIEntityList.isEmpty());
         assertEquals(expectedFakeMovieAPISourceDTOList.size(), actualMovieAPIEntityList.size());
 

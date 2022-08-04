@@ -25,11 +25,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true) // allows @Secured annotation
 public class MovieAPIApplicationWebSecurityConfig {
 
-    private final String signInUrl;
     private final String signUpUrl;
+    private final String signInUrl;
 
-    public MovieAPIApplicationWebSecurityConfig(@Value("${security.jwt.url.signin}") final String signInUrl,
-                                                @Value("${security.jwt.url.signup}") final String signUpUrl) {
+    public MovieAPIApplicationWebSecurityConfig(@Value("${security.jwt.url.signup}") final String signUpUrl,
+                                                @Value("${security.jwt.url.signin}") final String signInUrl) {
         this.signInUrl = signInUrl;
         this.signUpUrl = signUpUrl;
     }
@@ -38,7 +38,7 @@ public class MovieAPIApplicationWebSecurityConfig {
     public JWTSignUpFilter jwtSignUpFilter(final AuthenticationManager authManager,
                                            final TokenAuthenticationService tokenAuthenticationService,
                                            final ObjectMapper objectMapper) {
-        return new JWTSignUpFilter(this.signUpUrl, authManager, tokenAuthenticationService, objectMapper);
+        return new JWTSignUpFilter(this.signInUrl, authManager, tokenAuthenticationService, objectMapper);
     }
 
     @Bean
@@ -65,8 +65,8 @@ public class MovieAPIApplicationWebSecurityConfig {
                    .authorizeRequests()
 
                    // Allows SignUp and SignIn urls
-                   .antMatchers(HttpMethod.POST, this.signUpUrl).permitAll()
                    .antMatchers(HttpMethod.POST, this.signInUrl).permitAll()
+                   .antMatchers(HttpMethod.POST, this.signUpUrl).permitAll()
 
                    // Swagger is permitted here, but it is configured to try to access the
                    // API only with a JWT Token set

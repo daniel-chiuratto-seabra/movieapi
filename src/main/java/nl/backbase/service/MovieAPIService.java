@@ -1,17 +1,15 @@
 package nl.backbase.service;
 
-import lombok.RequiredArgsConstructor;
-import nl.backbase.csv.CSVData;
-import nl.backbase.csv.ValueParserHelper;
 import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
 import nl.backbase.dto.RatingRequestDTO;
-import nl.backbase.dto.source.MovieAPISourceDTO;
-import nl.backbase.mapper.Mapper;
-import nl.backbase.model.MovieAPIEntity;
+import nl.backbase.helper.ValueParserHelper;
+import nl.backbase.helper.csv.CSVData;
+import nl.backbase.mapper.impl.MovieMappers;
 import nl.backbase.model.MovieAPISummaryEntity;
 import nl.backbase.model.RatingEntity;
 import nl.backbase.repository.MovieAPIRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,59 +20,68 @@ import java.util.Collection;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class MovieAPIService {
+
     private final MovieAPIRepository movieRepository;
     private final MovieAPISourceService movieSourceService;
-    private final Mapper<MovieAPISourceDTO, MovieAPIEntity> movieSourceDTOMovieEntityMapper;
-    private final Mapper<MovieAPISummaryEntity, MovieAPISummaryDTO> movieTop10EntityMovieTop10DTOMapper;
-    private final Mapper<MovieAPIEntity, MovieAPIDTO> movieEntityMovieDTOMapper;
+    private final MovieMappers movieMappers;
+    private final String apiKey;
+
+    public MovieAPIService(final MovieAPIRepository movieRepository,
+                           final MovieAPISourceService movieSourceService,
+                           final MovieMappers movieMappers,
+                           @Value("${omdbapi.api.key}") final String apiKey) {
+        this.movieRepository = movieRepository;
+        this.movieSourceService = movieSourceService;
+        this.movieMappers = movieMappers;
+        this.apiKey = apiKey;
+    }
 
     public Collection<MovieAPISummaryDTO> getMovieTop10() {
         final Collection<MovieAPISummaryEntity> top10Collection = this.movieRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
-        return this.movieTop10EntityMovieTop10DTOMapper.map(top10Collection);
+        return this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(top10Collection);
     }
 
     public void postRating(final RatingRequestDTO ratingRequestDTO) {
-        var movieEntity = this.movieRepository.findByTitleIgnoreCase(ratingRequestDTO.getMovieTitle());
-        if (movieEntity == null) {
-            final var movieSourceDTO = this.movieSourceService.getMovieSourceDTO(ratingRequestDTO.getApiKey(), ratingRequestDTO.getMovieTitle());
-            movieEntity = this.movieSourceDTOMovieEntityMapper.map(movieSourceDTO);
+        var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(ratingRequestDTO.getMovieTitle());
+        if (movieAPIEntity == null) {
+            final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(ratingRequestDTO.getApiKey(), ratingRequestDTO.getMovieTitle());
+            movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
         }
         final var ratingEntity = new RatingEntity();
         ratingEntity.setValue(ratingRequestDTO.getValue());
 
-        var ratingsCollection = movieEntity.getRatings();
+        var ratingsCollection = movieAPIEntity.getRatings();
         if (ratingsCollection == null) {
             ratingsCollection = new ArrayList<>();
-            movieEntity.setRatings(ratingsCollection);
+            movieAPIEntity.setRatings(ratingsCollection);
         }
 
-        movieEntity.getRatings().add(ratingEntity);
-        this.movieRepository.save(movieEntity);
+        movieAPIEntity.getRatings().add(ratingEntity);
+        this.movieRepository.save(movieAPIEntity);
     }
 
-    public Collection<CSVData> saveCSVFile(final String apiKey, final MultipartFile multipartFile) {
+    public Collection<CSVData> saveCSVFile(final MultipartFile multipartFile) {
         final var csvCollection = ValueParserHelper.loadFileContent(multipartFile);
         csvCollection.forEach(csvMovie -> {
-            var movieEntity = this.movieRepository.findByTitleIgnoreCase(csvMovie.getNominee());
-            if (movieEntity == null)
+            var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(csvMovie.getNominee());
+            if (movieAPIEntity == null)
             {
-                final var movieSourceDTO = this.movieSourceService.getMovieSourceDTO(apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
-                movieEntity = this.movieSourceDTOMovieEntityMapper.map(movieSourceDTO);
-                this.movieRepository.save(movieEntity);
+                final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
+                movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
+                this.movieRepository.save(movieAPIEntity);
             }
         });
         return csvCollection;
     }
 
-    public MovieAPIDTO getMovie(final String apiKey, final String movieTitle) {
-        var movieEntity = this.movieRepository.findByTitleIgnoreCase(movieTitle);
-        if (movieEntity == null) {
-            final var movieSourceDTO = this.movieSourceService.getMovieSourceDTO(apiKey, movieTitle);
-            movieEntity = this.movieSourceDTOMovieEntityMapper.map(movieSourceDTO);
-            movieEntity = this.movieRepository.save(movieEntity);
+    public MovieAPIDTO getMovie(final String movieTitle) {
+        var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(movieTitle);
+        if (movieAPIEntity == null) {
+            final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(this.apiKey, movieTitle);
+            movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
+            movieAPIEntity = this.movieRepository.save(movieAPIEntity);
         }
-        return this.movieEntityMovieDTOMapper.map(movieEntity);
+        return this.movieMappers.movieAPITEntityToMovieAPIDTO(movieAPIEntity);
     }
 }

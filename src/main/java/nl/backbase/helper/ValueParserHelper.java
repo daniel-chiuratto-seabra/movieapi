@@ -1,10 +1,11 @@
-package nl.backbase.csv;
+package nl.backbase.helper;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.backbase.controller.exception.MovieAPPIServiceFileLoadErrorException;
+import nl.backbase.helper.csv.CSVData;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;

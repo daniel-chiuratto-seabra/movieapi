@@ -1,4 +1,4 @@
-package nl.backbase.csv;
+package nl.backbase.helper.csv;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.Data;

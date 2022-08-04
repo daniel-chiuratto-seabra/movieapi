@@ -2,21 +2,33 @@ movie:
   api:
     url: http://www.omdbapi.com/
 
+# TODO REMOVE THE SERVLET PARAMETER BELOW AFTER REMOVING THE FILE UPLOAD ENDPOINT
 spring:
-  jackson:
-    serialization:
-      indent_output: true
   servlet:
     multipart:
       max-file-size: -1
       max-request-size: -1
+  jpa:
+    hibernate:
+      ddl-auto: ${APPLICATION_JPA_HIBERNATE_DDL_AUTO}
+    generate-ddl: ${APPLICATION_JPA_GENERATE_DDL}
+  datasource:
+    url: ${APPLICATION_JPA_DATASOURCE_URL}
 
 server:
-  port: ${APPLICATION_PORT:8080}
+  port: ${APPLICATION_PORT}
 
 api:
   server:
-    url: ${APPLICATION_URL:http://localhost:${server.port}}
+    url: ${APPLICATION_URL}
+
+omdbapi:
+  api:
+    key: ${APPLICATION_OMDBAPI_KEY}
+
+springdoc:
+  api-docs:
+    enabled: false
 
 security:
   jwt:
@@ -24,5 +36,5 @@ security:
       signin: /v1/signin
       signup: /v1/signup
     token:
-      secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
-      expiration: 86400000 # 24 hours
+      secret: ${APPLICATION_JWT_SECRET}
+      expiration: ${APPLICATION_JWT_TOKEN_EXPIRATION}

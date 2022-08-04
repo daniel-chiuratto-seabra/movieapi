@@ -31,10 +31,10 @@ public class MovieAPISourceService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public MovieAPISourceDTO getMovieSourceDTO(final String apiKey, final String movieTitle) {
-        return getMovieSourceDTO(apiKey, movieTitle, null);
+    public MovieAPISourceDTO getMovieAPISourceDTO(final String apiKey, final String movieTitle) {
+        return getMovieAPISourceDTO(apiKey, movieTitle, null);
     }
-    public MovieAPISourceDTO getMovieSourceDTO(final String apiKey, final String movieTitle, final String additionalInfo) {
+    public MovieAPISourceDTO getMovieAPISourceDTO(final String apiKey, final String movieTitle, final String additionalInfo) {
         final var httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         final var requestEntity = new HttpEntity<>(httpHeaders);
