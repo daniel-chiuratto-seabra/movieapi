@@ -1,5 +1,6 @@
 package nl.backbase.service;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.backbase.controller.exception.MovieAPISourceNotFoundException;
 import nl.backbase.controller.exception.MovieAPISourceServiceException;
 import nl.backbase.dto.source.MovieAPISourceDTO;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
 
+@Slf4j
 @Service
 public class MovieAPISourceService {
 
@@ -32,9 +34,10 @@ public class MovieAPISourceService {
     }
 
     public MovieAPISourceDTO getMovieAPISourceDTO(final String apiKey, final String movieTitle) {
-        return getMovieAPISourceDTO(apiKey, movieTitle, null);
+        return getMovieAPISourceDTOFromCSVFile(apiKey, movieTitle, null);
     }
-    public MovieAPISourceDTO getMovieAPISourceDTO(final String apiKey, final String movieTitle, final String additionalInfo) {
+
+    public MovieAPISourceDTO getMovieAPISourceDTOFromCSVFile(final String apiKey, final String movieTitle, final String additionalInfo) {
         final var httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         final var requestEntity = new HttpEntity<>(httpHeaders);
@@ -49,10 +52,12 @@ public class MovieAPISourceService {
             } else if (movieSourceDTO != null && Boolean.FALSE == Boolean.valueOf(movieSourceDTO.getResponse())) {
                 urlParametersMap = new HashMap<>(urlParametersMap);
                 urlParametersMap.put(MOVIE_TITLE_PARAM_NAME, additionalInfo);
+                log.info("The movie {} has not been found, trying to load the movie {} available in the 'additionalInfo' field", movieTitle, additionalInfo);
                 responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, requestEntity, MovieAPISourceDTO.class, urlParametersMap);
                 if (responseEntity.getStatusCode() == HttpStatus.OK) {
                     movieSourceDTO = responseEntity.getBody();
                     if (movieSourceDTO != null && movieSourceDTO.getResponse() != null && Boolean.TRUE == Boolean.valueOf(movieSourceDTO.getResponse())) {
+                        log.info("Movie {} from the 'additionalInfo' field successfully retrieved from the API", additionalInfo);
                         return movieSourceDTO;
                     } else {
                         throw new MovieAPISourceNotFoundException(movieTitle);

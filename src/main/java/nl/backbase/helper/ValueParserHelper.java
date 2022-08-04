@@ -50,6 +50,8 @@ public class ValueParserHelper {
                 final var num = Double.parseDouble(valueArr[0]);
                 final var denum = Double.parseDouble(valueArr[1]);
                 return (num / denum) * 10D;
+            } else {
+                return Double.parseDouble(stringValue);
             }
         } catch (final Exception e) {
             log.error(String.format("An error occurred while parsing the RatingSourceDTO value attribute: %s", stringValue), e);

@@ -16,4 +16,6 @@ public class MovieAPISummaryDTO implements Serializable {
     private Double average;
     @JsonProperty
     private BigDecimal boxOffice;
+    @JsonProperty
+    private String oscarWinner;
 }

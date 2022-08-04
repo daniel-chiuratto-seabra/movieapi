@@ -11,4 +11,5 @@ public class MovieAPISummaryEntity {
     private String title;
     private Double average;
     private BigDecimal boxOffice;
+    private Boolean oscarWinner;
 }

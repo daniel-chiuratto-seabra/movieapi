@@ -13,10 +13,11 @@ import java.util.List;
 public interface MovieAPIRepository extends JpaRepository<MovieAPIEntity, Long> {
     MovieAPIEntity findByTitleIgnoreCase(String title);
 
-    @Query(value = "SELECT new nl.backbase.model.MovieAPISummaryEntity(m.title, ROUND(AVG(r.value),2), m.boxOffice) " +
+    @Query(value = "SELECT new nl.backbase.model.MovieAPISummaryEntity(m.title, ROUND(AVG(r.value),2), m.boxOffice, m.oscarWinner) " +
                      "FROM RatingEntity r RIGHT JOIN MovieAPIEntity m " +
-                       "ON m.id = r.movieId " +
+                       "ON r.movieAPIEntity.id = m.id " +
                  "GROUP BY m.title " +
-                 "ORDER BY m.boxOffice DESC")
+                 "ORDER BY ROUND(AVG(r.value),2) DESC, " +
+                          "m.boxOffice DESC")
     List<MovieAPISummaryEntity> findTop10OrderedByBoxOffice(Pageable pageable);
 }

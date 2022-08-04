@@ -1,7 +1,6 @@
 package nl.backbase.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,7 +11,6 @@ import java.util.Collection;
 @Entity
 @Table(name = "MOVIE")
 @NoArgsConstructor
-@EqualsAndHashCode
 public class MovieAPIEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,4 +23,6 @@ public class MovieAPIEntity {
     private Collection<RatingEntity> ratings;
     @Column(name = "BOX_OFFICE")
     private BigDecimal boxOffice;
+    @Column(name = "OSCAR_WINNER")
+    private Boolean oscarWinner;
 }

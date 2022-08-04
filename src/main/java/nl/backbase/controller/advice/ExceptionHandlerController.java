@@ -43,4 +43,10 @@ public class ExceptionHandlerController {
         log.warn(invalidPasswordException.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(invalidPasswordException.getMessage());
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> userAlreadyExistException(final UserAlreadyExistException userAlreadyExistException) {
+        log.warn(userAlreadyExistException.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.ofEntries(Map.entry("message",userAlreadyExistException.getMessage())));
+    }
 }

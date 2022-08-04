@@ -1,7 +1,6 @@
 package nl.backbase.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "RATING")
 @NoArgsConstructor
-@EqualsAndHashCode
 public class RatingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,6 +18,7 @@ public class RatingEntity {
     private String source;
     @Column(name = "VALUE", nullable = false)
     private Double value;
-    @Column(name = "MOVIE_ID")
-    private Long movieId;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "MOVIE_ID", referencedColumnName = "ID")
+    private MovieAPIEntity movieAPIEntity;
 }

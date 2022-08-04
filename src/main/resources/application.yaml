@@ -1,19 +1,15 @@
 movie:
   api:
     url: http://www.omdbapi.com/
-
-# TODO REMOVE THE SERVLET PARAMETER BELOW AFTER REMOVING THE FILE UPLOAD ENDPOINT
-spring:
-  servlet:
-    multipart:
-      max-file-size: -1
-      max-request-size: -1
   jpa:
     hibernate:
       ddl-auto: ${APPLICATION_JPA_HIBERNATE_DDL_AUTO}
     generate-ddl: ${APPLICATION_JPA_GENERATE_DDL}
   datasource:
     url: ${APPLICATION_JPA_DATASOURCE_URL}
+  h2:
+    console:
+      enabled: false
 
 server:
   port: ${APPLICATION_PORT}

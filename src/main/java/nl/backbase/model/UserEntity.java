@@ -1,7 +1,6 @@
 package nl.backbase.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "USER")
 @NoArgsConstructor
-@EqualsAndHashCode
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

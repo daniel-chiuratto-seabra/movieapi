@@ -62,24 +62,29 @@ public class MovieAPIApplicationWebSecurityConfig {
                                            final JWTSignUpFilter loginFilter,
                                            final JWTServiceAuthenticationFilter authenticationFilter) throws Exception {
         return http.csrf().disable()
-                   .authorizeRequests()
+                    .authorizeRequests()
 
-                   // Allows SignUp and SignIn urls
-                   .antMatchers(HttpMethod.POST, this.signInUrl).permitAll()
-                   .antMatchers(HttpMethod.POST, this.signUpUrl).permitAll()
+                    // Allows SignUp and SignIn urls
+                    .antMatchers(HttpMethod.POST, this.signInUrl).permitAll()
+                    .antMatchers(HttpMethod.POST, this.signUpUrl).permitAll()
 
-                   // Swagger is permitted here, but it is configured to try to access the
-                   // API only with a JWT Token set
-                   .antMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
-                   .antMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+                    // Swagger is permitted here, but it is configured to try to access the
+                    // API only with a JWT Token set
+                    .antMatchers("/swagger-ui/**").permitAll()
+                    .antMatchers("/v3/api-docs/**").permitAll()
+                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers("/favicon.ico").permitAll()
 
-                   // Requires Authentication
-                   .anyRequest().authenticated()
+                    // Requires Authentication
+                    .anyRequest().authenticated()
 
-                   // Session
-                   .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                   .and().addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
-                   .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                   .build();
+                    // In order to allow the H2 Console access
+                    .and().headers().frameOptions().sameOrigin()
+
+                    // Session
+                    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and().addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .build();
     }
 }

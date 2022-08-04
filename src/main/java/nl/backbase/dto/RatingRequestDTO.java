@@ -4,15 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 public class RatingRequestDTO implements Serializable {
-    @JsonProperty("apiKey")
-    private String apiKey;
-    @JsonProperty("movieTitle")
+    @NotEmpty
+    @JsonProperty(value = "movieTitle", required = true)
     private String movieTitle;
-    @JsonProperty("value")
+    @NotEmpty
+    @JsonProperty(value = "value", required = true)
     private Double value;
 }

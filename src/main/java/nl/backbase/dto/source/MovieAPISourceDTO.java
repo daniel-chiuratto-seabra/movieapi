@@ -14,8 +14,6 @@ import java.util.Collection;
 public class MovieAPISourceDTO implements Serializable {
     @JsonProperty(value = "Title")
     String title;
-    @JsonProperty(value = "Ratings")
-    Collection<RatingSourceDTO> ratings;
     @JsonProperty(value = "BoxOffice")
     String boxOffice;
     @JsonProperty(value = "Response")

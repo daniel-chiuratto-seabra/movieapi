@@ -35,3 +35,13 @@ omdbapi:
 api:
   server:
     url: ${http://localhost:${server.port}}
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
