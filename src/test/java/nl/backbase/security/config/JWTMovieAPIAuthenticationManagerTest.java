@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class JWTMovieAPIAuthenticationManagerTest {
@@ -24,8 +25,8 @@ class JWTMovieAPIAuthenticationManagerTest {
 
     @BeforeEach
     public void setUp() {
-        this.mockUserRepository = Mockito.mock(UserRepository.class);
-        this.mockPasswordEncoder = Mockito.mock(PasswordEncoder.class);
+        this.mockUserRepository = mock(UserRepository.class);
+        this.mockPasswordEncoder = mock(PasswordEncoder.class);
         this.jwtMovieAPIAuthenticationManager = new JWTMovieAPIAuthenticationManager(this.mockUserRepository, this.mockPasswordEncoder);
     }
 

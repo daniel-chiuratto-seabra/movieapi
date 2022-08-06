@@ -34,13 +34,13 @@ public class JWTSignUpFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) throws AuthenticationException, IOException {
-        final var userDTO = this.objectMapper .readValue(request.getInputStream(), UserDTO.class);
+        final var userDTO = this.objectMapper.readValue(request.getInputStream(), UserDTO.class);
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword(), emptyList()));
     }
 
     @Override
-    protected void successfulAuthentication(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain, final Authentication auth) {
-        final var token = this.tokenAuthenticationService.buildJWTToken(auth.getName());
+    public void successfulAuthentication(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain, final Authentication authentication) {
+        final var token = this.tokenAuthenticationService.buildJWTToken(authentication.getName());
         response.addHeader(AUTHORIZATION_HEADER_STRING, TOKEN_PREFIX + " " + token);
     }
 }

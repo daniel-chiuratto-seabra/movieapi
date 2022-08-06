@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class TokenAuthenticationServiceTest {
@@ -21,7 +22,7 @@ class TokenAuthenticationServiceTest {
                   "WHEN getAuthentication is called with a mocked HttpServletRequest that returns null as Authorization header value " +
                   "THEN the TokenAuthenticationService should return a null authentication")
     public void givenTokenAuthenticationServiceWhenGetAuthenticationCalledThenTokenAuthenticationServiceReturnNullAuthentication() {
-        final var mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
+        final var mockHttpServletRequest = mock(HttpServletRequest.class);
         final var tokenAuthenticationService = new TokenAuthenticationService(System.currentTimeMillis(), StringUtils.EMPTY);
         final var actualAuthentication = tokenAuthenticationService.getAuthentication(mockHttpServletRequest);
         assertNull(actualAuthentication);
@@ -37,7 +38,7 @@ class TokenAuthenticationServiceTest {
         final var expectedUsername = "Fake Subject";
         final var actualToken = tokenAuthenticationService.buildJWTToken(expectedUsername);
 
-        final var mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
+        final var mockHttpServletRequest = mock(HttpServletRequest.class);
         when(mockHttpServletRequest.getHeader(eq(JWTConfigurationConstants.AUTHORIZATION_HEADER_STRING))).thenReturn(actualToken);
 
         final var actualAuthentication = tokenAuthenticationService.getAuthentication(mockHttpServletRequest);

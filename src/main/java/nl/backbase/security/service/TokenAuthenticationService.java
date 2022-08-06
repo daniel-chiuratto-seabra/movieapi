@@ -1,6 +1,7 @@
 package nl.backbase.security.service;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,7 @@ public class TokenAuthenticationService {
                 .compact();
     }
 
-
-    public Authentication getAuthentication(final HttpServletRequest request) {
+    public Authentication getAuthentication(final HttpServletRequest request) throws MalformedJwtException {
         final var token = request.getHeader(AUTHORIZATION_HEADER_STRING);
         if (token != null) {
             final var user = Jwts.parserBuilder().setSigningKey(getSigningKey()).build()

@@ -22,6 +22,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class MovieAPISourceServiceTest {
@@ -32,9 +33,9 @@ class MovieAPISourceServiceTest {
 
     @BeforeEach
     private void setUp() {
-        this.mockRestTemplate = Mockito.mock(RestTemplate.class);
+        this.mockRestTemplate = mock(RestTemplate.class);
 
-        final var mockRestTemplateBuilder = Mockito.mock(RestTemplateBuilder.class);
+        final var mockRestTemplateBuilder = mock(RestTemplateBuilder.class);
         when(mockRestTemplateBuilder.build()).thenReturn(this.mockRestTemplate);
 
         final var fakeMovieSourceAPIURL = "Fake Movie Source API URL";

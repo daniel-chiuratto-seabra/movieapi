@@ -12,8 +12,7 @@ import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 
@@ -24,8 +23,8 @@ class UserServiceTest {
 
     @BeforeEach
     private void setUp() {
-        this.mockUserRepository = Mockito.mock(UserRepository.class);
-        this.mockUserMappers = Mockito.mock(UserMappers.class);
+        this.mockUserRepository = mock(UserRepository.class);
+        this.mockUserMappers = mock(UserMappers.class);
         this.userService = new UserService(this.mockUserRepository, this.mockUserMappers);
     }
 

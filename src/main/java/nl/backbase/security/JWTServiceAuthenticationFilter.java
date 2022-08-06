@@ -27,13 +27,13 @@ public class JWTServiceAuthenticationFilter extends GenericFilterBean {
 
     public static final String ERROR_MESSAGE_FIELD = "errorMessage";
 
-    private final TokenAuthenticationService tokenService;
+    private final TokenAuthenticationService tokenAuthenticationService;
     private final ObjectMapper objectMapper;
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain filterChain) throws IOException {
         try {
-            final var authentication = this.tokenService.getAuthentication((HttpServletRequest) request);
+            final var authentication = this.tokenAuthenticationService.getAuthentication((HttpServletRequest) request);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         } catch (final MalformedJwtException malformedJwtException) {
