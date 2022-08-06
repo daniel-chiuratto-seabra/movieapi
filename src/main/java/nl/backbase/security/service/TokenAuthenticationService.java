@@ -3,7 +3,8 @@ package nl.backbase.security.service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -13,16 +14,14 @@ import java.util.Date;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyList;
-import static nl.backbase.security.JWTConfigurationConstants.HEADER_STRING;
+import static nl.backbase.security.JWTConfigurationConstants.AUTHORIZATION_HEADER_STRING;
 import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
 
+@RequiredArgsConstructor
 public class TokenAuthenticationService {
 
-    @Value("${security.jwt.token.expiration}")
-    private Long expirationTime;
-
-    @Value("${security.jwt.token.secret}")
-    private String secret;
+    private final Long expirationTime;
+    private final String secret;
 
     // Used to build a JWT Token for a new login
     public String buildJWTToken(final String subject) {
@@ -33,16 +32,12 @@ public class TokenAuthenticationService {
                 .compact();
     }
 
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(this.secret);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
 
     public Authentication getAuthentication(final HttpServletRequest request) {
-        final var token = request.getHeader(HEADER_STRING);
+        final var token = request.getHeader(AUTHORIZATION_HEADER_STRING);
         if (token != null) {
             final var user = Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
-                                        .parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody()
+                                        .parseClaimsJws(token.replace(TOKEN_PREFIX, StringUtils.EMPTY)).getBody()
                                         .getSubject();
 
             if (user != null) {
@@ -50,5 +45,10 @@ public class TokenAuthenticationService {
             }
         }
         return null;
+    }
+
+    private Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(this.secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

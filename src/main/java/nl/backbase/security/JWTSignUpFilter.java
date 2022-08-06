@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static java.util.Collections.emptyList;
-import static nl.backbase.security.JWTConfigurationConstants.HEADER_STRING;
+import static nl.backbase.security.JWTConfigurationConstants.AUTHORIZATION_HEADER_STRING;
 import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
 
 public class JWTSignUpFilter extends AbstractAuthenticationProcessingFilter {
@@ -41,6 +41,6 @@ public class JWTSignUpFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     protected void successfulAuthentication(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain, final Authentication auth) {
         final var token = this.tokenAuthenticationService.buildJWTToken(auth.getName());
-        response.addHeader(HEADER_STRING, TOKEN_PREFIX + " " + token);
+        response.addHeader(AUTHORIZATION_HEADER_STRING, TOKEN_PREFIX + " " + token);
     }
 }

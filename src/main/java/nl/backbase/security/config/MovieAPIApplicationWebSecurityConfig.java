@@ -25,11 +25,17 @@ public class MovieAPIApplicationWebSecurityConfig {
 
     private final String signUpUrl;
     private final String signInUrl;
+    private final Long expiration;
+    private final String secret;
 
     public MovieAPIApplicationWebSecurityConfig(@Value("${security.jwt.url.signup}") final String signUpUrl,
-                                                @Value("${security.jwt.url.signin}") final String signInUrl) {
+                                                @Value("${security.jwt.url.signin}") final String signInUrl,
+                                                @Value("${security.jwt.token.expiration}") final Long expiration,
+                                                @Value("${security.jwt.token.secret}") final String secret) {
         this.signInUrl = signInUrl;
         this.signUpUrl = signUpUrl;
+        this.expiration = expiration;
+        this.secret = secret;
     }
 
     @Bean
@@ -41,7 +47,7 @@ public class MovieAPIApplicationWebSecurityConfig {
 
     @Bean
     public TokenAuthenticationService tokenAuthenticationService() {
-        return new TokenAuthenticationService();
+        return new TokenAuthenticationService(this.expiration, this.secret);
     }
 
     @Bean

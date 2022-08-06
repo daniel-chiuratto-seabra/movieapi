@@ -17,6 +17,7 @@ import static ch.qos.logback.core.CoreConstants.EMPTY_STRING;
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValueParserHelper {
+
     private static final String DOLLAR_SIGN = "$";
     private static final String COMMA_STRING = ",";
     private static final String OSCAR_WINNER_YES = "YES";
@@ -38,13 +39,11 @@ public class ValueParserHelper {
     }
 
     public static BigDecimal getBigDecimalFromString(final String boxOffice) {
-        if (boxOffice == null || boxOffice.trim().isEmpty() || "N/A".equals(boxOffice)) {
-            return BigDecimal.ZERO;
-        }
         try {
             return new BigDecimal(boxOffice.replace(DOLLAR_SIGN, EMPTY_STRING)
-                    .replace(COMMA_STRING, EMPTY_STRING));
-        } catch (final  NumberFormatException e) {
+                                           .replace(COMMA_STRING, EMPTY_STRING));
+        } catch (final Exception e) {
+            log.error("An error occurred while parsing the String boxOffice into BigDecimal: {}", e.getMessage());
             return BigDecimal.ZERO;
         }
     }

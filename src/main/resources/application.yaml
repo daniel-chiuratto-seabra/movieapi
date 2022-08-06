@@ -34,3 +34,8 @@ security:
     token:
       secret: ${APPLICATION_JWT_SECRET}
       expiration: ${APPLICATION_JWT_TOKEN_EXPIRATION}
+
+spring:
+  logging:
+    level:
+      root: INFO

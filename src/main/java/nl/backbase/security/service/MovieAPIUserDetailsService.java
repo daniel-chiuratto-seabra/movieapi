@@ -26,6 +26,7 @@ public class MovieAPIUserDetailsService implements UserDetailsService {
                 .accountExpired(false)
                 .accountLocked(false)
                 .disabled(false)
+                .authorities(new String[0])
                 .build();
     }
 }
