@@ -29,8 +29,8 @@ public class MovieAPISourceService {
     private final String movieSourceApiUrl;
     private final RestTemplate restTemplate;
 
-    public MovieAPISourceService(@Value("${movie.api.url}") final String movieSourceApiUrl, final RestTemplateBuilder restTemplateBuilder) {
-        this.movieSourceApiUrl = movieSourceApiUrl;
+    public MovieAPISourceService(@Value("${movie.api.url}") final String movieSourceAPIUrl, final RestTemplateBuilder restTemplateBuilder) {
+        this.movieSourceApiUrl = movieSourceAPIUrl;
         this.restTemplate = restTemplateBuilder.build();
     }
 
@@ -41,33 +41,39 @@ public class MovieAPISourceService {
     public MovieAPISourceDTO getMovieAPISourceDTOFromCSVFile(final String apiKey, final String movieTitle, final String additionalInfo) {
         final var httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        final var requestEntity = new HttpEntity<>(httpHeaders);
+        final var httpEntity = new HttpEntity<>(httpHeaders);
 
         var urlParametersMap = Map.ofEntries(entry(API_KEY_PARAM_NAME, apiKey), entry(MOVIE_TITLE_PARAM_NAME, movieTitle), entry(DATA_TYPE_PARAM_NAME, MOVIE_DATA_TYPE));
         final var urlParams = buildParamsPlaceholders(urlParametersMap);
         try {
-            var responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, requestEntity, MovieAPISourceDTO.class, urlParametersMap);
+            var responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, httpEntity, MovieAPISourceDTO.class, urlParametersMap);
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                var movieSourceDTO = responseEntity.getBody();
-                if (movieSourceDTO != null && movieSourceDTO.getResponse() != null && Boolean.TRUE == Boolean.valueOf(movieSourceDTO.getResponse())) {
-                    return movieSourceDTO;
-                } else if (movieSourceDTO != null && Boolean.FALSE == Boolean.valueOf(movieSourceDTO.getResponse())) {
-                    urlParametersMap = new HashMap<>(urlParametersMap);
-                    urlParametersMap.put(MOVIE_TITLE_PARAM_NAME, additionalInfo);
-                    log.info("The movie {} has not been found, trying to load the movie {} available in the 'additionalInfo' field", movieTitle, additionalInfo);
-                    responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, requestEntity, MovieAPISourceDTO.class, urlParametersMap);
-                    if (responseEntity.getStatusCode() == HttpStatus.OK) {
-                        movieSourceDTO = responseEntity.getBody();
-                        if (movieSourceDTO != null && movieSourceDTO.getResponse() != null && Boolean.TRUE == Boolean.valueOf(movieSourceDTO.getResponse())) {
-                            log.info("Movie {} from the 'additionalInfo' field successfully retrieved from the API", additionalInfo);
-                            return movieSourceDTO;
-                        } else {
-                            throw new MovieAPINotFoundException(movieTitle);
+                var movieAPISourceDTO = responseEntity.getBody();
+                if (movieAPISourceDTO != null && movieAPISourceDTO.getResponse() != null) {
+                    if (Boolean.TRUE == Boolean.valueOf(movieAPISourceDTO.getResponse())) {
+                        return movieAPISourceDTO;
+                    } else if (Boolean.FALSE == Boolean.valueOf(movieAPISourceDTO.getResponse()) && additionalInfo != null) {
+                        urlParametersMap = new HashMap<>(urlParametersMap);
+                        urlParametersMap.put(MOVIE_TITLE_PARAM_NAME, additionalInfo);
+                        log.info("The movie {} has not been found, trying to load the movie {} available in the 'additionalInfo' field", movieTitle, additionalInfo);
+                        responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, httpEntity, MovieAPISourceDTO.class, urlParametersMap);
+                        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+                            movieAPISourceDTO = responseEntity.getBody();
+                            if (movieAPISourceDTO != null && movieAPISourceDTO.getResponse() != null) {
+                                if(Boolean.TRUE == Boolean.valueOf(movieAPISourceDTO.getResponse())) {
+                                    log.info("Movie {} from the 'additionalInfo' field successfully retrieved from the API", additionalInfo);
+                                    return movieAPISourceDTO;
+                                } else {
+                                    throw new MovieAPINotFoundException(movieTitle);
+                                }
+                            }
                         }
                     }
                 }
+                throw new MovieAPISourceServiceException(String.format("The external Movie API did not return any response body. It returned Http Status %d: %s", responseEntity.getStatusCode().value(), responseEntity.getStatusCode().name()));
+            } else {
+                throw new MovieAPISourceServiceException(String.format("The external Movie API returned a non 200 http status that were not expected. It returned: %d: %s", responseEntity.getStatusCode().value(), responseEntity.getStatusCode().name()));
             }
-            throw new MovieAPISourceServiceException(String.format("The external Movie API did not return any body. It returned Http Status %d: %s", responseEntity.getStatusCode().value(), responseEntity.getStatusCode().name()));
         } catch (final HttpClientErrorException httpClientErrorException) {
             throw new MovieAPISourceServiceException(String.format("The external API returned an error %d (%s)", httpClientErrorException.getStatusCode().value(), httpClientErrorException.getStatusCode().name()), httpClientErrorException);
         }
@@ -77,4 +83,3 @@ public class MovieAPISourceService {
         return "?" + urlParametersMap.keySet().stream().map(s -> String.format("%s={%s}", s, s)).collect(Collectors.joining("&"));
     }
 }
-

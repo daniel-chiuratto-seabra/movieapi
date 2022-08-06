@@ -37,28 +37,6 @@ public class ValueParserHelper {
         }
     }
 
-    public static Double parseValueToDouble(final String stringValue) {
-        if (stringValue == null || stringValue.trim().isEmpty()) {
-            return 0D;
-        }
-        try {
-            if (stringValue.contains("%")) {
-                final var valuePercent = Double.parseDouble(stringValue.replace("%", ""));
-                return 10D * (valuePercent / 100D);
-            } else if (stringValue.contains("/")) {
-                final var valueArr = stringValue.split("/");
-                final var num = Double.parseDouble(valueArr[0]);
-                final var denum = Double.parseDouble(valueArr[1]);
-                return (num / denum) * 10D;
-            } else {
-                return Double.parseDouble(stringValue);
-            }
-        } catch (final Exception e) {
-            log.error(String.format("An error occurred while parsing the RatingSourceDTO value attribute: %s", stringValue), e);
-        }
-        return 0D;
-    }
-
     public static BigDecimal getBigDecimalFromString(final String boxOffice) {
         if (boxOffice == null || boxOffice.trim().isEmpty() || "N/A".equals(boxOffice)) {
             return BigDecimal.ZERO;

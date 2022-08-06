@@ -24,14 +24,14 @@ public class MovieMappersTest {
     @Test
     @DisplayName("GIVEN a null MovieAPIDTOEntity , WHEN the mapper tries to map it, THEN it should return null")
     public void givenANullMovieAPIDTOEntityWhenTheMapperTriesToMapItThenItShouldReturnNull() {
-        final var actualMovieAPIDTO = this.movieMappers.movieAPITEntityToMovieAPIDTO((MovieAPIEntity) null);
+        final var actualMovieAPIDTO = this.movieMappers.movieAPIEntityToMovieAPIDTO((MovieAPIEntity) null);
         assertNull(actualMovieAPIDTO);
     }
 
     @Test
     @DisplayName("GIVEN a null MovieAPIDTOEntity collection, WHEN the mapper tries to map it, THEN it should return an empty MovieAPIDTO Collection")
     public void givenANullEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnEmptyCollection() {
-        final var actualMovieAPIDTOCollection = this.movieMappers.movieAPITEntityToMovieAPIDTO((Collection<MovieAPIEntity>) null);
+        final var actualMovieAPIDTOCollection = this.movieMappers.movieAPIEntityToMovieAPIDTO((Collection<MovieAPIEntity>) null);
         assertNotNull(actualMovieAPIDTOCollection);
         assertTrue(actualMovieAPIDTOCollection.isEmpty());
     }
@@ -47,7 +47,7 @@ public class MovieMappersTest {
         expectedFakeMovieAPIEntity.setTitle(expectedFakeTitle);
         expectedFakeMovieAPIEntity.setRatings(expectedFakeRatingEntityCollection);
 
-        final var actualMovieAPIDTO = this.movieMappers.movieAPITEntityToMovieAPIDTO(expectedFakeMovieAPIEntity);
+        final var actualMovieAPIDTO = this.movieMappers.movieAPIEntityToMovieAPIDTO(expectedFakeMovieAPIEntity);
 
         assertNotNull(actualMovieAPIDTO);
         assertEquals(expectedFakeTitle, actualMovieAPIDTO.getTitle());
@@ -81,7 +81,7 @@ public class MovieMappersTest {
             expectedFakeMovieAPIEntityList.add(expectedFakeMovieAPIEntity);
         });
 
-        final var actualMovieAPIDTOList = new ArrayList<>(this.movieMappers.movieAPITEntityToMovieAPIDTO(expectedFakeMovieAPIEntityList));
+        final var actualMovieAPIDTOList = new ArrayList<>(this.movieMappers.movieAPIEntityToMovieAPIDTO(expectedFakeMovieAPIEntityList));
 
         assertNotNull(actualMovieAPIDTOList);
         assertFalse(actualMovieAPIDTOList.isEmpty());

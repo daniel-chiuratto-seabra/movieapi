@@ -23,7 +23,7 @@ public class MovieMappers {
 
     private final RatingMappers ratingMappers;
 
-    public MovieAPIDTO movieAPITEntityToMovieAPIDTO(final MovieAPIEntity movieAPIEntity) {
+    public MovieAPIDTO movieAPIEntityToMovieAPIDTO(final MovieAPIEntity movieAPIEntity) {
         if (movieAPIEntity == null) { return null; }
         final var movieAPIDTO = new MovieAPIDTO();
         movieAPIDTO.setTitle(movieAPIEntity.getTitle());
@@ -54,9 +54,9 @@ public class MovieMappers {
         return movieAPIEntity;
     }
 
-    public Collection<MovieAPIDTO> movieAPITEntityToMovieAPIDTO(final Collection<MovieAPIEntity> movieAPIEntityCollection) {
+    public Collection<MovieAPIDTO> movieAPIEntityToMovieAPIDTO(final Collection<MovieAPIEntity> movieAPIEntityCollection) {
         if (movieAPIEntityCollection == null) { return Collections.emptyList(); }
-        return movieAPIEntityCollection.stream().map(this::movieAPITEntityToMovieAPIDTO).collect(Collectors.toList());
+        return movieAPIEntityCollection.stream().map(this::movieAPIEntityToMovieAPIDTO).collect(Collectors.toList());
     }
 
     public Collection<MovieAPIEntity> movieAPISourceDTOToMovieAPIEntity(final Collection<MovieAPISourceDTO> movieAPISourceDTOCollection) {

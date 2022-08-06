@@ -9,7 +9,6 @@ import nl.backbase.helper.ValueParserHelper;
 import nl.backbase.helper.csv.CSVData;
 import nl.backbase.mapper.MovieMappers;
 import nl.backbase.mapper.RatingMappers;
-import nl.backbase.model.MovieAPISummaryEntity;
 import nl.backbase.repository.MovieAPIRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +25,8 @@ import java.util.concurrent.Executors;
 @Transactional
 public class MovieAPIService {
 
-    private final MovieAPIRepository movieRepository;
-    private final MovieAPISourceService movieSourceService;
+    private final MovieAPIRepository movieAPIRepository;
+    private final MovieAPISourceService movieAPISourceService;
     private final MovieMappers movieMappers;
     private final RatingMappers ratingMappers;
     private final String apiKey;
@@ -37,39 +36,39 @@ public class MovieAPIService {
                            final MovieMappers movieMappers,
                            final RatingMappers ratingMappers,
                            @Value("${omdbapi.api.key}") final String apiKey) {
-        this.movieRepository = movieRepository;
-        this.movieSourceService = movieSourceService;
+        this.movieAPIRepository = movieRepository;
+        this.movieAPISourceService = movieSourceService;
         this.movieMappers = movieMappers;
         this.ratingMappers = ratingMappers;
         this.apiKey = apiKey;
     }
 
     public Collection<MovieAPISummaryDTO> getMovieAPISummaryDTOCollection() {
-        final Collection<MovieAPISummaryEntity> top10Collection = this.movieRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
+        final var top10Collection = this.movieAPIRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
         return this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(top10Collection);
     }
 
     public RatingRequestDTO saveRatingDTO(final RatingRequestDTO ratingRequestDTO) {
-        var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(ratingRequestDTO.getMovieTitle());
+        var movieAPIEntity = this.movieAPIRepository.findByTitleIgnoreCase(ratingRequestDTO.getMovieTitle());
         if (movieAPIEntity == null) {
-            final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTO(this.apiKey, ratingRequestDTO.getMovieTitle());
+            final var movieAPISourceDTO = this.movieAPISourceService.getMovieAPISourceDTO(this.apiKey, ratingRequestDTO.getMovieTitle());
             movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
         }
 
         final var authentication = SecurityContextHolder.getContext().getAuthentication();
         final var ratingEntity = this.ratingMappers.ratingRequestDTORatingEntity(ratingRequestDTO, authentication, movieAPIEntity);
         movieAPIEntity.getRatings().add(ratingEntity);
-        this.movieRepository.save(movieAPIEntity);
+        this.movieAPIRepository.save(movieAPIEntity);
 
         return ratingRequestDTO;
     }
 
     public MovieAPIDTO getBestPictureMovieAPIDTO(final String movieTitle) {
-        var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(movieTitle);
+        var movieAPIEntity = this.movieAPIRepository.findByTitleIgnoreCase(movieTitle);
         if (movieAPIEntity == null) {
             throw new MovieAPINotFoundException(movieTitle);
         }
-        return this.movieMappers.movieAPITEntityToMovieAPIDTO(movieAPIEntity);
+        return this.movieMappers.movieAPIEntityToMovieAPIDTO(movieAPIEntity);
     }
 
     @PostConstruct
@@ -83,12 +82,12 @@ public class MovieAPIService {
         try {
             log.info("LOADING the CSV File Content into the Database...");
             csvCollection.forEach(csvMovie -> {
-                var movieAPIEntity = this.movieRepository.findByTitleIgnoreCase(csvMovie.getNominee());
+                var movieAPIEntity = this.movieAPIRepository.findByTitleIgnoreCase(csvMovie.getNominee());
                 if (movieAPIEntity == null) {
-                    final var movieAPISourceDTO = this.movieSourceService.getMovieAPISourceDTOFromCSVFile(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
+                    final var movieAPISourceDTO = this.movieAPISourceService.getMovieAPISourceDTOFromCSVFile(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
                     movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
                     movieAPIEntity.setOscarWinner(true);
-                    this.movieRepository.save(movieAPIEntity);
+                    this.movieAPIRepository.save(movieAPIEntity);
                 }
             });
             log.info("FINISHED loading the CSV File Content into the Database...");
