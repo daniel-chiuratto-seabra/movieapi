@@ -6,10 +6,8 @@ import nl.backbase.dto.source.MovieAPISourceDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -34,12 +32,8 @@ class MovieAPISourceServiceTest {
     @BeforeEach
     private void setUp() {
         this.mockRestTemplate = mock(RestTemplate.class);
-
-        final var mockRestTemplateBuilder = mock(RestTemplateBuilder.class);
-        when(mockRestTemplateBuilder.build()).thenReturn(this.mockRestTemplate);
-
         final var fakeMovieSourceAPIURL = "Fake Movie Source API URL";
-        this.movieAPISourceService = new MovieAPISourceService(fakeMovieSourceAPIURL, mockRestTemplateBuilder);
+        this.movieAPISourceService = new MovieAPISourceService(fakeMovieSourceAPIURL, this.mockRestTemplate);
     }
 
     @Test

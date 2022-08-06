@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static java.util.Collections.emptyList;
-import static nl.backbase.security.JWTConfigurationConstants.AUTHORIZATION_HEADER_STRING;
 import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 public class JWTSignUpFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -34,13 +34,14 @@ public class JWTSignUpFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) throws AuthenticationException, IOException {
-        final var userDTO = this.objectMapper.readValue(request.getInputStream(), UserDTO.class);
+        final var inputStream = request.getInputStream();
+        final var userDTO = this.objectMapper.readValue(inputStream, UserDTO.class);
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword(), emptyList()));
     }
 
     @Override
     public void successfulAuthentication(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain, final Authentication authentication) {
         final var token = this.tokenAuthenticationService.buildJWTToken(authentication.getName());
-        response.addHeader(AUTHORIZATION_HEADER_STRING, TOKEN_PREFIX + " " + token);
+        response.addHeader(AUTHORIZATION, TOKEN_PREFIX + " " + token);
     }
 }

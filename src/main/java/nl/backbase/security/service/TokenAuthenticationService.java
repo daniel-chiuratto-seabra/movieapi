@@ -15,8 +15,8 @@ import java.util.Date;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyList;
-import static nl.backbase.security.JWTConfigurationConstants.AUTHORIZATION_HEADER_STRING;
 import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationService {
@@ -34,7 +34,7 @@ public class TokenAuthenticationService {
     }
 
     public Authentication getAuthentication(final HttpServletRequest request) throws MalformedJwtException {
-        final var token = request.getHeader(AUTHORIZATION_HEADER_STRING);
+        final var token = request.getHeader(AUTHORIZATION);
         if (token != null) {
             final var user = Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
                                         .parseClaimsJws(token.replace(TOKEN_PREFIX, StringUtils.EMPTY)).getBody()

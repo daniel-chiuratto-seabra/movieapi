@@ -1,6 +1,10 @@
+movie:
+  api:
+    url: http://fake.url.com/
+
 springdoc:
   api-docs:
-    enabled: true
+    enabled: false
 
 security:
   jwt:
@@ -15,12 +19,6 @@ server:
   port: 8080
 
 spring:
-  jackson:
-    serialization:
-      indent_output: true
-  h2:
-    console:
-      enabled: true
   jpa:
     hibernate:
       ddl-auto: create
@@ -28,10 +26,17 @@ spring:
   datasource:
     url: jdbc:h2:mem:movietestdb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER
 
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        SQL: INFO
+        type:
+          descriptor:
+            sql:
+              BasicBinder: INFO
+
 omdbapi:
   api:
-    key: f06bd2c1
-
-api:
-  server:
-    url: ${http://localhost:${server.port}}
+    key: fakeKey

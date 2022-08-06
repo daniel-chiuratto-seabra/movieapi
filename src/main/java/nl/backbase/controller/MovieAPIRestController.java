@@ -17,7 +17,7 @@ public class MovieAPIRestController {
     private final MovieAPIService movieService;
 
     @ResponseBody
-    @GetMapping(value="bestpicture", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value="/bestpicture", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<MovieAPIDTO> bestpicture(@RequestParam("movieTitle") final String movieTitle) {
         return ResponseEntity.ok(this.movieService.getBestPictureMovieAPIDTO(movieTitle));
     }

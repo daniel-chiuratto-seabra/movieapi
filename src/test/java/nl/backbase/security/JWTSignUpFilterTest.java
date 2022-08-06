@@ -17,13 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-import static nl.backbase.security.JWTConfigurationConstants.AUTHORIZATION_HEADER_STRING;
 import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 class JWTSignUpFilterTest {
 
@@ -77,7 +77,7 @@ class JWTSignUpFilterTest {
 
         this.jwtSignUpFilter.successfulAuthentication(mockHttpServletRequest, httpServletResponse, mockFilterChain, expectedFakeAuthentication);
 
-        final var actualToken = httpServletResponse.getHeader(AUTHORIZATION_HEADER_STRING);
+        final var actualToken = httpServletResponse.getHeader(AUTHORIZATION);
         assertNotNull(actualToken);
         assertEquals(TOKEN_PREFIX + " " + expectedFakeToken, actualToken);
     }

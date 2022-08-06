@@ -5,7 +5,6 @@ import nl.backbase.controller.exception.MovieAPINotFoundException;
 import nl.backbase.controller.exception.MovieAPISourceServiceException;
 import nl.backbase.dto.source.MovieAPISourceDTO;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -29,9 +28,9 @@ public class MovieAPISourceService {
     private final String movieSourceApiUrl;
     private final RestTemplate restTemplate;
 
-    public MovieAPISourceService(@Value("${movie.api.url}") final String movieSourceAPIUrl, final RestTemplateBuilder restTemplateBuilder) {
+    public MovieAPISourceService(@Value("${movie.api.url}") final String movieSourceAPIUrl, final RestTemplate restTemplate) {
         this.movieSourceApiUrl = movieSourceAPIUrl;
-        this.restTemplate = restTemplateBuilder.build();
+        this.restTemplate = restTemplate;
     }
 
     public MovieAPISourceDTO getMovieAPISourceDTO(final String apiKey, final String movieTitle) {

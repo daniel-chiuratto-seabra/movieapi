@@ -1,11 +1,9 @@
 package nl.backbase.security.service;
 
 import io.jsonwebtoken.io.Encoders;
-import nl.backbase.security.JWTConfigurationConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
@@ -14,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 class TokenAuthenticationServiceTest {
 
@@ -39,7 +38,7 @@ class TokenAuthenticationServiceTest {
         final var actualToken = tokenAuthenticationService.buildJWTToken(expectedUsername);
 
         final var mockHttpServletRequest = mock(HttpServletRequest.class);
-        when(mockHttpServletRequest.getHeader(eq(JWTConfigurationConstants.AUTHORIZATION_HEADER_STRING))).thenReturn(actualToken);
+        when(mockHttpServletRequest.getHeader(eq(AUTHORIZATION))).thenReturn(actualToken);
 
         final var actualAuthentication = tokenAuthenticationService.getAuthentication(mockHttpServletRequest);
         assertNotNull(actualAuthentication);

@@ -83,11 +83,14 @@ public class MovieAPIApplicationWebSecurityConfig {
                     .anyRequest().authenticated()
 
                     // In order to allow the H2 Console access
-                    .and().headers().frameOptions().sameOrigin()
+                    .and()
+                    .headers().frameOptions().sameOrigin()
 
                     // Session
-                    .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and().addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
+                    .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
                     .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();
     }

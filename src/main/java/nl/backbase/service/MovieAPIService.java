@@ -11,6 +11,8 @@ import nl.backbase.mapper.MovieMappers;
 import nl.backbase.mapper.RatingMappers;
 import nl.backbase.repository.MovieAPIRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -71,28 +73,49 @@ public class MovieAPIService {
         return this.movieMappers.movieAPIEntityToMovieAPIDTO(movieAPIEntity);
     }
 
-    @PostConstruct
-    private void loadMoviesCSVContent() {
-        final var csvFileContentInputStream = this.getClass().getClassLoader().getResourceAsStream("academy_awards.csv");
-        final var csvCollection = ValueParserHelper.loadFileContent(csvFileContentInputStream);
-        Executors.newSingleThreadExecutor().execute(() -> loadCSVDataIntoDatabase(csvCollection));
-    }
 
-    private void loadCSVDataIntoDatabase(final Collection<CSVData> csvCollection) {
-        try {
-            log.info("LOADING the CSV File Content into the Database...");
-            csvCollection.forEach(csvMovie -> {
-                var movieAPIEntity = this.movieAPIRepository.findByTitleIgnoreCase(csvMovie.getNominee());
-                if (movieAPIEntity == null) {
-                    final var movieAPISourceDTO = this.movieAPISourceService.getMovieAPISourceDTOFromCSVFile(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
-                    movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
-                    movieAPIEntity.setOscarWinner(true);
-                    this.movieAPIRepository.save(movieAPIEntity);
-                }
-            });
-            log.info("FINISHED loading the CSV File Content into the Database...");
-        } catch (final Exception e) {
-            log.error("An error occurred while loading the file into the database, the process will be skipped", e);
+    @Configuration
+    @Profile("!test")
+    private class CSVFileLoader {
+        private final MovieAPIRepository movieAPIRepository;
+        private final MovieAPISourceService movieAPISourceService;
+        private final MovieMappers movieMappers;
+        private final String apiKey;
+
+        public CSVFileLoader(final MovieAPIRepository movieAPIRepository,
+                             final MovieAPISourceService movieAPISourceService,
+                             final MovieMappers movieMappers,
+                             @Value("${omdbapi.api.key}") final String apiKey) {
+
+            this.movieAPIRepository = movieAPIRepository;
+            this.movieAPISourceService = movieAPISourceService;
+            this.movieMappers = movieMappers;
+            this.apiKey = apiKey;
+        }
+
+        @PostConstruct
+        private void loadMoviesCSVContent() {
+            final var csvFileContentInputStream = this.getClass().getClassLoader().getResourceAsStream("academy_awards.csv");
+            final var csvCollection = ValueParserHelper.loadFileContent(csvFileContentInputStream);
+            Executors.newSingleThreadExecutor().execute(() -> loadCSVDataIntoDatabase(csvCollection));
+        }
+
+        private void loadCSVDataIntoDatabase(final Collection<CSVData> csvCollection) {
+            try {
+                log.info("LOADING the CSV File Content into the Database...");
+                csvCollection.forEach(csvMovie -> {
+                    var movieAPIEntity = this.movieAPIRepository.findByTitleIgnoreCase(csvMovie.getNominee());
+                    if (movieAPIEntity == null) {
+                        final var movieAPISourceDTO = this.movieAPISourceService.getMovieAPISourceDTOFromCSVFile(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
+                        movieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(movieAPISourceDTO);
+                        movieAPIEntity.setOscarWinner(true);
+                        this.movieAPIRepository.save(movieAPIEntity);
+                    }
+                });
+                log.info("FINISHED loading the CSV File Content into the Database...");
+            } catch (final Exception e) {
+                log.error("An error occurred while loading the file into the database, the process will be skipped", e);
+            }
         }
     }
 }
