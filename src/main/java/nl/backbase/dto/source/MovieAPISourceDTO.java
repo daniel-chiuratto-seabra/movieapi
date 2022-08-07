@@ -6,8 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Collection;
 
+/**
+ * This DTO represents the Movie data returned by the external Movie API Service
+ *
+ * @author Daniel Chiuratto Seabra
+ * @since 02/08/2022
+ */
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)

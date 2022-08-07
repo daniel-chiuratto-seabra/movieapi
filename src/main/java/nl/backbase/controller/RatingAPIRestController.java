@@ -3,6 +3,7 @@ package nl.backbase.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.RatingRequestDTO;
+import nl.backbase.model.RatingEntity;
 import nl.backbase.service.MovieAPIService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * This is the controller related to the {@link RatingEntity} creations, where the user can rate a given Movie Title:
+ * <ul>
+ *     <li><b>/v1/rating (POST):</b> Saves a rating between 0 and 10 for the specified Movie Title, with the username as a rating source</li>
+ * </ul>
+ *
+ * @author Daniel Chiuratto Seabra
+ * @since 04/08/2022
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/rating")

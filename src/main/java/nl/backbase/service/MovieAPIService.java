@@ -2,8 +2,8 @@ package nl.backbase.service;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.backbase.controller.exception.MovieAPINotFoundException;
-import nl.backbase.dto.MovieAPIDTO;
-import nl.backbase.dto.MovieAPISummaryDTO;
+import nl.backbase.dto.BestPictureMovieDTO;
+import nl.backbase.dto.MovieTop10DTO;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.helper.ValueParserHelper;
 import nl.backbase.helper.csv.CSVData;
@@ -45,7 +45,7 @@ public class MovieAPIService {
         this.apiKey = apiKey;
     }
 
-    public Collection<MovieAPISummaryDTO> getMovieAPISummaryDTOCollection() {
+    public Collection<MovieTop10DTO> getMovieAPISummaryDTOCollection() {
         final var top10Collection = this.movieAPIRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
         return this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(top10Collection);
     }
@@ -67,7 +67,7 @@ public class MovieAPIService {
         return ratingRequestDTO;
     }
 
-    public MovieAPIDTO getBestPictureMovieAPIDTO(final String movieTitle) {
+    public BestPictureMovieDTO getBestPictureMovieAPIDTO(final String movieTitle) {
         var movieAPIEntity = this.movieAPIRepository.findByTitleIgnoreCase(movieTitle);
         if (movieAPIEntity == null) {
             throw new MovieAPINotFoundException(movieTitle);
@@ -98,7 +98,7 @@ public class MovieAPIService {
         @PostConstruct
         private void loadMoviesCSVContent() {
             final var csvFileContentInputStream = this.getClass().getClassLoader().getResourceAsStream("academy_awards.csv");
-            final var csvCollection = ValueParserHelper.loadFileContent(csvFileContentInputStream);
+            final var csvCollection = ValueParserHelper.getCSVDataCollectionFromInputStream(csvFileContentInputStream);
             Executors.newSingleThreadExecutor().execute(() -> loadCSVDataIntoDatabase(csvCollection));
         }
 

@@ -1,8 +1,8 @@
 package nl.backbase.service;
 
 import nl.backbase.controller.exception.MovieAPINotFoundException;
-import nl.backbase.dto.MovieAPIDTO;
-import nl.backbase.dto.MovieAPISummaryDTO;
+import nl.backbase.dto.BestPictureMovieDTO;
+import nl.backbase.dto.MovieTop10DTO;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.dto.source.MovieAPISourceDTO;
 import nl.backbase.mapper.MovieMappers;
@@ -50,11 +50,11 @@ class MovieAPIServiceTest {
     @Test
     @DisplayName("GIVEN a MovieAPISourceService with mocked dependencies, " +
                   "WHEN getMovieAPISummaryDTOCollection is called " +
-                  "THEN it should return the expected actual MovieAPISummaryDTO collection")
+                  "THEN it should return the expected actual MovieTop10DTO collection")
     public void givenMovieAPISourceServiceWhenGetMovieAPISummaryDTOCollectionThenItShouldReturnTheExpectedActualMovieAPISummaryDTOCollection() {
         final var fakePageable = Pageable.ofSize(10);
         final var fakeMovieAPISummaryEntityList = Collections.<MovieAPISummaryEntity>emptyList();
-        final var fakeMovieAPISummaryDTOList = Collections.<MovieAPISummaryDTO>emptyList();
+        final var fakeMovieAPISummaryDTOList = Collections.<MovieTop10DTO>emptyList();
         when(mockMovieAPIRepository.findTop10OrderedByBoxOffice(eq(fakePageable))).thenReturn(fakeMovieAPISummaryEntityList);
         when(mockMovieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(eq(fakeMovieAPISummaryEntityList))).thenReturn(fakeMovieAPISummaryDTOList);
         final var actualMovieAPISummaryDTOCollection = movieAPISourceService.getMovieAPISummaryDTOCollection();
@@ -149,11 +149,11 @@ class MovieAPIServiceTest {
     @DisplayName("GIVEN a MovieAPISourceService with mocked dependencies, " +
                   "WHEN getBestPictureMovieAPIDTO is called with a fake Movie Title set, " +
                    "AND MovieRepository returns a fake MovieAPIEntity by calling findByTitleIgnoreCase method " +
-                  "THEN it should return the expected actual MovieAPIDTO instance")
+                  "THEN it should return the expected actual BestPictureMovieDTO instance")
     public void givenMovieAPISourceServiceWhenGetBestPictureMovieAPIDTOCalledThenShouldReturnExpectedActualMovieAPIDTOInstance() {
         final var fakeMovieTitle = "Fake Movie Title";
         final var fakeMovieAPIEntity = new MovieAPIEntity();
-        final var fakeMovieAPIDTO = new MovieAPIDTO();
+        final var fakeMovieAPIDTO = new BestPictureMovieDTO();
 
         when(mockMovieAPIRepository.findByTitleIgnoreCase(eq(fakeMovieTitle))).thenReturn(fakeMovieAPIEntity);
         when(mockMovieMappers.movieAPIEntityToMovieAPIDTO(eq(fakeMovieAPIEntity))).thenReturn(fakeMovieAPIDTO);

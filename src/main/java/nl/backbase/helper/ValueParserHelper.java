@@ -3,7 +3,6 @@ package nl.backbase.helper;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import nl.backbase.controller.exception.MovieAPPIServiceFileLoadErrorException;
 import nl.backbase.helper.csv.CSVData;
 
 import java.io.*;
@@ -13,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static ch.qos.logback.core.CoreConstants.EMPTY_STRING;
 
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValueParserHelper {
 
@@ -21,7 +21,7 @@ public class ValueParserHelper {
     private static final String OSCAR_WINNER_YES = "YES";
     private static final String BEST_PICTURE_OSCAR = "Best Picture";
 
-    public static Collection<CSVData> loadFileContent(final InputStream inputStream) {
+    public static Collection<CSVData> getCSVDataCollectionFromInputStream(final InputStream inputStream) {
         try (final Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             final var csvToBeanBuilder = new CsvToBeanBuilder<CSVData>(reader)
                     .withType(CSVData.class)
@@ -32,7 +32,7 @@ public class ValueParserHelper {
                                                       BEST_PICTURE_OSCAR.equals(csvData.getCategory()))
                                    .collect(Collectors.toList());
         } catch (final IOException e) {
-            throw new MovieAPPIServiceFileLoadErrorException(e);
+            throw new RuntimeException(e);
         }
     }
 

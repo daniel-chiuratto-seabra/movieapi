@@ -1,8 +1,8 @@
 package nl.backbase.controller;
 
 import nl.backbase.IntegrationTest;
-import nl.backbase.dto.MovieAPIDTO;
-import nl.backbase.dto.MovieAPISummaryDTO;
+import nl.backbase.dto.BestPictureMovieDTO;
+import nl.backbase.dto.MovieTop10DTO;
 import nl.backbase.model.MovieAPIEntity;
 import nl.backbase.model.RatingEntity;
 import nl.backbase.repository.MovieAPIRepository;
@@ -44,7 +44,7 @@ class MovieAPIRestControllerTest extends IntegrationTest {
                 assertNotNull(mvcResult.getResponse().getContentAsString());
                 assertFalse(mvcResult.getResponse().getContentAsString().trim().isEmpty());
 
-                final var movieAPIDTO = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), MovieAPIDTO.class);
+                final var movieAPIDTO = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BestPictureMovieDTO.class);
                 assertEquals(movieAPIEntity.getTitle(), movieAPIDTO.getTitle());
                 assertEquals(movieAPIEntity.getOscarWinner() ? "YES" : "NO", movieAPIDTO.getOscarWinner());
             } catch (final Exception e) {
@@ -67,7 +67,7 @@ class MovieAPIRestControllerTest extends IntegrationTest {
         assertNotNull(mvcResult.getResponse().getContentAsString());
         assertFalse(mvcResult.getResponse().getContentAsString().trim().isEmpty());
 
-        final List<MovieAPISummaryDTO> actualMovieAPISummaryDTOList = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, MovieAPISummaryDTO.class));
+        final List<MovieTop10DTO> actualMovieAPISummaryDTOList = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, MovieTop10DTO.class));
         assertEquals(expectedFakeMovieAPIEntityList.size(), actualMovieAPISummaryDTOList.size());
         IntStream.range(0, expectedFakeMovieAPIEntityList.size()).forEach(index -> {
             final var expectedMovieAPIEntity = expectedFakeMovieAPIEntityList.get(index);

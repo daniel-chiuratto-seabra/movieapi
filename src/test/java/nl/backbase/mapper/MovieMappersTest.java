@@ -29,7 +29,7 @@ public class MovieMappersTest {
     }
 
     @Test
-    @DisplayName("GIVEN a null MovieAPIDTOEntity collection, WHEN the mapper tries to map it, THEN it should return an empty MovieAPIDTO Collection")
+    @DisplayName("GIVEN a null MovieAPIDTOEntity collection, WHEN the mapper tries to map it, THEN it should return an empty BestPictureMovieDTO Collection")
     public void givenANullEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnEmptyCollection() {
         final var actualMovieAPIDTOCollection = this.movieMappers.movieAPIEntityToMovieAPIDTO((Collection<MovieAPIEntity>) null);
         assertNotNull(actualMovieAPIDTOCollection);
@@ -37,7 +37,7 @@ public class MovieMappersTest {
     }
 
     @Test
-    @DisplayName("GIVEN a fake entity, WHEN the mapper tries to map it, THEN it should return an actual MovieAPIDTO with expected values")
+    @DisplayName("GIVEN a fake entity, WHEN the mapper tries to map it, THEN it should return an actual BestPictureMovieDTO with expected values")
     public void givenAFakeMovieAPIEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieAPIDTOWithExpectedValues() {
         final var expectedFakeTitle = "Fake Movie Title";
         final var expectedFakeRatingEntityCollection = getFakeRatingEntityCollection(1);
@@ -68,7 +68,7 @@ public class MovieMappersTest {
     }
 
     @Test
-    @DisplayName("GIVEN a fake MovieAPIEntity collection, WHEN the mapper tries to map it, THEN it should return an actual MovieAPIDTO collection with expected values")
+    @DisplayName("GIVEN a fake MovieAPIEntity collection, WHEN the mapper tries to map it, THEN it should return an actual BestPictureMovieDTO collection with expected values")
     public void givenAFakeMovieAPIEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieAPIDTOCollectionWithExpectedValues() {
         final var expectedFakeTitle = "Fake Movie Title";
         final var expectedFakeMovieAPIEntityList = new ArrayList<MovieAPIEntity>();
@@ -85,7 +85,7 @@ public class MovieMappersTest {
 
         assertNotNull(actualMovieAPIDTOList);
         assertFalse(actualMovieAPIDTOList.isEmpty());
-        assertEquals(expectedFakeMovieAPIEntityList.size(), actualMovieAPIDTOList.size(), "The amount of MovieAPIDTO collection items should be the same as the MovieAPIEntity collection");
+        assertEquals(expectedFakeMovieAPIEntityList.size(), actualMovieAPIDTOList.size(), "The amount of BestPictureMovieDTO collection items should be the same as the MovieAPIEntity collection");
 
         IntStream.range(0, expectedFakeMovieAPIEntityList.size()).forEach(index -> {
             final var expectedFakeMovieAPIEntity = expectedFakeMovieAPIEntityList.get(index);
@@ -184,7 +184,7 @@ public class MovieMappersTest {
     }
 
     @Test
-    @DisplayName("GIVEN a fake MovieAPISummaryEntity, WHEN the mapper tries to map it, THEN it should return an actual MovieAPISummaryDTO with the expected values")
+    @DisplayName("GIVEN a fake MovieAPISummaryEntity, WHEN the mapper tries to map it, THEN it should return an actual MovieTop10DTO with the expected values")
     public void givenAFakeMovieAPISummaryEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieAPISummaryDTOWithTheExpectedValues() {
         final var expectedFakeMovieAPISummaryEntity = new MovieAPISummaryEntity("Fake Title", 1234D, new BigDecimal("7654321"), true);
         final var actualMovieAPISummaryDTO = this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(expectedFakeMovieAPISummaryEntity);
@@ -196,14 +196,14 @@ public class MovieMappersTest {
     }
 
     @Test
-    @DisplayName("GIVEN a fake MovieAPISummaryEntity collection, WHEN the mapper tries to map it, THEN it should return an actual MovieAPISummaryDTO collection with the expected values")
+    @DisplayName("GIVEN a fake MovieAPISummaryEntity collection, WHEN the mapper tries to map it, THEN it should return an actual MovieTop10DTO collection with the expected values")
     public void givenAFakeMovieAPISummaryEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieAPISummaryDTOCollectionWithTheExpectedValues() {
         final var expectedFakeMovieAPISummaryEntityCollection = new ArrayList<MovieAPISummaryEntity>();
         IntStream.range(0, 5).forEach(index -> expectedFakeMovieAPISummaryEntityCollection.add(new MovieAPISummaryEntity(String.format("Fake Title %d", index), 1234D * index, new BigDecimal("7654321").multiply(BigDecimal.valueOf(index)), index % 2 == 0)));
 
         final var actualMovieAPISummaryDTOCollection = new ArrayList<>(this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(expectedFakeMovieAPISummaryEntityCollection));
 
-        assertEquals(expectedFakeMovieAPISummaryEntityCollection.size(), actualMovieAPISummaryDTOCollection.size(), "The amount of parsed MovieAPISummaryDTO should be the same as the expected collection");
+        assertEquals(expectedFakeMovieAPISummaryEntityCollection.size(), actualMovieAPISummaryDTOCollection.size(), "The amount of parsed MovieTop10DTO should be the same as the expected collection");
 
         IntStream.range(0, expectedFakeMovieAPISummaryEntityCollection.size()).forEach(index -> {
             final var expectedFakeMovieAPISummaryEntity = expectedFakeMovieAPISummaryEntityCollection.get(index);

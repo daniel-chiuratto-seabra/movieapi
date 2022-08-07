@@ -8,6 +8,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
+/**
+ * This DTO represents a user rating request for a specific movie title. It accepts a movie title, as well a value between
+ * 0 and 10 (with both 0 and 10 included)
+ *
+ * @author Daniel Chiuratto Seabra
+ * @since 02/08/2022
+ */
 @Data
 @NoArgsConstructor
 public class RatingRequestDTO implements Serializable {

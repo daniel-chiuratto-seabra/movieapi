@@ -24,7 +24,7 @@ class ValueParserHelperTest {
                   "WHEN the content is parsed " +
                   "THEN the parser should return an empty collection")
     public void givenAnEmptyCSVContentWhenTheContentIsParsedThenTheParserShouldReturnAnEmptyCollection() {
-        final var csvDataCollection = ValueParserHelper.loadFileContent(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)));
+        final var csvDataCollection = ValueParserHelper.getCSVDataCollectionFromInputStream(new ByteArrayInputStream("".getBytes(StandardCharsets.UTF_8)));
         assertTrue(csvDataCollection.isEmpty());
     }
 
@@ -33,7 +33,7 @@ class ValueParserHelperTest {
                   "WHEN the content contains 2 registers as Best Picture that won the Oscar " +
                   "THEN the parser should return only these 2 parsed values")
     public void givenCSVContentWith6RegistersWhenContentContains2RegistersBestPictureWonOscarThenReturnThese2() {
-        final var csvDataCollection = ValueParserHelper.loadFileContent(getListInputStream(
+        final var csvDataCollection = ValueParserHelper.getCSVDataCollectionFromInputStream(getListInputStream(
                 CSV_DATA_HEADERS,
                 getData(1, "Best Actor", false),
                 getData(2, "Best Picture", true),

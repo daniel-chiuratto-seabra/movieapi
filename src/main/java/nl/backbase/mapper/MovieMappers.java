@@ -1,8 +1,8 @@
 package nl.backbase.mapper;
 
 import lombok.RequiredArgsConstructor;
-import nl.backbase.dto.MovieAPIDTO;
-import nl.backbase.dto.MovieAPISummaryDTO;
+import nl.backbase.dto.BestPictureMovieDTO;
+import nl.backbase.dto.MovieTop10DTO;
 import nl.backbase.dto.source.MovieAPISourceDTO;
 import nl.backbase.helper.ValueParserHelper;
 import nl.backbase.model.MovieAPIEntity;
@@ -23,18 +23,18 @@ public class MovieMappers {
 
     private final RatingMappers ratingMappers;
 
-    public MovieAPIDTO movieAPIEntityToMovieAPIDTO(final MovieAPIEntity movieAPIEntity) {
+    public BestPictureMovieDTO movieAPIEntityToMovieAPIDTO(final MovieAPIEntity movieAPIEntity) {
         if (movieAPIEntity == null) { return null; }
-        final var movieAPIDTO = new MovieAPIDTO();
+        final var movieAPIDTO = new BestPictureMovieDTO();
         movieAPIDTO.setTitle(movieAPIEntity.getTitle());
         movieAPIDTO.setOscarWinner(parseBooleanToOscarWinnerString(movieAPIEntity.getOscarWinner()));
         movieAPIDTO.setRatings(this.ratingMappers.ratingEntityRatingDTO(movieAPIEntity.getRatings()));
         return movieAPIDTO;
     }
 
-    public MovieAPISummaryDTO movieAPISummaryEntityToMovieAPISummaryDTO(final MovieAPISummaryEntity movieAPISummaryEntity) {
+    public MovieTop10DTO movieAPISummaryEntityToMovieAPISummaryDTO(final MovieAPISummaryEntity movieAPISummaryEntity) {
         if (movieAPISummaryEntity == null) { return null; }
-        final var movieAPISummaryDTO = new MovieAPISummaryDTO();
+        final var movieAPISummaryDTO = new MovieTop10DTO();
         movieAPISummaryDTO.setTitle(movieAPISummaryEntity.getTitle());
         movieAPISummaryDTO.setBoxOffice(movieAPISummaryEntity.getBoxOffice());
         var average = movieAPISummaryEntity.getAverage();
@@ -54,7 +54,7 @@ public class MovieMappers {
         return movieAPIEntity;
     }
 
-    public Collection<MovieAPIDTO> movieAPIEntityToMovieAPIDTO(final Collection<MovieAPIEntity> movieAPIEntityCollection) {
+    public Collection<BestPictureMovieDTO> movieAPIEntityToMovieAPIDTO(final Collection<MovieAPIEntity> movieAPIEntityCollection) {
         if (movieAPIEntityCollection == null) { return Collections.emptyList(); }
         return movieAPIEntityCollection.stream().map(this::movieAPIEntityToMovieAPIDTO).collect(Collectors.toList());
     }
@@ -64,7 +64,7 @@ public class MovieMappers {
         return movieAPISourceDTOCollection.stream().map(this::movieAPISourceDTOToMovieAPIEntity).collect(Collectors.toList());
     }
 
-    public Collection<MovieAPISummaryDTO> movieAPISummaryEntityToMovieAPISummaryDTO(final Collection<MovieAPISummaryEntity> movieAPISummaryEntityCollection) {
+    public Collection<MovieTop10DTO> movieAPISummaryEntityToMovieAPISummaryDTO(final Collection<MovieAPISummaryEntity> movieAPISummaryEntityCollection) {
         if (movieAPISummaryEntityCollection == null) { return Collections.emptyList(); }
         return movieAPISummaryEntityCollection.stream().map(this::movieAPISummaryEntityToMovieAPISummaryDTO).collect(Collectors.toList());
     }
