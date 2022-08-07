@@ -11,9 +11,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class UserDTO implements Serializable {
     @NotEmpty
-    @JsonProperty
+    @JsonProperty(required = true)
     private String username;
     @NotEmpty
-    @JsonProperty
+    @JsonProperty(required = true)
     private String password;
 }

@@ -42,12 +42,12 @@ logging:
             sql:
               BasicBinder: INFO
 
+server:
+  port: ${APPLICATION_PORT}
+
 api:
   server:
-    url: ${APPLICATION_URL}
-
-server:
-  port: ${APPLICATION_PORT:8080}
+    url: ${APPLICATION_URL}:${APPLICATION_PORT}
 
 omdbapi:
   api:

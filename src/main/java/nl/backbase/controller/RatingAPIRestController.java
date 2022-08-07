@@ -1,5 +1,6 @@
 package nl.backbase.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.service.MovieAPIService;
@@ -17,6 +18,8 @@ public class RatingAPIRestController {
     private final MovieAPIService movieAPIService;
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
+    @Operation(summary = "This endpoint is related in saving a Rate to the informed Movie Title, the rate should be " +
+                         "a number in between 0 and 10")
     public ResponseEntity<?> saveRatingDTO(@RequestBody final RatingRequestDTO ratingRequestDTO) {
         return ResponseEntity.ok().body(this.movieAPIService.saveRatingDTO(ratingRequestDTO));
     }

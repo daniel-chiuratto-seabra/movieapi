@@ -62,6 +62,8 @@ public class MovieAPIService {
         movieAPIEntity.getRatings().add(ratingEntity);
         this.movieAPIRepository.save(movieAPIEntity);
 
+        ratingRequestDTO.setMovieTitle(movieAPIEntity.getTitle());
+
         return ratingRequestDTO;
     }
 

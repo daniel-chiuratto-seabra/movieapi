@@ -18,6 +18,14 @@
 		<jjwt.version>0.11.5</jjwt.version>
 		<mapstruct.version>1.5.2.Final</mapstruct.version>
 	</properties>
+	<repositories>
+		<!-- The repository below is to allow the usage of the copy-rename-maven-plugin so the right application file -->
+		<!-- is packed relied on which Maven profile (prod/dev) is being used -->
+		<repository>
+			<id>sonartype-nexus-staging</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,6 +94,23 @@
 
 	<profiles>
 		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<excludes>
+							<!-- For development buildings, there is no need for the production application file be packed -->
+							<exclude>**/application-**.yaml</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
 			<id>prod</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -95,11 +120,34 @@
 					<resource>
 						<directory>src/main/resources</directory>
 						<excludes>
-							<!-- The resource below is intended to not load the application-dev.yaml file for production while packaging-->
+							<!-- When building for production, the application development file should not be packed -->
+							<exclude>**/application.yaml</exclude>
 							<exclude>**/application-**.yaml</exclude>
 						</excludes>
 					</resource>
 				</resources>
+				<plugins>
+					<plugin>
+						<groupId>com.coderplus.maven.plugins</groupId>
+						<artifactId>copy-rename-maven-plugin</artifactId>
+						<version>1.0</version>
+						<executions>
+							<execution>
+								<id>copy-file</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<!-- When building for production, the application file should expect values from -->
+									<!-- environment variables -->
+									<sourceFile>src/main/resources/application-prod.yaml</sourceFile>
+									<destinationFile>target/classes/application.yaml</destinationFile>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 	</profiles>

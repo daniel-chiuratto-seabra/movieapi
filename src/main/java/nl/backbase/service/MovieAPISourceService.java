@@ -67,6 +67,8 @@ public class MovieAPISourceService {
                                 }
                             }
                         }
+                    } else {
+                        throw new MovieAPINotFoundException(String.format("The searched '%s' movie cannot be found", movieTitle));
                     }
                 }
                 throw new MovieAPISourceServiceException(String.format("The external Movie API did not return any response body. It returned Http Status %d: %s", responseEntity.getStatusCode().value(), responseEntity.getStatusCode().name()));

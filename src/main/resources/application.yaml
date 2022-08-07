@@ -42,12 +42,12 @@ logging:
             sql:
               BasicBinder: INFO
 
-api:
-  server:
-    url: ${http://localhost:${server.port}}
-
 server:
   port: 8080
+
+api:
+  server:
+    url: http://localhost:${server.port}
 
 omdbapi:
   api:
