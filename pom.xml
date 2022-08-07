@@ -87,14 +87,16 @@
 	<profiles>
 		<profile>
 			<id>prod</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 			<build>
 				<resources>
-					<!-- The resource below is intended to not load the application-dev.yaml file for production while packaging-->
 					<resource>
-						<filtering>true</filtering>
-						<directory>${project.basedir}/src/main/resources</directory>
+						<directory>src/main/resources</directory>
 						<excludes>
-							<exclude>application-dev.yaml</exclude>
+							<!-- The resource below is intended to not load the application-dev.yaml file for production while packaging-->
+							<exclude>**/application-**.yaml</exclude>
 						</excludes>
 					</resource>
 				</resources>

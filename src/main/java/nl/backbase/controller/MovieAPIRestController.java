@@ -1,5 +1,6 @@
 package nl.backbase.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
@@ -18,6 +19,7 @@ public class MovieAPIRestController {
 
     @ResponseBody
     @GetMapping(value="/bestpicture", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @Operation(summary = "Get the Movie that won the Oscar for Best Picture, if not it returns a Not Found")
     public ResponseEntity<MovieAPIDTO> bestpicture(@RequestParam("movieTitle") final String movieTitle) {
         return ResponseEntity.ok(this.movieService.getBestPictureMovieAPIDTO(movieTitle));
     }

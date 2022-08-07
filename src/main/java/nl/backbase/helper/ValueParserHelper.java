@@ -3,7 +3,6 @@ package nl.backbase.helper;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import nl.backbase.controller.exception.MovieAPPIServiceFileLoadErrorException;
 import nl.backbase.helper.csv.CSVData;
 
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 
 import static ch.qos.logback.core.CoreConstants.EMPTY_STRING;
 
-@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValueParserHelper {
 
@@ -43,7 +41,6 @@ public class ValueParserHelper {
             return new BigDecimal(boxOffice.replace(DOLLAR_SIGN, EMPTY_STRING)
                                            .replace(COMMA_STRING, EMPTY_STRING));
         } catch (final Exception e) {
-            log.error("An error occurred while parsing the String boxOffice into BigDecimal: {}", e.getMessage());
             return BigDecimal.ZERO;
         }
     }

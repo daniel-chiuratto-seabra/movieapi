@@ -4,7 +4,7 @@ movie:
 
 springdoc:
   api-docs:
-    enabled: true
+    enabled: false
 
 security:
   jwt:
@@ -12,24 +12,24 @@ security:
       signin: /v1/signin
       signup: /v1/signup
     token:
-      secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
-      expiration: 86400000 # 24 hours
+      secret: ${APPLICATION_JWT_SECRET}
+      expiration: ${APPLICATION_JWT_TOKEN_EXPIRATION}
 
 spring:
   profiles:
-    active: dev
+    active: prod
   jackson:
     serialization:
       indent_output: true
   h2:
     console:
-      enabled: true
+      enabled: false
   jpa:
     hibernate:
-      ddl-auto: create
-    generate-ddl: true
+      ddl-auto: ${APPLICATION_JPA_HIBERNATE_DDL_AUTO}
+    generate-ddl: ${APPLICATION_JPA_GENERATE_DDL}
   datasource:
-    url: jdbc:h2:mem:movietestdb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER
+    url: ${APPLICATION_JPA_DATASOURCE_URL}
 
 logging:
   level:
@@ -44,11 +44,11 @@ logging:
 
 api:
   server:
-    url: ${http://localhost:${server.port}}
+    url: ${APPLICATION_URL}
 
 server:
-  port: 8080
+  port: ${APPLICATION_PORT:8080}
 
 omdbapi:
   api:
-    key: f06bd2c1
+    key: ${APPLICATION_OMDBAPI_KEY}
