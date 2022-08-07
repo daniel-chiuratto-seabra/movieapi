@@ -1,6 +1,6 @@
 package nl.backbase.controller;
 
-import nl.backbase.integration.IntegrationTest;
+import nl.backbase.IntegrationTest;
 import nl.backbase.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

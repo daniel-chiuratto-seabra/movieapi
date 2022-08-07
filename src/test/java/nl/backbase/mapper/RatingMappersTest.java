@@ -51,7 +51,7 @@ class RatingMappersTest {
         final var actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(expectedFakeRatingRequestDTO, expectedFakeAuthentication, expectedFakeMovieAPIEntity);
         assertNotNull(actualRatingEntity);
         assertEquals(expectedFakeAuthentication.getPrincipal(), actualRatingEntity.getSource());
-        assertEquals(expectedFakeRatingRequestDTO.getValue(), actualRatingEntity.getValue());
+        assertEquals(Integer.parseInt(expectedFakeRatingRequestDTO.getValue()), actualRatingEntity.getValue().intValue());
         assertEquals(expectedFakeMovieAPIEntity, actualRatingEntity.getMovieAPIEntity());
     }
 
@@ -85,7 +85,7 @@ class RatingMappersTest {
 
     private RatingRequestDTO getFakeRatingRequestDTO() {
         final var fakeRatingRequestDTO = new RatingRequestDTO();
-        fakeRatingRequestDTO.setValue(123D);
+        fakeRatingRequestDTO.setValue("123");
         fakeRatingRequestDTO.setMovieTitle("Fake Movie Title");
         return fakeRatingRequestDTO;
     }

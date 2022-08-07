@@ -1,8 +1,8 @@
 package nl.backbase.controller;
 
+import nl.backbase.IntegrationTest;
 import nl.backbase.dto.MovieAPIDTO;
 import nl.backbase.dto.MovieAPISummaryDTO;
-import nl.backbase.integration.IntegrationTest;
 import nl.backbase.model.MovieAPIEntity;
 import nl.backbase.model.RatingEntity;
 import nl.backbase.repository.MovieAPIRepository;
@@ -26,6 +26,7 @@ class MovieAPIRestControllerTest extends IntegrationTest {
 
     @Autowired
     private MovieAPIRepository movieAPIRepository;
+
 
     @Test
     @DisplayName("GIVEN a fake Movie collection that starts available in the database " +

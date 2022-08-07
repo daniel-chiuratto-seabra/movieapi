@@ -1,4 +1,4 @@
-package nl.backbase.integration;
+package nl.backbase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

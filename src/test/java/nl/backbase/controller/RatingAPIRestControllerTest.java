@@ -1,8 +1,8 @@
 package nl.backbase.controller;
 
+import nl.backbase.IntegrationTest;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.dto.source.MovieAPISourceDTO;
-import nl.backbase.integration.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
@@ -27,7 +27,7 @@ class RatingAPIRestControllerTest extends IntegrationTest {
     public void givenRatingToBePostedWhenUserPostThenAPIReturnRatingRequestAfterSuccessfullyPosted() throws Exception {
         final var expectedRatingRequestDTO = new RatingRequestDTO();
         expectedRatingRequestDTO.setMovieTitle("Fake Movie");
-        expectedRatingRequestDTO.setValue(10D);
+        expectedRatingRequestDTO.setValue("10");
 
         final var expectedFakeMovieAPISourceDTO = new MovieAPISourceDTO();
         expectedFakeMovieAPISourceDTO.setTitle("Fake Movie");

@@ -17,5 +17,5 @@ public class RatingRequestDTO implements Serializable {
     @NotEmpty
     @Pattern(regexp = "\\b(0*[0-9]|10)\\b")
     @JsonProperty(value = "value", required = true)
-    private Double value;
+    private String value;
 }

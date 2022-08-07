@@ -1,3 +1,5 @@
+*I KNOW! I SHOULD NOT LEAVE THE DATA BELOW IN A README, BUT IT IS TEMPORARY!*
+
 # Build the Docker image
 mvn spring-boot:build-image
 
@@ -28,3 +30,7 @@ docker run --name movie-api-prod \
 -e APPLICATION_PORT=8080 \
 -e APPLICATION_OMDBAPI_KEY=f06bd2c1 \
 movieapi:0.0.1-SNAPSHOT
+
+# To SignIn/LogIn Using CURL
+curl -v -d '{"username":"<USERNAME>", "password":"<PASSWORD>"}' -H "Content-Type: application/json" -X POST http://localhost:8080/v1/signin
+

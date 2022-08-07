@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "88d1ec8a-6683-46b2-bfae-6bf1d60d1282",
+		"name": "MovieAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11141650"
+	},
+	"item": [
+		{
+			"name": "OMDB API Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://www.omdbapi.com/?apikey=<OMDB-TOKEN>&type=movie&t=Wings",
+					"protocol": "http",
+					"host": [
+						"www",
+						"omdbapi",
+						"com"
+					],
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "<OMDB-TOKEN>"
+						},
+						{
+							"key": "type",
+							"value": "movie"
+						},
+						{
+							"key": "t",
+							"value": "Wings"
+						},
+						{
+							"key": "plot",
+							"value": "full",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "top10",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/movie/top10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"movie",
+						"top10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "rating",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"movieTitle\": \"<MOVIE-TITLE>\",\n    \"value\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/rating",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signIn",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"<USERNAME>\",\n    \"password\": \"<PASSWORD>\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/signin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signUp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"<USERNAME>\",\n    \"password\": \"<PASSWORD>\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bestpicure",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/v1/movie/bestpicture?movieTitle=<MOVIE-TITLE>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"movie",
+						"bestpicture"
+					],
+					"query": [
+						{
+							"key": "movieTitle",
+							"value": "<MOVIE-TITLE>"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

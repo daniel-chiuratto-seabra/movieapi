@@ -17,7 +17,7 @@ public class RatingMappers {
         if (ratingRequestDTO == null || authentication == null || movieAPIEntity == null) { return null; }
         final var ratingEntity = new RatingEntity();
         ratingEntity.setSource(authentication.getName());
-        ratingEntity.setValue(ratingRequestDTO.getValue());
+        ratingEntity.setValue(Double.parseDouble(ratingRequestDTO.getValue()));
         ratingEntity.setMovieAPIEntity(movieAPIEntity);
         return ratingEntity;
     }
