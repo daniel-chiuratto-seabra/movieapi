@@ -1,6 +1,5 @@
 package nl.backbase.service;
 
-import nl.backbase.controller.exception.MovieNotFoundException;
 import nl.backbase.controller.exception.MovieSourceServiceException;
 import nl.backbase.dto.source.MovieSourceDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,7 +65,7 @@ class MovieSourceServiceTest {
     public void givenMovieSourceServiceWithFakeMockedDependenciesWhenGetMovieSourceDTOFromCSVFileIsCalledWithTestTemplateReturnsNullBodyThenMovieSourceServiceExceptionShouldBeThrown() {
         final var fakeResponseEntity = new ResponseEntity<MovieSourceDTO>(null, null, HttpStatus.OK);
         when(this.mockRestTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class), any(Map.class))).thenReturn(fakeResponseEntity);
-        assertThrows(MovieSourceServiceException.class, () -> this.movieSourceService.getMovieSourceDTOFromCSVFile("Fake API", "Fake Movie Title", "Fake Additional Info"));
+        assertNull(this.movieSourceService.getMovieSourceDTOFromCSVFile("Fake API", "Fake Movie Title", "Fake Additional Info"));
     }
 
     @Test
@@ -78,6 +77,7 @@ class MovieSourceServiceTest {
     public void givenMovieSourceServiceWhenGetMovieSourceDTOFromCSVFileIsCalledThenMovieSourceDTOShouldBeReturnedWithTheExpectedValues() {
         final var expectedFakeMovieSourceDTO = new MovieSourceDTO();
         expectedFakeMovieSourceDTO.setResponse("true");
+        expectedFakeMovieSourceDTO.setTitle("Fake Movie Title");
         final var fakeResponseEntity = new ResponseEntity<>(expectedFakeMovieSourceDTO, null, HttpStatus.OK);
         when(this.mockRestTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class), any(Map.class))).thenReturn(fakeResponseEntity);
         final var actualMovieSourceDTOFromCSVFile = this.movieSourceService.getMovieSourceDTOFromCSVFile("Fake API", "Fake Movie Title", "Fake Additional Info");
@@ -96,6 +96,7 @@ class MovieSourceServiceTest {
     public void givenMovieSourceServiceWhenGetMovieSourceDTOFromCSVFileReturns200ResponseFalseAnotherExchangeResponseTrueActualMovieSourceDTOExpectedValues() {
         final var expectedFakeMovieSourceDTO = new MovieSourceDTO();
         expectedFakeMovieSourceDTO.setResponse("true");
+        expectedFakeMovieSourceDTO.setTitle("Fake Additional Info");
 
         when(this.mockRestTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class), any(Map.class))).thenAnswer(new Answer<ResponseEntity<?>>() {
             boolean firstTime = true;
@@ -143,6 +144,6 @@ class MovieSourceServiceTest {
             }
         });
 
-        assertThrows(MovieNotFoundException.class, () -> this.movieSourceService.getMovieSourceDTOFromCSVFile("Fake API", expectedFakeMovieTitle, "Fake Additional Info"), expectedFakeMovieTitle);
+        assertNull(this.movieSourceService.getMovieSourceDTOFromCSVFile("Fake API", expectedFakeMovieTitle, "Fake Additional Info"), expectedFakeMovieTitle);
     }
 }

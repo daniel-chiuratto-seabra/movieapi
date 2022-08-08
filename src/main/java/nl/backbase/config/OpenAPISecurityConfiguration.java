@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
 
 /**
  * This is the Open API Configuration class. Here is defined that Open API becomes available only when the
- * {@code spring.profiles.active} Spring property is set to {@code true}, and also configures Open API to request a
+ * {@code spring.profiles.active} Spring property is set to {@code dev}, and also configures Open API to request a
  * JWT token set in order to be able to use the API, since Spring Security is configured with it.
  * <br /><br />
  * Beyond those definitions, it is important to mention that the application also contains the {@code springdoc-openapi-ui}

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 class MovieServiceTest {
 
-    private MovieService movieSourceService;
+    private MovieService movieService;
 
     private MovieRepository mockMovieRepository;
     private MovieSourceService mockMovieSourceService;
@@ -44,7 +44,7 @@ class MovieServiceTest {
         this.mockMovieMappers = mock(MovieMappers.class);
         this.mockRatingMappers = mock(RatingMappers.class);
         this.fakeApiKey = "Fake Api Key";
-        this.movieSourceService = new MovieService(mockMovieRepository, mockMovieSourceService, mockMovieMappers, mockRatingMappers, fakeApiKey);
+        this.movieService = new MovieService(mockMovieRepository, mockMovieSourceService, mockMovieMappers, mockRatingMappers, fakeApiKey);
     }
 
     @Test
@@ -57,7 +57,7 @@ class MovieServiceTest {
         final var fakeMovieSummaryDTOList = Collections.<MovieTop10DTO>emptyList();
         when(mockMovieRepository.findTop10OrderedByBoxOffice(eq(fakePageable))).thenReturn(fakeMovieSummaryEntityList);
         when(mockMovieMappers.movieTop10EntityToMovieTop10DTO(eq(fakeMovieSummaryEntityList))).thenReturn(fakeMovieSummaryDTOList);
-        final var actualMovieSummaryDTOCollection = movieSourceService.getMovieTop10DTOCollection();
+        final var actualMovieSummaryDTOCollection = movieService.getMovieTop10DTOCollection();
         assertNotNull(actualMovieSummaryDTOCollection);
         verify(mockMovieRepository).findTop10OrderedByBoxOffice(eq(fakePageable));
         verify(mockMovieMappers).movieTop10EntityToMovieTop10DTO(eq(fakeMovieSummaryEntityList));
@@ -90,7 +90,7 @@ class MovieServiceTest {
         when(fakeContext.getAuthentication()).thenReturn(fakeAuthentication);
         when(this.mockRatingMappers.ratingRequestDTORatingEntity(eq(fakeRatingRequestDTO), eq(fakeAuthentication), eq(fakeMovieEntity))).thenReturn(fakeRatingEntity);
 
-        final var actualRatingRequestDTO = this.movieSourceService.saveRatingRequestDTO(fakeRatingRequestDTO);
+        final var actualRatingRequestDTO = this.movieService.saveRatingRequestDTO(fakeRatingRequestDTO);
         assertNotNull(actualRatingRequestDTO);
         verify(this.mockMovieRepository).findByTitleIgnoreCase(eq(fakeMovieTitle));
         verify(this.mockMovieSourceService).getMovieSourceDTO(eq(this.fakeApiKey), eq(fakeMovieTitle));
@@ -126,7 +126,7 @@ class MovieServiceTest {
         when(fakeContext.getAuthentication()).thenReturn(fakeAuthentication);
         when(this.mockRatingMappers.ratingRequestDTORatingEntity(eq(fakeRatingRequestDTO), eq(fakeAuthentication), eq(fakeMovieEntity))).thenReturn(fakeRatingEntity);
 
-        final var actualRatingRequestDTO = this.movieSourceService.saveRatingRequestDTO(fakeRatingRequestDTO);
+        final var actualRatingRequestDTO = this.movieService.saveRatingRequestDTO(fakeRatingRequestDTO);
         assertNotNull(actualRatingRequestDTO);
         verify(this.mockMovieRepository).findByTitleIgnoreCase(eq(fakeMovieTitle));
         verify(this.mockMovieSourceService, never()).getMovieSourceDTO(eq(this.fakeApiKey), eq(fakeMovieTitle));
@@ -137,12 +137,24 @@ class MovieServiceTest {
 
     @Test
     @DisplayName("GIVEN a MovieSourceService with mocked dependencies, " +
+                  "WHEN savingRatingDTO is called with a fake RatingRequestDTO " +
+                   "AND MovieRepository findByTitleIgnoreCase returns null" +
+                  "THEN a MovieNotFoundException should be thrown")
+    public void givenMovieSourceServiceWhenSavingRatingDTOIsCalledMovieRepositoryReturnsNullThenMovieNotFoundExceptionShouldBeThrown() {
+        final var fakeMovieTitle = "Fake Movie Title";
+        final var fakeRatingRequestDTO = new RatingRequestDTO();
+        fakeRatingRequestDTO.setMovieTitle(fakeMovieTitle);
+        assertThrows(MovieNotFoundException.class, () -> this.movieService.saveRatingRequestDTO(fakeRatingRequestDTO), String.format("The searched '%s' movie cannot be found", fakeMovieTitle));
+    }
+
+    @Test
+    @DisplayName("GIVEN a MovieSourceService with mocked dependencies, " +
                   "WHEN getBestPictureMovieDTO is called with a fake Movie Title set, " +
                    "AND MovieRepository returns null by calling findByTitleIgnoreCase method " +
                   "THEN it should throw a MovieNotFoundException with the fake Movie Title as message")
     public void givenMovieSourceServiceWhenGetBestPictureMovieDTOCalledMovieRepositoryReturnsNullThenThrowMovieNotFoundException() {
         final var fakeMovieTitle = "Fake Movie Title";
-        assertThrows(MovieNotFoundException.class, () -> movieSourceService.getBestPictureMovieDTO(fakeMovieTitle), fakeMovieTitle);
+        assertThrows(MovieNotFoundException.class, () -> movieService.getBestPictureMovieDTO(fakeMovieTitle), fakeMovieTitle);
     }
 
     @Test
@@ -158,7 +170,7 @@ class MovieServiceTest {
         when(mockMovieRepository.findByTitleIgnoreCase(eq(fakeMovieTitle))).thenReturn(fakeMovieEntity);
         when(mockMovieMappers.movieEntityToBestPictureMovieDTO(eq(fakeMovieEntity))).thenReturn(fakeMovieDTO);
 
-        final var actualMovieDTo = movieSourceService.getBestPictureMovieDTO(fakeMovieTitle);
+        final var actualMovieDTo = movieService.getBestPictureMovieDTO(fakeMovieTitle);
         assertNotNull(actualMovieDTo);
         verify(mockMovieRepository).findByTitleIgnoreCase(eq(fakeMovieTitle));
         verify(mockMovieMappers).movieEntityToBestPictureMovieDTO(eq(fakeMovieEntity));

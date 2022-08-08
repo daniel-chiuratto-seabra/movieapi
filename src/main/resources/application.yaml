@@ -1,35 +1,34 @@
 movie:
   api:
-    url: http://www.omdbapi.com/
+    url: http://www.omdbapi.com/ # URL of the external Movie Source API Service
 
 springdoc:
   api-docs:
-    enabled: true
+    enabled: true # Setting Swagger-UI to be accessible through: http://localhost:8080/swagger-ui/index.html
 
 security:
   jwt:
     url:
-      signin: /v1/signin
-      signup: /v1/signup
-    token:
-#      secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
-      secret: QWRvcm8gY3JlbWUgZGUgYmF1bmlsaGEgY29tIHNhYm9yIGRlIHDDqSBzdWpvLCBtZXNtbyBwb3JxdWUgdHVkbyDDqSBzYWJvcm9zbwo=
-      expiration: 86400000 # 24 hours
+      signin: /v1/signin # Defining what is the SignIn endpoint
+      signup: /v1/signup # Defining what is the SignUp endpoint
+    token: # Below there is the secret, Base 64 encoded to be used in the JWT Token generation process
+      secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
+      expiration: 86400000 # The JWT Token expiration time in milliseconds (this value means 24 hours)
 
 spring:
   profiles:
-    active: dev
+    active: dev # Defining the Spring Profile Active as Dev
   jackson:
     serialization:
-      indent_output: true
+      indent_output: true # Setting to ident the JSON when logged, so it can have a better visualization during a troubleshoot
   h2:
     console:
-      enabled: true
+      enabled: true # Enabling the H2 Console, accessible through http://localhost:8080/h2-console
       settings:
-        web-allow-others: true
+        web-allow-others: true # Enabling web-allow-others to allow access to the H2 Console when the application is running inside a Docker container
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create # DDL defining the database to be automatically created by Hibernate when the application is starting
     generate-ddl: true
   datasource:
     url: jdbc:h2:mem:movietestdb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER
