@@ -5,6 +5,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * This class is an {@link Entity} that represents each rate given by the users per Movie
+ *
+ * @author Daniel Chiuratto Seabra
+ * @since 02/08/2022
+ */
 @Data
 @Entity
 @Table(name = "RATING")

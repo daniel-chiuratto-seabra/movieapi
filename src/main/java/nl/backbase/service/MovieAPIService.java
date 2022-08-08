@@ -47,7 +47,7 @@ public class MovieAPIService {
 
     public Collection<MovieTop10DTO> getMovieAPISummaryDTOCollection() {
         final var top10Collection = this.movieAPIRepository.findTop10OrderedByBoxOffice(Pageable.ofSize(10));
-        return this.movieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(top10Collection);
+        return this.movieMappers.movieTop10EntityToMovieTop10DTO(top10Collection);
     }
 
     public RatingRequestDTO saveRatingDTO(final RatingRequestDTO ratingRequestDTO) {
@@ -72,7 +72,7 @@ public class MovieAPIService {
         if (movieAPIEntity == null) {
             throw new MovieAPINotFoundException(movieTitle);
         }
-        return this.movieMappers.movieAPIEntityToMovieAPIDTO(movieAPIEntity);
+        return this.movieMappers.movieAPIEntityToBestPictureMovieDTO(movieAPIEntity);
     }
 
 

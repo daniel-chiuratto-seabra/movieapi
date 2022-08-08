@@ -126,7 +126,7 @@
 							<!-- When building for production, the application development file should not be packed -->
 							<exclude>**/application.yaml</exclude>
 							<exclude>**/application-**.yaml</exclude>
-						</excludes>
+					</excludes>
 					</resource>
 				</resources>
 				<plugins>

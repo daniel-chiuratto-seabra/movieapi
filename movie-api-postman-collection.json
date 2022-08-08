@@ -12,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://www.omdbapi.com/?apikey=<OMDB-TOKEN>&type=movie&t=Wings",
+					"raw": "http://www.omdbapi.com/?apikey=<OMDB-TOKEN>&type=movie&t=<MOVIE-TITLE>",
 					"protocol": "http",
 					"host": [
 						"www",
@@ -33,7 +33,7 @@
 						},
 						{
 							"key": "t",
-							"value": "Wings"
+							"value": "<MOVIE-TITLE>"
 						},
 						{
 							"key": "plot",

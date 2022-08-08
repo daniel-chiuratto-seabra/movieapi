@@ -8,7 +8,7 @@ import nl.backbase.dto.source.MovieAPISourceDTO;
 import nl.backbase.mapper.MovieMappers;
 import nl.backbase.mapper.RatingMappers;
 import nl.backbase.model.MovieAPIEntity;
-import nl.backbase.model.MovieAPISummaryEntity;
+import nl.backbase.model.MovieTop10Entity;
 import nl.backbase.model.RatingEntity;
 import nl.backbase.repository.MovieAPIRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,14 +53,14 @@ class MovieAPIServiceTest {
                   "THEN it should return the expected actual MovieTop10DTO collection")
     public void givenMovieAPISourceServiceWhenGetMovieAPISummaryDTOCollectionThenItShouldReturnTheExpectedActualMovieAPISummaryDTOCollection() {
         final var fakePageable = Pageable.ofSize(10);
-        final var fakeMovieAPISummaryEntityList = Collections.<MovieAPISummaryEntity>emptyList();
+        final var fakeMovieAPISummaryEntityList = Collections.<MovieTop10Entity>emptyList();
         final var fakeMovieAPISummaryDTOList = Collections.<MovieTop10DTO>emptyList();
         when(mockMovieAPIRepository.findTop10OrderedByBoxOffice(eq(fakePageable))).thenReturn(fakeMovieAPISummaryEntityList);
-        when(mockMovieMappers.movieAPISummaryEntityToMovieAPISummaryDTO(eq(fakeMovieAPISummaryEntityList))).thenReturn(fakeMovieAPISummaryDTOList);
+        when(mockMovieMappers.movieTop10EntityToMovieTop10DTO(eq(fakeMovieAPISummaryEntityList))).thenReturn(fakeMovieAPISummaryDTOList);
         final var actualMovieAPISummaryDTOCollection = movieAPISourceService.getMovieAPISummaryDTOCollection();
         assertNotNull(actualMovieAPISummaryDTOCollection);
         verify(mockMovieAPIRepository).findTop10OrderedByBoxOffice(eq(fakePageable));
-        verify(mockMovieMappers).movieAPISummaryEntityToMovieAPISummaryDTO(eq(fakeMovieAPISummaryEntityList));
+        verify(mockMovieMappers).movieTop10EntityToMovieTop10DTO(eq(fakeMovieAPISummaryEntityList));
     }
 
     @Test
@@ -156,11 +156,11 @@ class MovieAPIServiceTest {
         final var fakeMovieAPIDTO = new BestPictureMovieDTO();
 
         when(mockMovieAPIRepository.findByTitleIgnoreCase(eq(fakeMovieTitle))).thenReturn(fakeMovieAPIEntity);
-        when(mockMovieMappers.movieAPIEntityToMovieAPIDTO(eq(fakeMovieAPIEntity))).thenReturn(fakeMovieAPIDTO);
+        when(mockMovieMappers.movieAPIEntityToBestPictureMovieDTO(eq(fakeMovieAPIEntity))).thenReturn(fakeMovieAPIDTO);
 
         final var actualMovieAPIDTo = movieAPISourceService.getBestPictureMovieAPIDTO(fakeMovieTitle);
         assertNotNull(actualMovieAPIDTo);
         verify(mockMovieAPIRepository).findByTitleIgnoreCase(eq(fakeMovieTitle));
-        verify(mockMovieMappers).movieAPIEntityToMovieAPIDTO(eq(fakeMovieAPIEntity));
+        verify(mockMovieMappers).movieAPIEntityToBestPictureMovieDTO(eq(fakeMovieAPIEntity));
     }
 }

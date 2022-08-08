@@ -7,6 +7,12 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+/**
+ * This {@link Entity} represents an actual Movie stored in the database to allow the users to rate it
+ *
+ * @author Daniel Chiuratto Seabra
+ * @since 02/08/2022
+ */
 @Data
 @Entity
 @Table(name = "MOVIE")

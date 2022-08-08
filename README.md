@@ -1,7 +1,12 @@
 *I KNOW! I SHOULD NOT LEAVE THE DATA BELOW IN A README, BUT IT IS TEMPORARY!*
 
 # Build the Docker image
-mvn spring-boot:build-image
+
+## For Dev
+mvn clean -D skipTests spring-boot:build-image -Dspring-boot.build-image.imageName=backbase/movie-api-dev
+
+## For Prod
+mvn clean -D skipTests spring-boot:build-image -Pprod -Dspring-boot.build-image.imageName=backbase/movie-api-prod
 
 # Build JAR for DEV
 mvn package
