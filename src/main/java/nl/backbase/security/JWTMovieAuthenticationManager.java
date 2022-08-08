@@ -1,9 +1,10 @@
-package nl.backbase.security.config;
+package nl.backbase.security;
 
 import lombok.RequiredArgsConstructor;
 import nl.backbase.controller.exception.InvalidPasswordException;
 import nl.backbase.model.UserEntity;
 import nl.backbase.repository.UserRepository;
+import nl.backbase.security.config.MovieApplicationWebSecurityConfig;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,14 +24,14 @@ import java.util.Collections;
  * then a {@link UsernameNotFoundException} is thrown, and if the user exists in the database but the provided password
  * does not match with the one available in the database, then a {@link InvalidPasswordException} is thrown.
  * <br /><br />
- * This class is instantiated in the {@link MovieAPIApplicationWebSecurityConfig#authenticationManager(UserRepository, PasswordEncoder)}
+ * This class is instantiated in the {@link MovieApplicationWebSecurityConfig#authenticationManager(UserRepository, PasswordEncoder)}
  * method, making it available in the Spring context so Spring Context can use it as an authenticator during the SignIn process.
  *
  * @author Daniel Chiuratto Seabra
  * @since 03/08/2022
  */
 @RequiredArgsConstructor
-public class JWTMovieAPIAuthenticationManager implements AuthenticationManager {
+public class JWTMovieAuthenticationManager implements AuthenticationManager {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

@@ -17,7 +17,7 @@ import java.util.Collection;
 @Entity
 @Table(name = "MOVIE")
 @NoArgsConstructor
-public class MovieAPIEntity {
+public class MovieEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)

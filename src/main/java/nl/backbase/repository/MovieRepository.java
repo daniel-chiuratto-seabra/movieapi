@@ -1,6 +1,6 @@
 package nl.backbase.repository;
 
-import nl.backbase.model.MovieAPIEntity;
+import nl.backbase.model.MovieEntity;
 import nl.backbase.model.MovieTop10Entity;
 import nl.backbase.model.RatingEntity;
 import org.springframework.data.domain.Pageable;
@@ -12,25 +12,25 @@ import javax.persistence.Entity;
 import java.util.List;
 
 /**
- * This {@link Repository} is where all the {@link MovieAPIEntity} are stored, and is where you retrieve the Top 10 list
- * relating the {@link MovieAPIEntity} with the {@link RatingEntity}
+ * This {@link Repository} is where all the {@link MovieEntity} are stored, and is where you retrieve the Top 10 list
+ * relating the {@link MovieEntity} with the {@link RatingEntity}
  *
  * @author Daniel Chiuratto Seabra
  * @since 02/08/2022
  */
 @Repository
-public interface MovieAPIRepository extends JpaRepository<MovieAPIEntity, Long> {
+public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
     /**
-     * This method returns an {@link MovieAPIEntity} given a {@link String} presenting the Movie title
+     * This method returns an {@link MovieEntity} given a {@link String} presenting the Movie title
      *
      * @param title {@link String} representing the requested Movie title
-     * @return {@link MovieAPIEntity} instance related to requested Movie title
+     * @return {@link MovieEntity} instance related to requested Movie title
      *
      * @author Daniel Chiuratto Seabra
      * @since 02/08/2022
      */
-    MovieAPIEntity findByTitleIgnoreCase(String title);
+    MovieEntity findByTitleIgnoreCase(String title);
 
     /**
      * This method returns the Top 10 list of the most rated Movies, where it takes the rate average into account, and
@@ -45,8 +45,8 @@ public interface MovieAPIRepository extends JpaRepository<MovieAPIEntity, Long> 
      * @since 02/08/2022
      */
     @Query(value = "SELECT new nl.backbase.model.MovieTop10Entity(m.title, ROUND(AVG(r.value),2), m.boxOffice, m.oscarWinner) " +
-                     "FROM RatingEntity r RIGHT JOIN MovieAPIEntity m " +
-                       "ON r.movieAPIEntity.id = m.id " +
+                     "FROM RatingEntity r RIGHT JOIN MovieEntity m " +
+                       "ON r.movieEntity.id = m.id " +
                  "GROUP BY m.title " +
                  "ORDER BY ROUND(AVG(r.value),2) DESC, " +
                           "m.boxOffice DESC")

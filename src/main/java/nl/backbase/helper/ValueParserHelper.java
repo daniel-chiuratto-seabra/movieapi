@@ -3,7 +3,7 @@ package nl.backbase.helper;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import nl.backbase.dto.source.MovieAPISourceDTO;
+import nl.backbase.dto.source.MovieSourceDTO;
 import nl.backbase.helper.csv.CSVData;
 
 import java.io.*;
@@ -50,7 +50,7 @@ public class ValueParserHelper {
     }
 
     /**
-     * This method receives a {@link String} that represents the {@link MovieAPISourceDTO} Box Office, removing all the
+     * This method receives a {@link String} that represents the {@link MovieSourceDTO} Box Office, removing all the
      * characters that it may bring with it such as dollar sign ({@code $}) and commas ({@code ,}), to make the {@link String}
      * parsable into {@link BigDecimal}, but even so there are movies that it comes as {@code N/A}, for those cases the
      * {@link BigDecimal} parsing throws an {@link Exception}, where when this happens the {@link Exception} is catch,

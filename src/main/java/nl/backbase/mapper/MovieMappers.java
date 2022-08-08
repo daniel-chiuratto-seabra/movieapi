@@ -1,15 +1,15 @@
 package nl.backbase.mapper;
 
 import lombok.RequiredArgsConstructor;
-import nl.backbase.controller.MovieAPIRestController;
+import nl.backbase.controller.MovieRestController;
 import nl.backbase.dto.BestPictureMovieDTO;
 import nl.backbase.dto.MovieTop10DTO;
-import nl.backbase.dto.source.MovieAPISourceDTO;
+import nl.backbase.dto.source.MovieSourceDTO;
 import nl.backbase.helper.ValueParserHelper;
-import nl.backbase.model.MovieAPIEntity;
+import nl.backbase.model.MovieEntity;
 import nl.backbase.model.MovieTop10Entity;
-import nl.backbase.repository.MovieAPIRepository;
-import nl.backbase.service.MovieAPISourceService;
+import nl.backbase.repository.MovieRepository;
+import nl.backbase.service.MovieSourceService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -35,28 +35,28 @@ public class MovieMappers {
     private final RatingMappers ratingMappers;
 
     /**
-     * This method parses a {@link MovieAPIEntity} instance to {@link BestPictureMovieDTO}, used when
-     * {@link MovieAPIRestController#bestpicture(String)} is called to parse the {@link MovieAPIEntity} into a
+     * This method parses a {@link MovieEntity} instance to {@link BestPictureMovieDTO}, used when
+     * {@link MovieRestController#bestpicture(String)} is called to parse the {@link MovieEntity} into a
      * {@link BestPictureMovieDTO} to return to the user
      *
-     * @param movieAPIEntity {@link MovieAPIEntity} instance
+     * @param movieEntity {@link MovieEntity} instance
      * @return {@link BestPictureMovieDTO} instance (if {@code null} then {@code null} is returned)
      *
      * @author Daniel Chiuratto Seabra
      * @since 04/08/2022
      */
-    public BestPictureMovieDTO movieAPIEntityToBestPictureMovieDTO(final MovieAPIEntity movieAPIEntity) {
-        if (movieAPIEntity == null) { return null; }
-        final var movieAPIDTO = new BestPictureMovieDTO();
-        movieAPIDTO.setTitle(movieAPIEntity.getTitle());
-        movieAPIDTO.setOscarWinner(parseBooleanToOscarWinnerString(movieAPIEntity.getOscarWinner()));
-        movieAPIDTO.setRatings(this.ratingMappers.ratingEntityRatingDTO(movieAPIEntity.getRatings()));
-        return movieAPIDTO;
+    public BestPictureMovieDTO movieEntityToBestPictureMovieDTO(final MovieEntity movieEntity) {
+        if (movieEntity == null) { return null; }
+        final var bestPictureMovieDTO = new BestPictureMovieDTO();
+        bestPictureMovieDTO.setTitle(movieEntity.getTitle());
+        bestPictureMovieDTO.setOscarWinner(parseBooleanToOscarWinnerString(movieEntity.getOscarWinner()));
+        bestPictureMovieDTO.setRatings(this.ratingMappers.ratingEntityRatingDTO(movieEntity.getRatings()));
+        return bestPictureMovieDTO;
     }
 
     /**
      * This method parses a {@link MovieTop10Entity} into a {@link MovieTop10DTO} instance, used when the
-     * {@link MovieAPIRepository#findTop10OrderedByBoxOffice(Pageable)} is called
+     * {@link MovieRepository#findTop10OrderedByBoxOffice(Pageable)} is called
      *
      * @param movieTop10Entity {@link MovieTop10Entity} instance
      * @return {@link MovieTop10DTO} instance (if {@link MovieTop10Entity} parameter is {@code null} then {@code null} is returned)
@@ -66,41 +66,41 @@ public class MovieMappers {
      */
     public MovieTop10DTO movieTop10EntityToMovieTop10DTO(final MovieTop10Entity movieTop10Entity) {
         if (movieTop10Entity == null) { return null; }
-        final var movieAPISummaryDTO = new MovieTop10DTO();
-        movieAPISummaryDTO.setTitle(movieTop10Entity.getTitle());
-        movieAPISummaryDTO.setBoxOffice(movieTop10Entity.getBoxOffice());
+        final var movieTop10DTO = new MovieTop10DTO();
+        movieTop10DTO.setTitle(movieTop10Entity.getTitle());
+        movieTop10DTO.setBoxOffice(movieTop10Entity.getBoxOffice());
         var average = movieTop10Entity.getAverage();
         if (average == null) { average = 0D; }
-        movieAPISummaryDTO.setAverage(average);
-        movieAPISummaryDTO.setOscarWinner(parseBooleanToOscarWinnerString(movieTop10Entity.getOscarWinner()));
-        return movieAPISummaryDTO;
+        movieTop10DTO.setAverage(average);
+        movieTop10DTO.setOscarWinner(parseBooleanToOscarWinnerString(movieTop10Entity.getOscarWinner()));
+        return movieTop10DTO;
     }
 
     /**
-     * This method parses a {@link MovieAPISourceDTO} into a {@link MovieAPIEntity} instance, used when the application
+     * This method parses a {@link MovieSourceDTO} into a {@link MovieEntity} instance, used when the application
      * requests Movie Data from the external API Service, to store it in the database, using the {@link RestTemplate} in the
-     * {@link MovieAPISourceService#getMovieAPISourceDTO(String, String)} call that returns the {@link MovieAPISourceDTO}
+     * {@link MovieSourceService#getMovieSourceDTO(String, String)} call that returns the {@link MovieSourceDTO}
      * instance to be parsed
      *
-     * @param movieAPISourceDTO {@link MovieAPISourceDTO} instance
-     * @return {@link MovieAPIEntity} instance (if {@code null} then {@code null} is returned)
+     * @param movieSourceDTO {@link MovieSourceDTO} instance
+     * @return {@link MovieEntity} instance (if {@code null} then {@code null} is returned)
      *
      * @author Daniel Chiuratto Seabra
      * @since 04/08/2022
      */
-    public MovieAPIEntity movieAPISourceDTOToMovieAPIEntity(final MovieAPISourceDTO movieAPISourceDTO) {
-        if (movieAPISourceDTO == null) { return null; }
-        final var movieAPIEntity = new MovieAPIEntity();
-        movieAPIEntity.setTitle(movieAPISourceDTO.getTitle());
-        movieAPIEntity.setBoxOffice(ValueParserHelper.getBigDecimalFromString(movieAPISourceDTO.getBoxOffice()));
-        movieAPIEntity.setRatings(new ArrayList<>());
-        movieAPIEntity.setOscarWinner(false);
-        return movieAPIEntity;
+    public MovieEntity movieSourceDTOToMovieEntity(final MovieSourceDTO movieSourceDTO) {
+        if (movieSourceDTO == null) { return null; }
+        final var movieEntity = new MovieEntity();
+        movieEntity.setTitle(movieSourceDTO.getTitle());
+        movieEntity.setBoxOffice(ValueParserHelper.getBigDecimalFromString(movieSourceDTO.getBoxOffice()));
+        movieEntity.setRatings(new ArrayList<>());
+        movieEntity.setOscarWinner(false);
+        return movieEntity;
     }
 
     /**
      * This method parses a {@link Collection<MovieTop10Entity>} into a {@link Collection<MovieTop10DTO>} instance, used when the
-     * {@link MovieAPIRepository#findTop10OrderedByBoxOffice(Pageable)} is called
+     * {@link MovieRepository#findTop10OrderedByBoxOffice(Pageable)} is called
      *
      * @param movieTop10EntityCollection {@link Collection<MovieTop10Entity>} instance
      * @return {@link Collection<MovieTop10DTO>} instance (if {@link Collection<MovieTop10Entity>} parameter is {@code null}

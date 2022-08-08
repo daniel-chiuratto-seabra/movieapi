@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieAPISourceDTO implements Serializable {
+public class MovieSourceDTO implements Serializable {
     @JsonProperty(value = "Title")
     String title;
     @JsonProperty(value = "BoxOffice")

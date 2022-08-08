@@ -27,34 +27,34 @@ import static java.util.Map.ofEntries;
 public class ExceptionHandlerController {
 
     /**
-     * This handler handles a {@link MovieAPISourceServiceException}, that is an {@link Exception} that represents an
+     * This handler handles a {@link MovieSourceServiceException}, that is an {@link Exception} that represents an
      * issue that may occur while the {@link RestTemplate} has issues in requesting data to the external Movie API Source
      *
-     * @param movieSourceServiceException {@link MovieAPISourceServiceException} instance containing the information about the issue
-     * @return {@link ResponseEntity} with the parsed error data regarding the connection with the MovieAPI service
+     * @param movieSourceServiceException {@link MovieSourceServiceException} instance containing the information about the issue
+     * @return {@link ResponseEntity} with the parsed error data regarding the connection with the Movie service
      *
      * @author Daniel Chiuratto Seabra
      * @since 01/08/2022
      */
-    @ExceptionHandler(MovieAPISourceServiceException.class)
-    public ResponseEntity<?> movieSourceServiceException(final MovieAPISourceServiceException movieSourceServiceException) {
+    @ExceptionHandler(MovieSourceServiceException.class)
+    public ResponseEntity<?> movieSourceServiceException(final MovieSourceServiceException movieSourceServiceException) {
         log.error(movieSourceServiceException.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(movieSourceServiceException.getMessage());
     }
 
     /**
-     * This handler handles a {@link MovieAPINotFoundException}, that is an {@link Exception} thrown when a requested
+     * This handler handles a {@link MovieNotFoundException}, that is an {@link Exception} thrown when a requested
      * Movie Title does not won a Best Picture Oscar, and also when the requested Movie Title is not found in the external
      * Movie API Service in flows that does such request.
      *
-     * @param movieNotFoundException {@link MovieAPINotFoundException} instance containing the information regarding the Movie
+     * @param movieNotFoundException {@link MovieNotFoundException} instance containing the information regarding the Movie
      * @return {@link ResponseEntity} with the parsed error data regarding the Movie Title that were not found
      *
      * @author Daniel Chiuratto Seabra
      * @since 02/08/2022
      */
-    @ExceptionHandler(MovieAPINotFoundException.class)
-    public ResponseEntity<?> movieSourceNotFoundException(final MovieAPINotFoundException movieNotFoundException) {
+    @ExceptionHandler(MovieNotFoundException.class)
+    public ResponseEntity<?> movieSourceNotFoundException(final MovieNotFoundException movieNotFoundException) {
         log.warn("The movie {} has not been found", movieNotFoundException.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ofEntries(entry("movieTitle", movieNotFoundException.getMessage())));
     }

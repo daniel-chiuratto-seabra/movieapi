@@ -9,12 +9,12 @@ import org.springframework.web.client.RestTemplate;
  * @author Daniel Chiuratto Seabra
  * @since 02/08/2022
  */
-public class MovieAPISourceServiceException extends RuntimeException {
-    public MovieAPISourceServiceException(final String message) {
+public class MovieSourceServiceException extends RuntimeException {
+    public MovieSourceServiceException(final String message) {
         super(message);
     }
 
-    public MovieAPISourceServiceException(final String message, final Throwable throwable) {
+    public MovieSourceServiceException(final String message, final Throwable throwable) {
         super(message, throwable);
     }
 }

@@ -1,8 +1,8 @@
 package nl.backbase.mapper;
 
 import nl.backbase.dto.RatingDTO;
-import nl.backbase.dto.source.MovieAPISourceDTO;
-import nl.backbase.model.MovieAPIEntity;
+import nl.backbase.dto.source.MovieSourceDTO;
+import nl.backbase.model.MovieEntity;
 import nl.backbase.model.MovieTop10Entity;
 import nl.backbase.model.RatingEntity;
 import org.junit.jupiter.api.DisplayName;
@@ -22,29 +22,29 @@ public class MovieMappersTest {
     private final MovieMappers movieMappers = new MovieMappers(new RatingMappers());
 
     @Test
-    @DisplayName("GIVEN a null MovieAPIDTOEntity , WHEN the mapper tries to map it, THEN it should return null")
-    public void givenANullMovieAPIDTOEntityWhenTheMapperTriesToMapItThenItShouldReturnNull() {
-        final var actualMovieAPIDTO = this.movieMappers.movieAPIEntityToBestPictureMovieDTO((MovieAPIEntity) null);
-        assertNull(actualMovieAPIDTO);
+    @DisplayName("GIVEN a null MovieDTOEntity , WHEN the mapper tries to map it, THEN it should return null")
+    public void givenANullMovieDTOEntityWhenTheMapperTriesToMapItThenItShouldReturnNull() {
+        final var actualMovieDTO = this.movieMappers.movieEntityToBestPictureMovieDTO(null);
+        assertNull(actualMovieDTO);
     }
 
     @Test
     @DisplayName("GIVEN a fake entity, WHEN the mapper tries to map it, THEN it should return an actual BestPictureMovieDTO with expected values")
-    public void givenAFakeMovieAPIEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieAPIDTOWithExpectedValues() {
+    public void givenAFakeMovieEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieDTOWithExpectedValues() {
         final var expectedFakeTitle = "Fake Movie Title";
         final var expectedFakeRatingEntityCollection = getFakeRatingEntityCollection(1);
 
-        final var expectedFakeMovieAPIEntity = new MovieAPIEntity();
-        expectedFakeMovieAPIEntity.setBoxOffice(new BigDecimal(12345));
-        expectedFakeMovieAPIEntity.setTitle(expectedFakeTitle);
-        expectedFakeMovieAPIEntity.setRatings(expectedFakeRatingEntityCollection);
+        final var expectedFakeMovieEntity = new MovieEntity();
+        expectedFakeMovieEntity.setBoxOffice(new BigDecimal(12345));
+        expectedFakeMovieEntity.setTitle(expectedFakeTitle);
+        expectedFakeMovieEntity.setRatings(expectedFakeRatingEntityCollection);
 
-        final var actualMovieAPIDTO = this.movieMappers.movieAPIEntityToBestPictureMovieDTO(expectedFakeMovieAPIEntity);
+        final var actualMovieDTO = this.movieMappers.movieEntityToBestPictureMovieDTO(expectedFakeMovieEntity);
 
-        assertNotNull(actualMovieAPIDTO);
-        assertEquals(expectedFakeTitle, actualMovieAPIDTO.getTitle());
+        assertNotNull(actualMovieDTO);
+        assertEquals(expectedFakeTitle, actualMovieDTO.getTitle());
 
-        final var actualRatingDTOCollection = actualMovieAPIDTO.getRatings();
+        final var actualRatingDTOCollection = actualMovieDTO.getRatings();
         assertNotNull(actualRatingDTOCollection);
         assertFalse(actualRatingDTOCollection.isEmpty(), "The returned RatingDTO collection should not be empty");
         assertEquals(expectedFakeRatingEntityCollection.size(), actualRatingDTOCollection.size(), "The amount of RatingDTO collection items should be the same as the RatingEntity collection");
@@ -60,72 +60,72 @@ public class MovieMappersTest {
     }
 
     @Test
-    @DisplayName("GIVEN a null fake MovieAPISourceDTO, WHEN the mapper tries to map it, THEN it should return null")
-    public void givenANullFakeMovieAPISourceDTOWhenTheMapperTriesToMapItThenItShouldReturnNull() {
-        final var actualMovieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity((MovieAPISourceDTO) null);
-        assertNull(actualMovieAPIEntity);
+    @DisplayName("GIVEN a null fake MovieSourceDTO, WHEN the mapper tries to map it, THEN it should return null")
+    public void givenANullFakeMovieSourceDTOWhenTheMapperTriesToMapItThenItShouldReturnNull() {
+        final var actualMovieEntity = this.movieMappers.movieSourceDTOToMovieEntity((MovieSourceDTO) null);
+        assertNull(actualMovieEntity);
     }
 
     @Test
-    @DisplayName("GIVEN a fake MovieAPISourceDTO with fake values, WHEN the mapper tries to map it, THEN it should return a MovieAPIEntity with the expected values")
-    public void givenAFakeMovieAPISourceDTOWithFakeValuesWhenTheMapperTriesToMapItThenItShouldReturnAMovieAPIEntityWithTheExpectedValues() {
-        final var expectedFakeMovieAPISourceDTO = new MovieAPISourceDTO();
-        expectedFakeMovieAPISourceDTO.setTitle("Fake Title");
-        expectedFakeMovieAPISourceDTO.setBoxOffice("12345");
+    @DisplayName("GIVEN a fake MovieSourceDTO with fake values, WHEN the mapper tries to map it, THEN it should return a MovieEntity with the expected values")
+    public void givenAFakeMovieSourceDTOWithFakeValuesWhenTheMapperTriesToMapItThenItShouldReturnAMovieEntityWithTheExpectedValues() {
+        final var expectedFakeMovieSourceDTO = new MovieSourceDTO();
+        expectedFakeMovieSourceDTO.setTitle("Fake Title");
+        expectedFakeMovieSourceDTO.setBoxOffice("12345");
 
-        final var actualMovieAPIEntity = this.movieMappers.movieAPISourceDTOToMovieAPIEntity(expectedFakeMovieAPISourceDTO);
-        assertNotNull(actualMovieAPIEntity);
-        assertEquals(expectedFakeMovieAPISourceDTO.getTitle(), actualMovieAPIEntity.getTitle());
-        assertNotNull(actualMovieAPIEntity.getBoxOffice());
-        assertEquals(expectedFakeMovieAPISourceDTO.getBoxOffice(), actualMovieAPIEntity.getBoxOffice().toString());
-        assertNotNull(actualMovieAPIEntity.getRatings());
-        assertTrue(actualMovieAPIEntity.getRatings().isEmpty(), "The rating collection should be empty");
+        final var actualMovieEntity = this.movieMappers.movieSourceDTOToMovieEntity(expectedFakeMovieSourceDTO);
+        assertNotNull(actualMovieEntity);
+        assertEquals(expectedFakeMovieSourceDTO.getTitle(), actualMovieEntity.getTitle());
+        assertNotNull(actualMovieEntity.getBoxOffice());
+        assertEquals(expectedFakeMovieSourceDTO.getBoxOffice(), actualMovieEntity.getBoxOffice().toString());
+        assertNotNull(actualMovieEntity.getRatings());
+        assertTrue(actualMovieEntity.getRatings().isEmpty(), "The rating collection should be empty");
     }
 
     @Test
     @DisplayName("GIVEN a null MovieTop10Entity, WHEN the mapper tries to map it, THEN it should return a null value")
-    public void givenANullMovieAPISummaryEntityWhenTheMapperTriesToMapItThenItShouldReturnANullValue() {
-        final var actualMovieAPISummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO((MovieTop10Entity) null);
-        assertNull(actualMovieAPISummaryDTO);
+    public void givenANullMovieSummaryEntityWhenTheMapperTriesToMapItThenItShouldReturnANullValue() {
+        final var actualMovieSummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO((MovieTop10Entity) null);
+        assertNull(actualMovieSummaryDTO);
     }
 
     @Test
     @DisplayName("GIVEN a null MovieTop10Entity Collection, WHEN the mapper tries to map it, THEN it should return an empty collection")
-    public void givenANullMovieAPISummaryEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnEmptyCollection() {
-        final var actualMovieAPISummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO((Collection<MovieTop10Entity>) null);
-        assertNotNull(actualMovieAPISummaryDTO);
-        assertTrue(actualMovieAPISummaryDTO.isEmpty());
+    public void givenANullMovieSummaryEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnEmptyCollection() {
+        final var actualMovieSummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO((Collection<MovieTop10Entity>) null);
+        assertNotNull(actualMovieSummaryDTO);
+        assertTrue(actualMovieSummaryDTO.isEmpty());
     }
 
     @Test
     @DisplayName("GIVEN a fake MovieTop10Entity, WHEN the mapper tries to map it, THEN it should return an actual MovieTop10DTO with the expected values")
-    public void givenAFakeMovieAPISummaryEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieAPISummaryDTOWithTheExpectedValues() {
-        final var expectedFakeMovieAPISummaryEntity = new MovieTop10Entity("Fake Title", 1234D, new BigDecimal("7654321"), true);
-        final var actualMovieAPISummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO(expectedFakeMovieAPISummaryEntity);
-        assertNotNull(actualMovieAPISummaryDTO);
-        assertEquals(expectedFakeMovieAPISummaryEntity.getTitle(), actualMovieAPISummaryDTO.getTitle());
-        assertEquals(parseBooleanToString(expectedFakeMovieAPISummaryEntity.getOscarWinner()), actualMovieAPISummaryDTO.getOscarWinner());
-        assertEquals(expectedFakeMovieAPISummaryEntity.getAverage(), actualMovieAPISummaryDTO.getAverage());
-        assertEquals(expectedFakeMovieAPISummaryEntity.getBoxOffice(), actualMovieAPISummaryDTO.getBoxOffice());
+    public void givenAFakeMovieSummaryEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieSummaryDTOWithTheExpectedValues() {
+        final var expectedFakeMovieSummaryEntity = new MovieTop10Entity("Fake Title", 1234D, new BigDecimal("7654321"), true);
+        final var actualMovieSummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO(expectedFakeMovieSummaryEntity);
+        assertNotNull(actualMovieSummaryDTO);
+        assertEquals(expectedFakeMovieSummaryEntity.getTitle(), actualMovieSummaryDTO.getTitle());
+        assertEquals(parseBooleanToString(expectedFakeMovieSummaryEntity.getOscarWinner()), actualMovieSummaryDTO.getOscarWinner());
+        assertEquals(expectedFakeMovieSummaryEntity.getAverage(), actualMovieSummaryDTO.getAverage());
+        assertEquals(expectedFakeMovieSummaryEntity.getBoxOffice(), actualMovieSummaryDTO.getBoxOffice());
     }
 
     @Test
     @DisplayName("GIVEN a fake MovieTop10Entity collection, WHEN the mapper tries to map it, THEN it should return an actual MovieTop10DTO collection with the expected values")
-    public void givenAFakeMovieAPISummaryEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieAPISummaryDTOCollectionWithTheExpectedValues() {
-        final var expectedFakeMovieAPISummaryEntityCollection = new ArrayList<MovieTop10Entity>();
-        IntStream.range(0, 5).forEach(index -> expectedFakeMovieAPISummaryEntityCollection.add(new MovieTop10Entity(String.format("Fake Title %d", index), 1234D * index, new BigDecimal("7654321").multiply(BigDecimal.valueOf(index)), index % 2 == 0)));
+    public void givenAFakeMovieSummaryEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieSummaryDTOCollectionWithTheExpectedValues() {
+        final var expectedFakeMovieSummaryEntityCollection = new ArrayList<MovieTop10Entity>();
+        IntStream.range(0, 5).forEach(index -> expectedFakeMovieSummaryEntityCollection.add(new MovieTop10Entity(String.format("Fake Title %d", index), 1234D * index, new BigDecimal("7654321").multiply(BigDecimal.valueOf(index)), index % 2 == 0)));
 
-        final var actualMovieAPISummaryDTOCollection = new ArrayList<>(this.movieMappers.movieTop10EntityToMovieTop10DTO(expectedFakeMovieAPISummaryEntityCollection));
+        final var actualMovieSummaryDTOCollection = new ArrayList<>(this.movieMappers.movieTop10EntityToMovieTop10DTO(expectedFakeMovieSummaryEntityCollection));
 
-        assertEquals(expectedFakeMovieAPISummaryEntityCollection.size(), actualMovieAPISummaryDTOCollection.size(), "The amount of parsed MovieTop10DTO should be the same as the expected collection");
+        assertEquals(expectedFakeMovieSummaryEntityCollection.size(), actualMovieSummaryDTOCollection.size(), "The amount of parsed MovieTop10DTO should be the same as the expected collection");
 
-        IntStream.range(0, expectedFakeMovieAPISummaryEntityCollection.size()).forEach(index -> {
-            final var expectedFakeMovieAPISummaryEntity = expectedFakeMovieAPISummaryEntityCollection.get(index);
-            final var actualMovieAPISummaryDTO = actualMovieAPISummaryDTOCollection.get(index);
-            assertEquals(expectedFakeMovieAPISummaryEntity.getTitle(), actualMovieAPISummaryDTO.getTitle());
-            assertEquals(parseBooleanToString(expectedFakeMovieAPISummaryEntity.getOscarWinner()), actualMovieAPISummaryDTO.getOscarWinner());
-            assertEquals(expectedFakeMovieAPISummaryEntity.getAverage(), actualMovieAPISummaryDTO.getAverage());
-            assertEquals(expectedFakeMovieAPISummaryEntity.getBoxOffice(), actualMovieAPISummaryDTO.getBoxOffice());
+        IntStream.range(0, expectedFakeMovieSummaryEntityCollection.size()).forEach(index -> {
+            final var expectedFakeMovieSummaryEntity = expectedFakeMovieSummaryEntityCollection.get(index);
+            final var actualMovieSummaryDTO = actualMovieSummaryDTOCollection.get(index);
+            assertEquals(expectedFakeMovieSummaryEntity.getTitle(), actualMovieSummaryDTO.getTitle());
+            assertEquals(parseBooleanToString(expectedFakeMovieSummaryEntity.getOscarWinner()), actualMovieSummaryDTO.getOscarWinner());
+            assertEquals(expectedFakeMovieSummaryEntity.getAverage(), actualMovieSummaryDTO.getAverage());
+            assertEquals(expectedFakeMovieSummaryEntity.getBoxOffice(), actualMovieSummaryDTO.getBoxOffice());
 
         });
     }

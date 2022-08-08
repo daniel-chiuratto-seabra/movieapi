@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.model.RatingEntity;
-import nl.backbase.service.MovieAPIService;
+import nl.backbase.service.MovieService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,14 +26,14 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/rating")
-public class RatingAPIRestController {
-    private final MovieAPIService movieAPIService;
+public class RatingRestController {
+    private final MovieService movieService;
 
     @PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "This endpoint is related in saving a rate to the informed Movie Title, the rate should be " +
                          "a number in between 0 and 10 (including both 0 and 10)")
     public ResponseEntity<?> saveRatingDTO(@RequestBody @Valid final RatingRequestDTO ratingRequestDTO) {
-        return ResponseEntity.ok().body(this.movieAPIService.saveRatingDTO(ratingRequestDTO));
+        return ResponseEntity.ok().body(this.movieService.saveRatingRequestDTO(ratingRequestDTO));
     }
 
 }

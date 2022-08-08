@@ -4,8 +4,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import nl.backbase.security.JWTAuthenticationFilter;
-import nl.backbase.security.JWTSignInFilter;
+import nl.backbase.security.filter.JWTAuthenticationFilter;
+import nl.backbase.security.filter.JWTSignInFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.Date;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.Collections.emptyList;
-import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
+import static nl.backbase.security.JWTConfigurationConstants.BEARER_TOKEN_PREFIX;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 
@@ -99,7 +99,7 @@ public class TokenAuthenticationService {
             // showing to Spring Boot that the user is forbidden, or it will throw a MalformedJwtException, that means
             // an invalid JWT Token, forbidding the request as well
             final var user = Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
-                                        .parseClaimsJws(token.replace(TOKEN_PREFIX, StringUtils.EMPTY)).getBody()
+                                        .parseClaimsJws(token.replace(BEARER_TOKEN_PREFIX, StringUtils.EMPTY)).getBody()
                                         .getSubject();
 
             if (user != null) {

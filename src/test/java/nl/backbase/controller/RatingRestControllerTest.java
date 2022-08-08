@@ -2,7 +2,7 @@ package nl.backbase.controller;
 
 import nl.backbase.IntegrationTest;
 import nl.backbase.dto.RatingRequestDTO;
-import nl.backbase.dto.source.MovieAPISourceDTO;
+import nl.backbase.dto.source.MovieSourceDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class RatingAPIRestControllerTest extends IntegrationTest {
+class RatingRestControllerTest extends IntegrationTest {
 
     @Test
     @DisplayName("GIVEN a Rating to be posted by the Fake User that does not exist in the database " +
@@ -29,12 +29,12 @@ class RatingAPIRestControllerTest extends IntegrationTest {
         expectedRatingRequestDTO.setMovieTitle("Fake Movie");
         expectedRatingRequestDTO.setValue("10");
 
-        final var expectedFakeMovieAPISourceDTO = new MovieAPISourceDTO();
-        expectedFakeMovieAPISourceDTO.setTitle("Fake Movie");
-        expectedFakeMovieAPISourceDTO.setBoxOffice("$234,543,231");
-        expectedFakeMovieAPISourceDTO.setResponse("true");
+        final var expectedFakeMovieSourceDTO = new MovieSourceDTO();
+        expectedFakeMovieSourceDTO.setTitle("Fake Movie");
+        expectedFakeMovieSourceDTO.setBoxOffice("$234,543,231");
+        expectedFakeMovieSourceDTO.setResponse("true");
 
-        final var expectedFakeResponseEntity = ResponseEntity.ok(expectedFakeMovieAPISourceDTO);
+        final var expectedFakeResponseEntity = ResponseEntity.ok(expectedFakeMovieSourceDTO);
 
         when(this.mockRestTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class), any(Map.class))).thenReturn(expectedFakeResponseEntity);
 

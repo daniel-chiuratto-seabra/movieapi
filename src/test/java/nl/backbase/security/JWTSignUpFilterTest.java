@@ -2,7 +2,7 @@ package nl.backbase.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.backbase.dto.UserDTO;
-import nl.backbase.security.config.JWTMovieAPIAuthenticationManager;
+import nl.backbase.security.filter.JWTSignInFilter;
 import nl.backbase.security.service.TokenAuthenticationService;
 import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
+import static nl.backbase.security.JWTConfigurationConstants.BEARER_TOKEN_PREFIX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,14 +27,14 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 class JWTSignUpFilterTest {
 
-    private JWTMovieAPIAuthenticationManager mockAuthenticationManager;
+    private JWTMovieAuthenticationManager mockAuthenticationManager;
     private TokenAuthenticationService mockTokenAuthenticationService;
     private ObjectMapper mockObjectMapper;
     private JWTSignInFilter jwtSignUpFilter;
 
     @BeforeEach
     private void setUp() {
-        this.mockAuthenticationManager = mock(JWTMovieAPIAuthenticationManager.class);
+        this.mockAuthenticationManager = mock(JWTMovieAuthenticationManager.class);
         this.mockTokenAuthenticationService = mock(TokenAuthenticationService.class);
         this.mockObjectMapper = mock(ObjectMapper.class);
         this.jwtSignUpFilter = new JWTSignInFilter("Fake Url", mockAuthenticationManager, mockTokenAuthenticationService, mockObjectMapper);
@@ -79,6 +79,6 @@ class JWTSignUpFilterTest {
 
         final var actualToken = httpServletResponse.getHeader(AUTHORIZATION);
         assertNotNull(actualToken);
-        assertEquals(TOKEN_PREFIX + " " + expectedFakeToken, actualToken);
+        assertEquals(BEARER_TOKEN_PREFIX + " " + expectedFakeToken, actualToken);
     }
 }

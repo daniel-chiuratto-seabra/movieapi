@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.BestPictureMovieDTO;
 import nl.backbase.dto.MovieTop10DTO;
-import nl.backbase.service.MovieAPIService;
+import nl.backbase.service.MovieService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +24,14 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/v1/movie")
 @RequiredArgsConstructor
-public class MovieAPIRestController {
-    private final MovieAPIService movieService;
+public class MovieRestController {
+    private final MovieService movieService;
 
     @ResponseBody
     @GetMapping(value="/bestpicture", produces = { MediaType.APPLICATION_JSON_VALUE })
     @Operation(summary = "Returns if the informed Movie Title won the Oscar for Best Picture. If not, it returns a Not Found Http Status")
     public ResponseEntity<BestPictureMovieDTO> bestpicture(@RequestParam("movieTitle") final String movieTitle) {
-        return ResponseEntity.ok(this.movieService.getBestPictureMovieAPIDTO(movieTitle));
+        return ResponseEntity.ok(this.movieService.getBestPictureMovieDTO(movieTitle));
     }
 
     @ResponseBody
@@ -39,6 +39,6 @@ public class MovieAPIRestController {
     @Operation(summary = "Get the Top 10 List of the most rated movies available in the database, ordered from the most voted " +
                          "to the less, and order by the Box Office, both descend")
     public ResponseEntity<Collection<MovieTop10DTO>> top10() {
-        return ResponseEntity.ok(this.movieService.getMovieAPISummaryDTOCollection());
+        return ResponseEntity.ok(this.movieService.getMovieTop10DTOCollection());
     }
 }

@@ -26,5 +26,5 @@ public class RatingEntity {
     private Double value;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "MOVIE_ID", referencedColumnName = "ID")
-    private MovieAPIEntity movieAPIEntity;
+    private MovieEntity movieEntity;
 }

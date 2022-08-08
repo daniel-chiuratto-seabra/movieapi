@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import nl.backbase.dto.UserDTO;
 import nl.backbase.repository.UserRepository;
-import nl.backbase.security.JWTAuthenticationFilter;
-import nl.backbase.security.JWTSignInFilter;
+import nl.backbase.security.JWTMovieAuthenticationManager;
+import nl.backbase.security.filter.JWTAuthenticationFilter;
+import nl.backbase.security.filter.JWTSignInFilter;
 import nl.backbase.security.service.TokenAuthenticationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,13 +37,13 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-public class MovieAPIApplicationWebSecurityConfig {
+public class MovieApplicationWebSecurityConfig {
 
     private final String signUpUrl;
     private final String signInUrl;
 
-    public MovieAPIApplicationWebSecurityConfig(@Value("${security.jwt.url.signup}") final String signUpUrl,
-                                                @Value("${security.jwt.url.signin}") final String signInUrl) {
+    public MovieApplicationWebSecurityConfig(@Value("${security.jwt.url.signup}") final String signUpUrl,
+                                             @Value("${security.jwt.url.signin}") final String signInUrl) {
         this.signInUrl = signInUrl;
         this.signUpUrl = signUpUrl;
     }
@@ -51,7 +52,7 @@ public class MovieAPIApplicationWebSecurityConfig {
      * This method creates the {@link Bean} related to the {@link AbstractAuthenticationProcessingFilter} implementation,
      * which is the class where the filters used by Spring Security implements. For this specific filter that this
      * method instantiates, is where the {@code JWT Token} is generated once the authentication process happens successfully
-     * on behalf of the {@link JWTMovieAPIAuthenticationManager#authenticate(Authentication)} execution. Once the authentication
+     * on behalf of the {@link JWTMovieAuthenticationManager#authenticate(Authentication)} execution. Once the authentication
      * happens successfully, then the {@link JWTSignInFilter#successfulAuthentication(HttpServletRequest,
      * HttpServletResponse, FilterChain, Authentication)} returns the {@code JWT Token} to the user
      *
@@ -101,7 +102,7 @@ public class MovieAPIApplicationWebSecurityConfig {
     }
 
     /**
-     * This method creates the {@link JWTMovieAPIAuthenticationManager} which is an implementation of {@link AuthenticationManager},
+     * This method creates the {@link JWTMovieAuthenticationManager} which is an implementation of {@link AuthenticationManager},
      * and is responsible in actually authenticate (or not) a user that is requesting to SignIn. It is this class that
      * during SignIn, verifies if the informed username exists in the database, and if so, if its password matches with
      * what is available in the database
@@ -122,7 +123,7 @@ public class MovieAPIApplicationWebSecurityConfig {
      */
     @Bean
     public AuthenticationManager authenticationManager(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
-        return new JWTMovieAPIAuthenticationManager(userRepository, passwordEncoder);
+        return new JWTMovieAuthenticationManager(userRepository, passwordEncoder);
     }
 
     @Bean

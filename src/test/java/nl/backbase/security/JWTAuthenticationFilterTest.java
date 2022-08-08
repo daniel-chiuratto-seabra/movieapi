@@ -2,6 +2,7 @@ package nl.backbase.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.MalformedJwtException;
+import nl.backbase.security.filter.JWTAuthenticationFilter;
 import nl.backbase.security.service.TokenAuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,7 @@ import static org.mockito.Mockito.*;
 class JWTAuthenticationFilterTest {
 
 
-    private JWTAuthenticationFilter JWTAuthenticationFilter;
+    private nl.backbase.security.filter.JWTAuthenticationFilter JWTAuthenticationFilter;
     private TokenAuthenticationService mockTokenAuthenticationService;
     private ObjectMapper mockObjectMapper;
 

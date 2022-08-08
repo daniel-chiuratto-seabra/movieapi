@@ -3,10 +3,10 @@ package nl.backbase.helper.csv;
 import com.opencsv.bean.CsvBindByName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import nl.backbase.repository.MovieAPIRepository;
+import nl.backbase.repository.MovieRepository;
 
 /**
- * This class is used to carry the deserialized data from the CSV file, and allow to fill the {@link MovieAPIRepository}
+ * This class is used to carry the deserialized data from the CSV file, and allow to fill the {@link MovieRepository}
  * with the movie data available in it
  *
  * @author Daniel Chiuratto Seabra

@@ -1,7 +1,7 @@
 package nl.backbase.mapper;
 
 import nl.backbase.dto.RatingRequestDTO;
-import nl.backbase.model.MovieAPIEntity;
+import nl.backbase.model.MovieEntity;
 import nl.backbase.model.RatingEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,11 +19,11 @@ class RatingMappersTest {
     private final RatingMappers ratingMappers = new RatingMappers();
 
     @Test
-    @DisplayName("GIVEN fakes RatingRequestDTO, Authentication and MovieAPIEntity, WHEN the mapper tries to map without having all of them set, THEN it should return null")
-    public void givenFakesRatingRequestDTOAuthenticationAndMovieAPIEntityWhenTheMapperTriesToMapWithoutHavingAllOfThemSetThenItShouldReturnNull() {
+    @DisplayName("GIVEN fakes RatingRequestDTO, Authentication and MovieEntity, WHEN the mapper tries to map without having all of them set, THEN it should return null")
+    public void givenFakesRatingRequestDTOAuthenticationAndMovieEntityWhenTheMapperTriesToMapWithoutHavingAllOfThemSetThenItShouldReturnNull() {
         final var expectedFakeRatingRequestDTO = getFakeRatingRequestDTO();
         final var expectedFakeAuthentication = getFakeAuthentication();
-        final var expectedFakeMovieAPIEntity = getFakeMovieAPIEntity();
+        final var expectedFakeMovieEntity = getFakeMovieEntity();
 
         var actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(null, null, null);
         assertNull(actualRatingEntity);
@@ -34,25 +34,25 @@ class RatingMappersTest {
         actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(null, expectedFakeAuthentication, null);
         assertNull(actualRatingEntity);
 
-        actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(null, null, expectedFakeMovieAPIEntity);
+        actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(null, null, expectedFakeMovieEntity);
         assertNull(actualRatingEntity);
 
-        actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(expectedFakeRatingRequestDTO, null, expectedFakeMovieAPIEntity);
+        actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(expectedFakeRatingRequestDTO, null, expectedFakeMovieEntity);
         assertNull(actualRatingEntity);
     }
 
     @Test
-    @DisplayName("GIVEN fakes RatingRequestDTO, Authentication and MovieAPIEntity, WHEN the mapper tries to map with all of them set, THEN it should return an actual RatingEntity with expected values")
-    public void givenFakesRatingRequestDTOAuthenticationAndMovieAPIEntityWhenTheMapperTriesToMapWithAllOfThemSetThenItShouldTeturnAnActualRatingEntityWithExpectedValues() {
+    @DisplayName("GIVEN fakes RatingRequestDTO, Authentication and MovieEntity, WHEN the mapper tries to map with all of them set, THEN it should return an actual RatingEntity with expected values")
+    public void givenFakesRatingRequestDTOAuthenticationAndMovieEntityWhenTheMapperTriesToMapWithAllOfThemSetThenItShouldTeturnAnActualRatingEntityWithExpectedValues() {
         final var expectedFakeRatingRequestDTO = getFakeRatingRequestDTO();
         final var expectedFakeAuthentication = getFakeAuthentication();
-        final var expectedFakeMovieAPIEntity = getFakeMovieAPIEntity();
+        final var expectedFakeMovieEntity = getFakeMovieEntity();
 
-        final var actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(expectedFakeRatingRequestDTO, expectedFakeAuthentication, expectedFakeMovieAPIEntity);
+        final var actualRatingEntity = this.ratingMappers.ratingRequestDTORatingEntity(expectedFakeRatingRequestDTO, expectedFakeAuthentication, expectedFakeMovieEntity);
         assertNotNull(actualRatingEntity);
         assertEquals(expectedFakeAuthentication.getPrincipal(), actualRatingEntity.getSource());
         assertEquals(Integer.parseInt(expectedFakeRatingRequestDTO.getValue()), actualRatingEntity.getValue().intValue());
-        assertEquals(expectedFakeMovieAPIEntity, actualRatingEntity.getMovieAPIEntity());
+        assertEquals(expectedFakeMovieEntity, actualRatingEntity.getMovieEntity());
     }
 
     @Test
@@ -61,7 +61,7 @@ class RatingMappersTest {
         final var expectedFakeRatingEntity = new RatingEntity();
         expectedFakeRatingEntity.setSource("Fake Source");
         expectedFakeRatingEntity.setValue(1234D);
-        expectedFakeRatingEntity.setMovieAPIEntity(getFakeMovieAPIEntity());
+        expectedFakeRatingEntity.setMovieEntity(getFakeMovieEntity());
 
         final var actualRatingDTO = this.ratingMappers.ratingEntityRatingDTO(expectedFakeRatingEntity);
         assertNotNull(actualRatingDTO);
@@ -75,7 +75,7 @@ class RatingMappersTest {
         final var expectedFakeRatingEntity = new RatingEntity();
         expectedFakeRatingEntity.setSource("Fake Source");
         expectedFakeRatingEntity.setValue(null);
-        expectedFakeRatingEntity.setMovieAPIEntity(getFakeMovieAPIEntity());
+        expectedFakeRatingEntity.setMovieEntity(getFakeMovieEntity());
 
         final var actualRatingDTO = this.ratingMappers.ratingEntityRatingDTO(expectedFakeRatingEntity);
         assertNotNull(actualRatingDTO);
@@ -94,22 +94,22 @@ class RatingMappersTest {
         return new UsernamePasswordAuthenticationToken("Fake Principal", "Fake Credentials", Collections.emptyList());
     }
 
-    private MovieAPIEntity getFakeMovieAPIEntity() {
-        final var fakeMovieAPIEntity = new MovieAPIEntity();
-        fakeMovieAPIEntity.setOscarWinner(true);
-        fakeMovieAPIEntity.setTitle("Fake Movie Title");
-        fakeMovieAPIEntity.setBoxOffice(new BigDecimal(65432));
+    private MovieEntity getFakeMovieEntity() {
+        final var fakeMovieEntity = new MovieEntity();
+        fakeMovieEntity.setOscarWinner(true);
+        fakeMovieEntity.setTitle("Fake Movie Title");
+        fakeMovieEntity.setBoxOffice(new BigDecimal(65432));
 
         final var ratingEntityCollection = new ArrayList<RatingEntity>();
         IntStream.range(0, 5).forEach(index -> {
             final var fakeRatingEntity = new RatingEntity();
             fakeRatingEntity.setSource(String.format("Fake Rating Source %d", index));
             fakeRatingEntity.setValue(123D * index);
-            fakeRatingEntity.setMovieAPIEntity(fakeMovieAPIEntity);
+            fakeRatingEntity.setMovieEntity(fakeMovieEntity);
             ratingEntityCollection.add(fakeRatingEntity);
         });
 
-        fakeMovieAPIEntity.setRatings(ratingEntityCollection);
-        return fakeMovieAPIEntity;
+        fakeMovieEntity.setRatings(ratingEntityCollection);
+        return fakeMovieEntity;
     }
 }
