@@ -21,10 +21,10 @@ import java.io.IOException;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-class JWTServiceAuthenticationFilterTest {
+class JWTAuthenticationFilterTest {
 
 
-    private JWTServiceAuthenticationFilter jwtServiceAuthenticationFilter;
+    private JWTAuthenticationFilter JWTAuthenticationFilter;
     private TokenAuthenticationService mockTokenAuthenticationService;
     private ObjectMapper mockObjectMapper;
 
@@ -32,15 +32,15 @@ class JWTServiceAuthenticationFilterTest {
     private void setUp() {
         this.mockTokenAuthenticationService = mock(TokenAuthenticationService.class);
         this.mockObjectMapper = mock(ObjectMapper.class);
-        this.jwtServiceAuthenticationFilter = new JWTServiceAuthenticationFilter(this.mockTokenAuthenticationService, this.mockObjectMapper);
+        this.JWTAuthenticationFilter = new JWTAuthenticationFilter(this.mockTokenAuthenticationService, this.mockObjectMapper);
     }
 
     @Test
-    @DisplayName("GIVEN a JWTServiceAuthenticationFilter with mocked dependencies " +
+    @DisplayName("GIVEN a JWTAuthenticationFilter with mocked dependencies " +
                   "WHEN doFilter is called with mock values set " +
                    "AND the JWT token is processed successfully " +
                   "THEN the flow should move forward as expected")
-    public void givenJWTServiceAuthenticationFilterWhenDoFilterProcessedSuccessfullyThenFlowMoveForwardAsExpected() throws IOException, ServletException {
+    public void givenJWTAuthenticationFilterWhenDoFilterProcessedSuccessfullyThenFlowMoveForwardAsExpected() throws IOException, ServletException {
         final var mockServletRequest = mock(HttpServletRequest.class);
         final var mockServletResponse = mock(ServletResponse.class);
         final var mockFilterChain = mock(FilterChain.class);
@@ -50,7 +50,7 @@ class JWTServiceAuthenticationFilterTest {
 
         when(this.mockTokenAuthenticationService.getAuthentication(eq(mockServletRequest))).thenReturn(mockAuthentication);
 
-        this.jwtServiceAuthenticationFilter.doFilter(mockServletRequest, mockServletResponse, mockFilterChain);
+        this.JWTAuthenticationFilter.doFilter(mockServletRequest, mockServletResponse, mockFilterChain);
 
         verify(this.mockTokenAuthenticationService).getAuthentication(eq(mockServletRequest));
         verify(mockSecurityContext).setAuthentication(eq(mockAuthentication));
@@ -58,11 +58,11 @@ class JWTServiceAuthenticationFilterTest {
     }
 
     @Test
-    @DisplayName("GIVEN a JWTServiceAuthenticationFilter with mocked dependencies " +
+    @DisplayName("GIVEN a JWTAuthenticationFilter with mocked dependencies " +
                   "WHEN doFilter is called with mocked request, mocked response and mocked filter chain " +
                    "AND the TokenAuthenticationService throws a MalformedJwtException " +
                   "THEN the exception is catch and the response is built with the error message as expected and set in the response OutputStream")
-    public void givenJWTServiceAuthenticationFilterWhenDoFilterCalledThenMalformedJwtExceptionCatchAndResponseBuilt() throws IOException {
+    public void givenJWTAuthenticationFilterWhenDoFilterCalledThenMalformedJwtExceptionCatchAndResponseBuilt() throws IOException {
         final var mockServletRequest = mock(HttpServletRequest.class);
         final var mockServletResponse = mock(HttpServletResponse.class);
         final var mockServletOutputStream = mock(ServletOutputStream.class);
@@ -74,18 +74,18 @@ class JWTServiceAuthenticationFilterTest {
         when(this.mockObjectMapper.writeValueAsString(any())).thenReturn(expectedFakeExceptionMessage);
         when(mockServletResponse.getOutputStream()).thenReturn(mockServletOutputStream);
 
-        this.jwtServiceAuthenticationFilter.doFilter(mockServletRequest, mockServletResponse, mockFilterChain);
+        this.JWTAuthenticationFilter.doFilter(mockServletRequest, mockServletResponse, mockFilterChain);
 
         verify(this.mockObjectMapper).writeValueAsString(any());
         verify(mockServletOutputStream).write(any());
     }
 
     @Test
-    @DisplayName("GIVEN a JWTServiceAuthenticationFilter with mocked dependencies " +
+    @DisplayName("GIVEN a JWTAuthenticationFilter with mocked dependencies " +
                   "WHEN doFilter is called with mocked request, mocked response and mocked filter chain " +
                    "AND the TokenAuthenticationService throws a ServletException " +
                   "THEN the exception is catch and the response is built with the error message as expected and set in the response OutputStream")
-    public void givenJWTServiceAuthenticationFilterWhenDoFilterCalledThenServletExceptionCatchAndResponseBuilt() throws IOException, ServletException {
+    public void givenJWTAuthenticationFilterWhenDoFilterCalledThenServletExceptionCatchAndResponseBuilt() throws IOException, ServletException {
         final var mockAuthentication = mock(Authentication.class);
         final var mockServletRequest = mock(HttpServletRequest.class);
         final var mockServletResponse = mock(HttpServletResponse.class);
@@ -99,7 +99,7 @@ class JWTServiceAuthenticationFilterTest {
         when(mockServletResponse.getOutputStream()).thenReturn(mockServletOutputStream);
         doThrow(new ServletException(expectedFakeExceptionMessage)).when(mockFilterChain).doFilter(eq(mockServletRequest), eq(mockServletResponse));
 
-        this.jwtServiceAuthenticationFilter.doFilter(mockServletRequest, mockServletResponse, mockFilterChain);
+        this.JWTAuthenticationFilter.doFilter(mockServletRequest, mockServletResponse, mockFilterChain);
 
         verify(this.mockObjectMapper).writeValueAsString(any());
         verify(mockServletOutputStream).write(any());

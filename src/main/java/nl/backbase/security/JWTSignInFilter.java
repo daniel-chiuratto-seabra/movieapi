@@ -20,13 +20,13 @@ import static java.util.Collections.emptyList;
 import static nl.backbase.security.JWTConfigurationConstants.TOKEN_PREFIX;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-public class JWTSignUpFilter extends AbstractAuthenticationProcessingFilter {
+public class JWTSignInFilter extends AbstractAuthenticationProcessingFilter {
 
     private final TokenAuthenticationService tokenAuthenticationService;
     private final ObjectMapper objectMapper;
 
-    public JWTSignUpFilter(final String signUpUrl, final AuthenticationManager authManager, final TokenAuthenticationService tokenAuthenticationService, final ObjectMapper objectMapper) {
-        super(new AntPathRequestMatcher(signUpUrl));
+    public JWTSignInFilter(final String signInUrl, final AuthenticationManager authManager, final TokenAuthenticationService tokenAuthenticationService, final ObjectMapper objectMapper) {
+        super(new AntPathRequestMatcher(signInUrl));
         setAuthenticationManager(authManager);
         this.tokenAuthenticationService = tokenAuthenticationService;
         this.objectMapper = objectMapper;
@@ -34,8 +34,7 @@ public class JWTSignUpFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse response) throws AuthenticationException, IOException {
-        final var inputStream = request.getInputStream();
-        final var userDTO = this.objectMapper.readValue(inputStream, UserDTO.class);
+        final var userDTO = this.objectMapper.readValue(request.getInputStream(), UserDTO.class);
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword(), emptyList()));
     }
 

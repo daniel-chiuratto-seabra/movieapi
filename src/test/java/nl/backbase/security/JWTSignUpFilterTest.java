@@ -30,18 +30,18 @@ class JWTSignUpFilterTest {
     private JWTMovieAPIAuthenticationManager mockAuthenticationManager;
     private TokenAuthenticationService mockTokenAuthenticationService;
     private ObjectMapper mockObjectMapper;
-    private JWTSignUpFilter jwtSignUpFilter;
+    private JWTSignInFilter jwtSignUpFilter;
 
     @BeforeEach
     private void setUp() {
         this.mockAuthenticationManager = mock(JWTMovieAPIAuthenticationManager.class);
         this.mockTokenAuthenticationService = mock(TokenAuthenticationService.class);
         this.mockObjectMapper = mock(ObjectMapper.class);
-        this.jwtSignUpFilter = new JWTSignUpFilter("Fake Url", mockAuthenticationManager, mockTokenAuthenticationService, mockObjectMapper);
+        this.jwtSignUpFilter = new JWTSignInFilter("Fake Url", mockAuthenticationManager, mockTokenAuthenticationService, mockObjectMapper);
     }
 
     @Test
-    @DisplayName("GIVEN a JWTSignUpFilter with mocked and fake dependencies " +
+    @DisplayName("GIVEN a JWTSignInFilter with mocked and fake dependencies " +
                   "WHEN attemptAuthentication is called with the fake request and response set " +
                   "THEN the authentication manager should call the authentication manager to authenticate the user")
     public void givenJWTSignUpFilterWhenAttemptAuthenticationCalledThenAuthenticationManagerShouldCallAuthenticationManagerToAuthenticateUser() throws IOException {
@@ -59,7 +59,7 @@ class JWTSignUpFilterTest {
     }
 
     @Test
-    @DisplayName("GIVEN a JWTSignUpFilter with mocked and fake dependencies " +
+    @DisplayName("GIVEN a JWTSignInFilter with mocked and fake dependencies " +
                   "WHEN successfulAuthentication is called with the fake request, response, filter chain and authentication set " +
                   "THEN the TokenAuthenticationService builds the JWT Token and sets it in the response Authorization header")
     public void givenJWTSignUpFilterWhenSuccessfulAuthenticationCalledThenTokenAuthenticationServiceBuildsJWTTokenAndSetsItInResponseHeader() {

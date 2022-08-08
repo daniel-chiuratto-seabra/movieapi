@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JWTServiceAuthenticationFilter extends GenericFilterBean {
+public class JWTAuthenticationFilter extends GenericFilterBean {
 
     public static final String ERROR_MESSAGE_FIELD = "errorMessage";
 
