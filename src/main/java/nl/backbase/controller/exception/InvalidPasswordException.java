@@ -11,7 +11,9 @@ import org.springframework.security.core.AuthenticationException;
  * @since 03/08/2022
  */
 public class InvalidPasswordException extends AuthenticationException {
-    public InvalidPasswordException(final String message) {
+    private static final long serialVersionUID = -7827967576484935729L;
+
+	public InvalidPasswordException(final String message) {
         super(message);
     }
 }

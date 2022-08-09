@@ -108,6 +108,8 @@
 						<excludes>
 							<!-- For development buildings, there is no need for the production application file be packed -->
 							<exclude>**/application-**.yaml</exclude>
+							<!-- The Eclipse Lombok JAR never should be packed -->
+							<exclude>**/lombok.jar</exclude>
 						</excludes>
 					</resource>
 				</resources>
@@ -126,6 +128,8 @@
 							<!-- When building for production, the application development file should not be packed -->
 							<exclude>**/application.yaml</exclude>
 							<exclude>**/application-**.yaml</exclude>
+							<!-- The Eclipse Lombok JAR never should be packed -->
+							<exclude>**/lombok.jar</exclude>
 					</excludes>
 					</resource>
 				</resources>
@@ -171,7 +175,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
 				<configuration>
 					<source>11</source>
 					<target>11</target>

@@ -1,13 +1,9 @@
 package nl.backbase.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import nl.backbase.dto.UserDTO;
-import nl.backbase.repository.UserRepository;
-import nl.backbase.security.JWTMovieAuthenticationManager;
-import nl.backbase.security.filter.JWTAuthenticationFilter;
-import nl.backbase.security.filter.JWTSignInFilter;
-import nl.backbase.security.service.TokenAuthenticationService;
+import javax.servlet.FilterChain;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +19,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import nl.backbase.dto.UserDTO;
+import nl.backbase.repository.UserRepository;
+import nl.backbase.security.JWTMovieAuthenticationManager;
+import nl.backbase.security.filter.JWTAuthenticationFilter;
+import nl.backbase.security.filter.JWTSignInFilter;
+import nl.backbase.security.service.TokenAuthenticationService;
 
 /**
  * This class is a {@link Configuration} class intended to configure the Web Security definitions regarding the SignIn and
@@ -34,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author Daniel Chiuratto Seabra
  * @since 02/08/2022
  */
-@Slf4j
 @Configuration
 @EnableWebSecurity
 public class MovieApplicationWebSecurityConfig {

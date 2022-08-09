@@ -10,7 +10,9 @@ import org.springframework.web.client.RestTemplate;
  * @since 02/08/2022
  */
 public class MovieSourceServiceException extends RuntimeException {
-    public MovieSourceServiceException(final String message) {
+    private static final long serialVersionUID = 4342520923108061884L;
+
+	public MovieSourceServiceException(final String message) {
         super(message);
     }
 

@@ -145,7 +145,8 @@ public class MovieService {
         private final MovieMappers movieMappers;
         private final String apiKey;
 
-        public CSVFileLoader(final MovieRepository movieRepository,
+        @SuppressWarnings("unused") // It is used by Spring only, not manually instantiated
+		public CSVFileLoader(final MovieRepository movieRepository,
                              final MovieSourceService movieSourceService,
                              final MovieMappers movieMappers,
                              @Value("${omdbapi.api.key}") final String apiKey) {

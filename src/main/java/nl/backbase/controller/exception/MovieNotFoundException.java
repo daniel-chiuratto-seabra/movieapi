@@ -11,7 +11,9 @@ import nl.backbase.repository.MovieRepository;
  * @since 01/08/2022
  */
 public class MovieNotFoundException extends RuntimeException {
-    public MovieNotFoundException(final String message) {
+    private static final long serialVersionUID = 6195255635762594121L;
+
+	public MovieNotFoundException(final String message) {
         super(message);
     }
 }

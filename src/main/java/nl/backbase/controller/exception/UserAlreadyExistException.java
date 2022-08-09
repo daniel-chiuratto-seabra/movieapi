@@ -9,7 +9,9 @@ import nl.backbase.repository.UserRepository;
  * @since 04/08/2022
  */
 public class UserAlreadyExistException extends RuntimeException {
-    public UserAlreadyExistException(final String message) {
+    private static final long serialVersionUID = 2989616291432066581L;
+
+	public UserAlreadyExistException(final String message) {
         super(message);
     }
 }

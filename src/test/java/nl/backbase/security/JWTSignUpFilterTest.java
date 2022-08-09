@@ -1,29 +1,33 @@
 package nl.backbase.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.backbase.dto.UserDTO;
-import nl.backbase.security.filter.JWTSignInFilter;
-import nl.backbase.security.service.TokenAuthenticationService;
+import static nl.backbase.security.JWTConfigurationConstants.BEARER_TOKEN_PREFIX;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
+import java.io.IOException;
+import java.util.Collections;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.catalina.connector.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Collections;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static nl.backbase.security.JWTConfigurationConstants.BEARER_TOKEN_PREFIX;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import nl.backbase.dto.UserDTO;
+import nl.backbase.security.filter.JWTSignInFilter;
+import nl.backbase.security.service.TokenAuthenticationService;
 
 class JWTSignUpFilterTest {
 

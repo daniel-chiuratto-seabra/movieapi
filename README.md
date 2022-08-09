@@ -31,4 +31,7 @@ So, taking those definitions into account, we have, as requested, the following 
 scale.md – a description of how it will scale when the number of users/agents/consumers grows from 100 per day to 10000000 per day,
 and what changes would have to be made to keep the same quality of service
 
-# Requirements to run the application
+## Requirements to run the application
+
+* Maven 3.8.4
+* Java 17.0.2+

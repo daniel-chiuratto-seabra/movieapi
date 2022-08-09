@@ -16,7 +16,8 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class RatingDTO implements Serializable {
-    @JsonProperty(required = true)
+    private static final long serialVersionUID = -1732529433859637182L;
+	@JsonProperty(required = true)
     private String source;
     @JsonProperty(required = true)
     private Double value;

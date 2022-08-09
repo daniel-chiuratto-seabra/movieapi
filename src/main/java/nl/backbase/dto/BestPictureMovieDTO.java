@@ -17,7 +17,8 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 public class BestPictureMovieDTO implements Serializable {
-    @JsonProperty
+    private static final long serialVersionUID = 8790702632274836870L;
+	@JsonProperty
     private String title;
     @JsonProperty
     private Collection<RatingDTO> ratings;

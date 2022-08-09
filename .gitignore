@@ -22,10 +22,17 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+# Compiled classes destination folder
 target/
 
+# IntelliJ Idea Files
 .idea/
-
 *.iml
 
+# Eclipse Files and Folders
+.classpath
+.project
+.settings/
+
+# Mac OS X Files
 .DS_Store

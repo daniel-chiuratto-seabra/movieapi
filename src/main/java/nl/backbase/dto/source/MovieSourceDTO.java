@@ -17,7 +17,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieSourceDTO implements Serializable {
-    @JsonProperty(value = "Title")
+    private static final long serialVersionUID = -8102359936075884756L;
+	@JsonProperty(value = "Title")
     String title;
     @JsonProperty(value = "BoxOffice")
     String boxOffice;

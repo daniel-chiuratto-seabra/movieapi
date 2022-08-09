@@ -16,7 +16,8 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 public class MovieTop10DTO implements Serializable {
-    @JsonProperty
+    private static final long serialVersionUID = -9110720113640454737L;
+	@JsonProperty
     private String title;
     @JsonProperty
     private Double average;
