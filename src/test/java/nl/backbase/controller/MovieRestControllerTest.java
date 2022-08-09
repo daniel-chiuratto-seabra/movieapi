@@ -52,15 +52,8 @@ class MovieRestControllerTest extends IntegrationTest {
                             .param(MOVIE_TITLE, fakeMovieEntity.getTitle()))
                     // Here is expected a Status OK meaning that yes, the Movie won a Best Picture Oscar
                     .andExpect(status().isOk()).andReturn();
-
-            mvcResult.getResponse().getOutputStream();
-            // Here the content is asserted as a Non-Null to avoid NullPointerException below in case anything changes in the service
-            assertNotNull(mvcResult.getResponse().getContentAsString());
-            // Here the content is asserted as a Non-Empty as well
-            assertFalse(mvcResult.getResponse().getContentAsString().trim().isEmpty());
-
             // Below the returned payload is asserted to confirm if the returned movie title and oscar winner fields match as expected
-            final var movieDTO = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BestPictureMovieDTO.class);
+            final var movieDTO = this.objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), BestPictureMovieDTO.class);
             assertEquals(fakeMovieEntity.getTitle(), movieDTO.getTitle());
             assertEquals(fakeMovieEntity.getOscarWinner() ? MovieMappers.OSCAR_WINNER_YES : MovieMappers.OSCAR_WINNER_NO, movieDTO.getOscarWinner());
         }
@@ -79,14 +72,9 @@ class MovieRestControllerTest extends IntegrationTest {
         final var mvcResult = this.mockMvc.perform(get(V1_MOVIE_TOP_10_ENDPOINT).accept(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, this.token)).andExpect(status().isOk()).andReturn();
 
-        // Once it returns, we verify if the content is null to avoid NullPointerException
-        assertNotNull(mvcResult.getResponse().getContentAsString());
-        // Also asserts if the content is empty
-        assertFalse(mvcResult.getResponse().getContentAsString().trim().isEmpty());
-
         // And in the end the payload is deserialized into a List of MovieTop10DTO classes to assert if each of the returned
         // Movie is as expected
-        final List<MovieTop10DTO> actualMovieSummaryDTOList = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, MovieTop10DTO.class));
+        final List<MovieTop10DTO> actualMovieSummaryDTOList = this.objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), objectMapper.getTypeFactory().constructCollectionType(List.class, MovieTop10DTO.class));
         // Here the amount of returned elements is compared with the expected amount
         assertEquals(expectedFakeMovieEntityList.size(), actualMovieSummaryDTOList.size());
         // Here each movie is asserted to see if it is as expected in the expected order

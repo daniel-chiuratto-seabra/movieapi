@@ -35,8 +35,6 @@ class UserRestControllerTest extends IntegrationTest {
 
 		// Therefore, here we look for the username from the UserDTO available in the parent class
 		final var actualUserEntity = this.userRepository.findByUsername(this.userDto.getUsername());
-		// Confirm that the entity returned by the repository is not null
-		assertNotNull(actualUserEntity);
 		// And assert that both username and password matches as expected
 		assertEquals(this.userDto.getUsername(), actualUserEntity.getUsername());
 		assertTrue(this.passwordEncoder.matches(this.userDto.getPassword(), actualUserEntity.getPassword()));

@@ -41,7 +41,6 @@ class TokenAuthenticationServiceTest {
         when(mockHttpServletRequest.getHeader(eq(AUTHORIZATION))).thenReturn(actualToken);
 
         final var actualAuthentication = tokenAuthenticationService.getAuthentication(mockHttpServletRequest);
-        assertNotNull(actualAuthentication);
         assertTrue(actualAuthentication.isAuthenticated());
         assertEquals(expectedUsername, String.valueOf(actualAuthentication.getPrincipal()));
     }

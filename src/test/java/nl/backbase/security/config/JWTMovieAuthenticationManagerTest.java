@@ -80,7 +80,6 @@ class JWTMovieAuthenticationManagerTest {
         when(this.mockPasswordEncoder.matches(eq(expectedFakeUserEntity.getPassword()), eq(String.valueOf(expectedAuthentication.getCredentials())))).thenReturn(true);
 
         final var actualAuthentication = this.jwtMovieAuthenticationManager.authenticate(expectedAuthentication);
-        assertNotNull(actualAuthentication);
         assertEquals(expectedFakeUserEntity.getUsername(), String.valueOf(actualAuthentication.getPrincipal()));
         assertEquals(expectedFakeUserEntity.getPassword(), String.valueOf(actualAuthentication.getCredentials()));
     }

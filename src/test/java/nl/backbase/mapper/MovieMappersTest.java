@@ -41,20 +41,15 @@ public class MovieMappersTest {
 
         final var actualMovieDTO = this.movieMappers.movieEntityToBestPictureMovieDTO(expectedFakeMovieEntity);
 
-        assertNotNull(actualMovieDTO);
         assertEquals(expectedFakeTitle, actualMovieDTO.getTitle());
 
         final var actualRatingDTOCollection = actualMovieDTO.getRatings();
-        assertNotNull(actualRatingDTOCollection);
-        assertFalse(actualRatingDTOCollection.isEmpty(), "The returned RatingDTO collection should not be empty");
         assertEquals(expectedFakeRatingEntityCollection.size(), actualRatingDTOCollection.size(), "The amount of RatingDTO collection items should be the same as the RatingEntity collection");
 
         final var actualRatingDTOList = new ArrayList<>(actualRatingDTOCollection);
         IntStream.range(0, expectedFakeRatingEntityCollection.size()).forEach(index -> {
             final var expectedRatingEntity = expectedFakeRatingEntityCollection.get(index);
             final var actualRatingDTO = actualRatingDTOList.get(index);
-
-            assertNotNull(actualRatingDTO);
             assertRatingDTORatingEntity(index, expectedRatingEntity, actualRatingDTO);
         });
     }
@@ -74,11 +69,8 @@ public class MovieMappersTest {
         expectedFakeMovieSourceDTO.setBoxOffice("12345");
 
         final var actualMovieEntity = this.movieMappers.movieSourceDTOToMovieEntity(expectedFakeMovieSourceDTO);
-        assertNotNull(actualMovieEntity);
         assertEquals(expectedFakeMovieSourceDTO.getTitle(), actualMovieEntity.getTitle());
-        assertNotNull(actualMovieEntity.getBoxOffice());
         assertEquals(expectedFakeMovieSourceDTO.getBoxOffice(), actualMovieEntity.getBoxOffice().toString());
-        assertNotNull(actualMovieEntity.getRatings());
         assertTrue(actualMovieEntity.getRatings().isEmpty(), "The rating collection should be empty");
     }
 
@@ -93,7 +85,6 @@ public class MovieMappersTest {
     @DisplayName("GIVEN a null MovieTop10Entity Collection, WHEN the mapper tries to map it, THEN it should return an empty collection")
     public void givenANullMovieSummaryEntityCollectionWhenTheMapperTriesToMapItThenItShouldReturnAnEmptyCollection() {
         final var actualMovieSummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO((Collection<MovieTop10Entity>) null);
-        assertNotNull(actualMovieSummaryDTO);
         assertTrue(actualMovieSummaryDTO.isEmpty());
     }
 
@@ -102,7 +93,6 @@ public class MovieMappersTest {
     public void givenAFakeMovieSummaryEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieSummaryDTOWithTheExpectedValues() {
         final var expectedFakeMovieSummaryEntity = new MovieTop10Entity("Fake Title", 1234D, new BigDecimal("7654321"), true);
         final var actualMovieSummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO(expectedFakeMovieSummaryEntity);
-        assertNotNull(actualMovieSummaryDTO);
         assertEquals(expectedFakeMovieSummaryEntity.getTitle(), actualMovieSummaryDTO.getTitle());
         assertEquals(parseBooleanToString(expectedFakeMovieSummaryEntity.getOscarWinner()), actualMovieSummaryDTO.getOscarWinner());
         assertEquals(expectedFakeMovieSummaryEntity.getAverage(), actualMovieSummaryDTO.getAverage());

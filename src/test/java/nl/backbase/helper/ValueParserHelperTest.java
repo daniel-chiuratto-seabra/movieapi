@@ -42,7 +42,6 @@ class ValueParserHelperTest {
                 getData(5, "Best Picture", false),
                 getData(6, "Best Picture", true)));
 
-        assertNotNull(csvDataCollection);
         assertEquals(2, csvDataCollection.size());
 
         final var csvDataList = new ArrayList<>(csvDataCollection);

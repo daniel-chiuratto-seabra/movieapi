@@ -81,7 +81,6 @@ class MovieSourceServiceTest {
         final var fakeResponseEntity = new ResponseEntity<>(expectedFakeMovieSourceDTO, null, HttpStatus.OK);
         when(this.mockRestTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), any(Class.class), any(Map.class))).thenReturn(fakeResponseEntity);
         final var actualMovieSourceDTOFromCSVFile = this.movieSourceService.getMovieSourceDTOFromCSVFile("Fake API", "Fake Movie Title", "Fake Additional Info");
-        assertNotNull(actualMovieSourceDTOFromCSVFile);
         assertEquals(expectedFakeMovieSourceDTO.getResponse(), actualMovieSourceDTOFromCSVFile.getResponse());
     }
 
@@ -113,7 +112,6 @@ class MovieSourceServiceTest {
         });
 
         final var actualMovieSourceDTOFromCSVFile = this.movieSourceService.getMovieSourceDTOFromCSVFile("Fake API", "Fake Movie Title", "Fake Additional Info");
-        assertNotNull(actualMovieSourceDTOFromCSVFile);
         assertEquals(expectedFakeMovieSourceDTO.getResponse(), actualMovieSourceDTOFromCSVFile.getResponse());
     }
 

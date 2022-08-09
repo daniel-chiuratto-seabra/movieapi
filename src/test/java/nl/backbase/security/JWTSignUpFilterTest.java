@@ -78,7 +78,6 @@ class JWTSignUpFilterTest {
         this.jwtSignUpFilter.successfulAuthentication(mockHttpServletRequest, httpServletResponse, mockFilterChain, expectedFakeAuthentication);
 
         final var actualToken = httpServletResponse.getHeader(AUTHORIZATION);
-        assertNotNull(actualToken);
         assertEquals(BEARER_TOKEN_PREFIX + " " + expectedFakeToken, actualToken);
     }
 }

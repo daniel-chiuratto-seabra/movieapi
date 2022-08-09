@@ -30,7 +30,6 @@ public class UserMappersTest {
         expectedFakeUserDTO.setPassword(expectedFakePassword);
 
         final var actualUserEntity = this.userMappers.userDTOToUserEntity(expectedFakeUserDTO);
-        assertNotNull(actualUserEntity);
         assertEquals(expectedFakeUserDTO.getUsername(), actualUserEntity.getUsername());
         assertTrue(passwordEncoder.matches(expectedFakePassword, actualUserEntity.getPassword()));
     }

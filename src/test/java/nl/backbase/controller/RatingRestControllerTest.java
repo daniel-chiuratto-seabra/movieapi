@@ -58,11 +58,8 @@ class RatingRestControllerTest extends IntegrationTest {
                                                                                     .content(asJsonString(expectedRatingRequestDTO)))
                                                                 .andExpect(status().isOk()).andReturn();
 
-        final var contentAsString = mockMvc.getResponse().getContentAsString();
-        // Then with the result, it is verified if it is null
-        assertNotNull(contentAsString);
         // Later it is deserialized into RatingRequestDTO as returned by the API, that means that the Rating has been successfully stored
-        final var actualRatingRequestDTO = this.objectMapper.readValue(contentAsString, RatingRequestDTO.class);
+        final var actualRatingRequestDTO = this.objectMapper.readValue(mockMvc.getResponse().getContentAsByteArray(), RatingRequestDTO.class);
         assertEquals(expectedRatingRequestDTO.getMovieTitle(), actualRatingRequestDTO.getMovieTitle());
         assertEquals(expectedRatingRequestDTO.getValue(), actualRatingRequestDTO.getValue());
     }
