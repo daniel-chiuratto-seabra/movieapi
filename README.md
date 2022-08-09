@@ -48,6 +48,6 @@ _IntelliJ Idea_ (does not require any plugin for `Lombok`)
 
 * Maven 3.8.4
 
-* Java 17.0.2+
+* Java 11.0.8+
 
 * Docker 20+
