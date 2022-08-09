@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import nl.backbase.dto.source.MovieSourceDTO;
 import nl.backbase.helper.csv.CSVData;
+import nl.backbase.mapper.MovieMappers;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -24,7 +25,6 @@ public class ValueParserHelper {
 
     private static final String DOLLAR_SIGN = "$";
     private static final String COMMA_STRING = ",";
-    private static final String OSCAR_WINNER_YES = "YES";
     private static final String BEST_PICTURE_OSCAR = "Best Picture";
 
     /**
@@ -41,7 +41,7 @@ public class ValueParserHelper {
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
             return csvToBeanBuilder.parse().stream()
-                                   .filter(csvData -> OSCAR_WINNER_YES.equals(csvData.getWon()) &&
+                                   .filter(csvData -> MovieMappers.OSCAR_WINNER_YES.equals(csvData.getWon()) &&
                                                       BEST_PICTURE_OSCAR.equals(csvData.getCategory()))
                                    .collect(Collectors.toList());
         } catch (final IOException e) {

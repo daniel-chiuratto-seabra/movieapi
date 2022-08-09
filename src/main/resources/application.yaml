@@ -11,7 +11,7 @@ security:
     url:
       signin: /v1/signin # Defining what is the SignIn endpoint
       signup: /v1/signup # Defining what is the SignUp endpoint
-    token: # Below there is the secret, Base 64 encoded to be used in the JWT Token generation process
+    token: # Below there is the secret, Base 64 encoded to be used in the JWT Token generation process (It is basically a huge string generated like, in terminal or bash type "echo AnythingAsSecret|base64")
       secret: ZmQ0ZGI5NjQ0MDQwY2I4MjMxY2Y3ZmI3MjdhN2ZmMjNhODViOTg1ZGE0NTBjMGM4NDA5NzYxMjdjOWMwYWRmZTBlZjlhNGY3ZTg4Y2U3YTE1ODVkZDU5Y2Y3OGYwZWE1NzUzNWQ2YjFjZDc0NGMxZWU2MmQ3MjY1NzJmNTE0MzI=
       expiration: 86400000 # The JWT Token expiration time in milliseconds (this value means 24 hours)
 
@@ -20,7 +20,7 @@ spring:
     active: dev # Defining the Spring Profile Active as Dev
   jackson:
     serialization:
-      indent_output: true # Setting to ident the JSON when logged, so it can have a better visualization during a troubleshoot
+      indent_output: true # Setting to indent the JSON
   h2:
     console:
       enabled: true # Enabling the H2 Console, accessible through http://localhost:8080/h2-console
@@ -28,29 +28,29 @@ spring:
         web-allow-others: true # Enabling web-allow-others to allow access to the H2 Console when the application is running inside a Docker container
   jpa:
     hibernate:
-      ddl-auto: create # DDL defining the database to be automatically created by Hibernate when the application is starting
-    generate-ddl: true
+      ddl-auto: create # DDL setting that the schema tool management should create the schema during startup
+    generate-ddl: true # Vendor-agnostic parameter to set to JPA to create the schema for other JPA based libraries
   datasource:
-    url: jdbc:h2:mem:movietestdb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER
+    url: jdbc:h2:mem:movietestdb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER # Datasource URL related to the database to connect with
 
 logging:
   level:
-    root: INFO
+    root: INFO # Spring Root Logging Level
     org:
       hibernate:
-        SQL: INFO
+        SQL: INFO # Hibernate SQL Query Logging Level
         type:
           descriptor:
             sql:
-              BasicBinder: INFO
+              BasicBinder: INFO # Hibernate SQL Prepared Statement Parameters Logging Level
 
 server:
-  port: 8080
+  port: 8080 # Setting the default port to access the API
 
 api:
   server:
-    url: http://localhost:${server.port}
+    url: http://localhost:${server.port} # Setting the URL to be shown in the Open API Swagger-UI page
 
 omdbapi:
   api:
-    key: f06bd2c1
+    key: f06bd2c1 # OMDB API token, needed to be able to retrieve the Movie Source Data from the external Service

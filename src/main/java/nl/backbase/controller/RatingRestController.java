@@ -1,6 +1,7 @@
 package nl.backbase.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.RatingRequestDTO;
 import nl.backbase.model.RatingEntity;
@@ -26,6 +27,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/rating")
+@SecurityRequirement(name = "Bearer Authentication")
 public class RatingRestController {
     private final MovieService movieService;
 

@@ -1,6 +1,7 @@
 package nl.backbase.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import nl.backbase.dto.BestPictureMovieDTO;
 import nl.backbase.dto.MovieTop10DTO;
@@ -24,6 +25,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/v1/movie")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class MovieRestController {
     private final MovieService movieService;
 

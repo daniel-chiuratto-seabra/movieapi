@@ -1,54 +1,54 @@
 movie:
   api:
-    url: http://www.omdbapi.com/
+    url: http://www.omdbapi.com/ # URL of the external Movie Source API Service
 
 springdoc:
   api-docs:
-    enabled: false
+    enabled: false true # Setting Swagger-UI to not be accessible
 
 security:
   jwt:
     url:
-      signin: /v1/signin
-      signup: /v1/signup
+      signin: /v1/signin # Defining what is the SignIn endpoint
+      signup: /v1/signup # Defining what is the SignUp endpoint
     token:
-      secret: ${APPLICATION_JWT_SECRET}
-      expiration: ${APPLICATION_JWT_TOKEN_EXPIRATION}
+      secret: ${APPLICATION_JWT_SECRET} # The secret, Base 64 encoded to be used in the JWT Token generation process
+      expiration: ${APPLICATION_JWT_TOKEN_EXPIRATION} # The JWT Token expiration time in milliseconds
 
 spring:
   profiles:
-    active: prod
+    active: prod # Defining the Spring Profile Active as Prod
   jackson:
     serialization:
-      indent_output: true
+      indent_output: true # Setting to indent the JSON
   h2:
     console:
-      enabled: false
+      enabled: false # Disabling the H2 Console
   jpa:
     hibernate:
-      ddl-auto: ${APPLICATION_JPA_HIBERNATE_DDL_AUTO}
-    generate-ddl: ${APPLICATION_JPA_GENERATE_DDL}
+      ddl-auto: ${APPLICATION_JPA_HIBERNATE_DDL_AUTO} # DDL setting defining the strategy which Hibernate should follow at startup (none, validate, update, create and create-drop)
+    generate-ddl: ${APPLICATION_JPA_GENERATE_DDL} # Vendor-agnostic parameter to set to JPA to create the schema for other JPA based libraries or not
   datasource:
-    url: ${APPLICATION_JPA_DATASOURCE_URL}
+    url: ${APPLICATION_JPA_DATASOURCE_URL} # Datasource URL related to the database to connect with
 
 logging:
   level:
-    root: INFO
+    root: INFO # Spring Root Logging Level
     org:
       hibernate:
-        SQL: INFO
+        SQL: INFO # Hibernate SQL Query Logging Level
         type:
           descriptor:
             sql:
-              BasicBinder: INFO
+              BasicBinder: INFO # Hibernate SQL Prepared Statement Parameters Logging Level
 
 server:
-  port: ${APPLICATION_PORT}
+  port: ${APPLICATION_PORT} # Setting the default port to access the API
 
 api:
   server:
-    url: ${APPLICATION_URL}:${APPLICATION_PORT}
+    url: ${APPLICATION_URL}:${APPLICATION_PORT} # Setting the URL to be shown in the Open API Swagger-UI page
 
 omdbapi:
   api:
-    key: ${APPLICATION_OMDBAPI_KEY}
+    key: ${APPLICATION_OMDBAPI_KEY} # OMDB API token, needed to be able to retrieve the Movie Source Data from the external Service
