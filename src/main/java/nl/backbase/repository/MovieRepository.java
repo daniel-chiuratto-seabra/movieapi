@@ -44,7 +44,7 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
      * @author Daniel Chiuratto Seabra
      * @since 02/08/2022
      */
-    @Query(value = "SELECT new nl.backbase.model.MovieTop10Entity(m.title, ROUND(AVG(r.value),2), m.boxOffice, m.oscarWinner) " +
+    @Query(value = "SELECT new nl.backbase.model.MovieTop10Entity(m.title, ROUND(AVG(r.value),2), m.boxOffice, m.bestPictureOscarWinner) " +
                      "FROM RatingEntity r RIGHT JOIN MovieEntity m " +
                        "ON r.movieEntity.id = m.id " +
                  "GROUP BY m.title " +

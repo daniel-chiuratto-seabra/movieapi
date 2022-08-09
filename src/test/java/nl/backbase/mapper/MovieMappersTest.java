@@ -32,7 +32,7 @@ public class MovieMappersTest {
     @DisplayName("GIVEN a fake entity, WHEN the mapper tries to map it, THEN it should return an actual BestPictureMovieDTO with expected values")
     public void givenAFakeMovieEntityWhenTheMapperTriesToMapItThenItShouldReturnAnActualMovieDTOWithExpectedValues() {
         final var expectedFakeTitle = "Fake Movie Title";
-        final var expectedFakeRatingEntityCollection = getFakeRatingEntityCollection(1);
+        final var expectedFakeRatingEntityCollection = getFakeRatingEntityCollection();
 
         final var expectedFakeMovieEntity = new MovieEntity();
         expectedFakeMovieEntity.setBoxOffice(new BigDecimal(12345));
@@ -57,7 +57,7 @@ public class MovieMappersTest {
     @Test
     @DisplayName("GIVEN a null fake MovieSourceDTO, WHEN the mapper tries to map it, THEN it should return null")
     public void givenANullFakeMovieSourceDTOWhenTheMapperTriesToMapItThenItShouldReturnNull() {
-        final var actualMovieEntity = this.movieMappers.movieSourceDTOToMovieEntity((MovieSourceDTO) null);
+        final var actualMovieEntity = this.movieMappers.movieSourceDTOToMovieEntity(null);
         assertNull(actualMovieEntity);
     }
 
@@ -94,7 +94,7 @@ public class MovieMappersTest {
         final var expectedFakeMovieSummaryEntity = new MovieTop10Entity("Fake Title", 1234D, new BigDecimal("7654321"), true);
         final var actualMovieSummaryDTO = this.movieMappers.movieTop10EntityToMovieTop10DTO(expectedFakeMovieSummaryEntity);
         assertEquals(expectedFakeMovieSummaryEntity.getTitle(), actualMovieSummaryDTO.getTitle());
-        assertEquals(parseBooleanToString(expectedFakeMovieSummaryEntity.getOscarWinner()), actualMovieSummaryDTO.getOscarWinner());
+        assertEquals(parseBooleanToString(expectedFakeMovieSummaryEntity.getBestPictureOscarWinner()), actualMovieSummaryDTO.getBestPictureOscarWinner());
         assertEquals(expectedFakeMovieSummaryEntity.getAverage(), actualMovieSummaryDTO.getAverage());
         assertEquals(expectedFakeMovieSummaryEntity.getBoxOffice(), actualMovieSummaryDTO.getBoxOffice());
     }
@@ -113,16 +113,16 @@ public class MovieMappersTest {
             final var expectedFakeMovieSummaryEntity = expectedFakeMovieSummaryEntityCollection.get(index);
             final var actualMovieSummaryDTO = actualMovieSummaryDTOCollection.get(index);
             assertEquals(expectedFakeMovieSummaryEntity.getTitle(), actualMovieSummaryDTO.getTitle());
-            assertEquals(parseBooleanToString(expectedFakeMovieSummaryEntity.getOscarWinner()), actualMovieSummaryDTO.getOscarWinner());
+            assertEquals(parseBooleanToString(expectedFakeMovieSummaryEntity.getBestPictureOscarWinner()), actualMovieSummaryDTO.getBestPictureOscarWinner());
             assertEquals(expectedFakeMovieSummaryEntity.getAverage(), actualMovieSummaryDTO.getAverage());
             assertEquals(expectedFakeMovieSummaryEntity.getBoxOffice(), actualMovieSummaryDTO.getBoxOffice());
 
         });
     }
 
-    private String parseBooleanToString(final Boolean oscarWinner) {
-        if (oscarWinner == null) { return MovieMappers.OSCAR_WINNER_NO; }
-        return oscarWinner ? MovieMappers.OSCAR_WINNER_YES : MovieMappers.OSCAR_WINNER_NO;
+    private String parseBooleanToString(final Boolean bestPictureOscarWinner) {
+        if (bestPictureOscarWinner == null) { return MovieMappers.BEST_PICTURE_OSCAR_WINNER_NO; }
+        return bestPictureOscarWinner ? MovieMappers.BEST_PICTURE_OSCAR_WINNER_YES : MovieMappers.BEST_PICTURE_OSCAR_WINNER_NO;
     }
 
     private void assertRatingDTORatingEntity(final int index, final RatingEntity expectedRatingEntity, final RatingDTO actualRatingDTO) {
@@ -130,13 +130,13 @@ public class MovieMappersTest {
         assertEquals(expectedRatingEntity.getValue(), actualRatingDTO.getValue(), "The Value values should not be different between the entity and the mapped DTO at index " + index);
     }
 
-    private List<RatingEntity> getFakeRatingEntityCollection(final int indexSrc) {
+    private List<RatingEntity> getFakeRatingEntityCollection() {
         final var ratingEntityCollection = new ArrayList<RatingEntity>();
         IntStream.range(0, COLLECTION_SIZE).forEach(index -> {
             final var ratingEntity = new RatingEntity();
-            ratingEntity.setId((long) index * (long) indexSrc);
-            ratingEntity.setValue((double) index * 5 * indexSrc);
-            ratingEntity.setSource(String.format("Fake Source %d %d", index, indexSrc));
+            ratingEntity.setId((long) index);
+            ratingEntity.setValue((double) index);
+            ratingEntity.setSource(String.format("Fake Source %d", index));
             ratingEntityCollection.add(ratingEntity);
         });
         return ratingEntityCollection;

@@ -55,7 +55,7 @@ class MovieRestControllerTest extends IntegrationTest {
             // Below the returned payload is asserted to confirm if the returned movie title and oscar winner fields match as expected
             final var movieDTO = this.objectMapper.readValue(mvcResult.getResponse().getContentAsByteArray(), BestPictureMovieDTO.class);
             assertEquals(fakeMovieEntity.getTitle(), movieDTO.getTitle());
-            assertEquals(fakeMovieEntity.getOscarWinner() ? MovieMappers.OSCAR_WINNER_YES : MovieMappers.OSCAR_WINNER_NO, movieDTO.getOscarWinner());
+            assertEquals(fakeMovieEntity.getBestPictureOscarWinner() ? MovieMappers.BEST_PICTURE_OSCAR_WINNER_YES : MovieMappers.BEST_PICTURE_OSCAR_WINNER_NO, movieDTO.getBestPictureOscarWinner());
         }
     }
 
@@ -83,7 +83,7 @@ class MovieRestControllerTest extends IntegrationTest {
             final var actualMovieSummaryDTO = actualMovieSummaryDTOList.get(index);
             assertEquals(expectedMovieEntity.getTitle(), actualMovieSummaryDTO.getTitle());
             assertEquals(expectedMovieEntity.getBoxOffice().doubleValue(), actualMovieSummaryDTO.getBoxOffice().doubleValue());
-            assertEquals(expectedMovieEntity.getOscarWinner(), "YES".equals(actualMovieSummaryDTO.getOscarWinner()));
+            assertEquals(expectedMovieEntity.getBestPictureOscarWinner(), "YES".equals(actualMovieSummaryDTO.getBestPictureOscarWinner()));
         });
     }
 
@@ -114,7 +114,7 @@ class MovieRestControllerTest extends IntegrationTest {
             final var fakeMovieEntity = new MovieEntity();
             fakeMovieEntity.setTitle(String.format("Fake Movie %s", index));
             fakeMovieEntity.setBoxOffice(new BigDecimal(1000 * index));
-            fakeMovieEntity.setOscarWinner(index % 2 == 0);
+            fakeMovieEntity.setBestPictureOscarWinner(index % 2 == 0);
 
             // And in this if block, if it is to generate fake ratings for the corresponding Fake Movie,
             // 5 of them will be created

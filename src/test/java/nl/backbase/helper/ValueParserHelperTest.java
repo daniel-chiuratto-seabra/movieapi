@@ -134,7 +134,7 @@ class ValueParserHelperTest {
         return new ByteArrayInputStream(Stream.of(lines).collect(joining(lineSeparator())).getBytes(StandardCharsets.UTF_8));
     }
 
-    private String getData(final int index, final String category, final boolean isOscarWinner) {
-        return String.format(CSV_DATA_TEMPLATE, "Fake Year", index, category, "Nominee", index, "Additional Info", index, isOscarWinner ? "YES" : "NO");
+    private String getData(final int index, final String category, final boolean isBestPictureOscarWinner) {
+        return String.format(CSV_DATA_TEMPLATE, "Fake Year", index, category, "Nominee", index, "Additional Info", index, isBestPictureOscarWinner ? "YES" : "NO");
     }
 }

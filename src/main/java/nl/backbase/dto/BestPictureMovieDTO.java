@@ -23,5 +23,5 @@ public class BestPictureMovieDTO implements Serializable {
     @JsonProperty
     private Collection<RatingDTO> ratings;
     @JsonProperty
-    private String oscarWinner;
+    private String bestPictureOscarWinner;
 }

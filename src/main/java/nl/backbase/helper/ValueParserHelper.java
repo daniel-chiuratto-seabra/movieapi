@@ -41,7 +41,7 @@ public class ValueParserHelper {
                     .withIgnoreLeadingWhiteSpace(true)
                     .build();
             return csvToBeanBuilder.parse().stream()
-                                   .filter(csvData -> MovieMappers.OSCAR_WINNER_YES.equals(csvData.getWon()) &&
+                                   .filter(csvData -> MovieMappers.BEST_PICTURE_OSCAR_WINNER_YES.equals(csvData.getWon()) &&
                                                       BEST_PICTURE_OSCAR.equals(csvData.getCategory()))
                                    .collect(Collectors.toList());
         } catch (final IOException e) {

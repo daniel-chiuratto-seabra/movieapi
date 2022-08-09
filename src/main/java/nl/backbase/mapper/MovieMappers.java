@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MovieMappers {
 
-    public static final String OSCAR_WINNER_YES = "YES";
-    public static final String OSCAR_WINNER_NO = "NO";
+    public static final String BEST_PICTURE_OSCAR_WINNER_YES = "YES";
+    public static final String BEST_PICTURE_OSCAR_WINNER_NO = "NO";
 
     private final RatingMappers ratingMappers;
 
@@ -49,7 +49,7 @@ public class MovieMappers {
         if (movieEntity == null) { return null; }
         final var bestPictureMovieDTO = new BestPictureMovieDTO();
         bestPictureMovieDTO.setTitle(movieEntity.getTitle());
-        bestPictureMovieDTO.setOscarWinner(parseBooleanToOscarWinnerString(movieEntity.getOscarWinner()));
+        bestPictureMovieDTO.setBestPictureOscarWinner(parseBooleanToBestPictureOscarWinnerString(movieEntity.getBestPictureOscarWinner()));
         bestPictureMovieDTO.setRatings(this.ratingMappers.ratingEntityRatingDTO(movieEntity.getRatings()));
         return bestPictureMovieDTO;
     }
@@ -72,7 +72,7 @@ public class MovieMappers {
         var average = movieTop10Entity.getAverage();
         if (average == null) { average = 0D; }
         movieTop10DTO.setAverage(average);
-        movieTop10DTO.setOscarWinner(parseBooleanToOscarWinnerString(movieTop10Entity.getOscarWinner()));
+        movieTop10DTO.setBestPictureOscarWinner(parseBooleanToBestPictureOscarWinnerString(movieTop10Entity.getBestPictureOscarWinner()));
         return movieTop10DTO;
     }
 
@@ -94,7 +94,7 @@ public class MovieMappers {
         movieEntity.setTitle(movieSourceDTO.getTitle());
         movieEntity.setBoxOffice(ValueParserHelper.getBigDecimalFromString(movieSourceDTO.getBoxOffice()));
         movieEntity.setRatings(new ArrayList<>());
-        movieEntity.setOscarWinner(false);
+        movieEntity.setBestPictureOscarWinner(false);
         return movieEntity;
     }
 
@@ -119,7 +119,7 @@ public class MovieMappers {
      * where instead of having {@link Boolean#TRUE} or {@link Boolean#FALSE}, you may have {@link String} {@code YES} or
      * {@code NO}
      *
-     * @param oscarWinner {@link Boolean} instance that says if the corresponding Movie won an Oscar or not
+     * @param bestPictureOscarWinner {@link Boolean} instance that says if the corresponding Movie won an Oscar or not
      *
      * @return {@link String} representing the values of {@code YES} or {@code NO}, defining if the corresponding Movie
      * won an Oscar
@@ -127,7 +127,7 @@ public class MovieMappers {
      * @author Daniel Chiuratto Seabra
      * @since 04/08/2022
      */
-    private String parseBooleanToOscarWinnerString(final Boolean oscarWinner) {
-        return oscarWinner != null && oscarWinner ? OSCAR_WINNER_YES : OSCAR_WINNER_NO;
+    private String parseBooleanToBestPictureOscarWinnerString(final Boolean bestPictureOscarWinner) {
+        return bestPictureOscarWinner != null && bestPictureOscarWinner ? BEST_PICTURE_OSCAR_WINNER_YES : BEST_PICTURE_OSCAR_WINNER_NO;
     }
 }

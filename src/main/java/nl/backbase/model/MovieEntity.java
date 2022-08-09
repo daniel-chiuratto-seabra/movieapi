@@ -29,6 +29,6 @@ public class MovieEntity {
     private Collection<RatingEntity> ratings;
     @Column(name = "BOX_OFFICE")
     private BigDecimal boxOffice;
-    @Column(name = "OSCAR_WINNER")
-    private Boolean oscarWinner;
+    @Column(name = "BEST_PICTURE_OSCAR_WINNER")
+    private Boolean bestPictureOscarWinner;
 }

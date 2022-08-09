@@ -93,7 +93,7 @@ class RatingMappersTest {
 
     private MovieEntity getFakeMovieEntity() {
         final var fakeMovieEntity = new MovieEntity();
-        fakeMovieEntity.setOscarWinner(true);
+        fakeMovieEntity.setBestPictureOscarWinner(true);
         fakeMovieEntity.setTitle("Fake Movie Title");
         fakeMovieEntity.setBoxOffice(new BigDecimal(65432));
 

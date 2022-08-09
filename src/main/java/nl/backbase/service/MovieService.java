@@ -227,9 +227,9 @@ public class MovieService {
                         // into the database
                         if (movieSourceDTO != null) {
                             movieEntity = this.movieMappers.movieSourceDTOToMovieEntity(movieSourceDTO);
-                            // The entity has the oscarWinner property set to true, since that all movies that came from the CSV file
+                            // The entity has the bestPictureOscarWinner property set to true, since that all movies that came from the CSV file
                             // were already filtered as Best Picture Oscar winners
-                            movieEntity.setOscarWinner(true);
+                            movieEntity.setBestPictureOscarWinner(true);
                             // Then the generated entity is added into the Movie Entity collection
                             movieEntityCollection.add(movieEntity);
                         } else {

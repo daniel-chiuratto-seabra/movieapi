@@ -24,5 +24,5 @@ public class MovieTop10DTO implements Serializable {
     @JsonProperty
     private BigDecimal boxOffice;
     @JsonProperty
-    private String oscarWinner;
+    private String bestPictureOscarWinner;
 }
