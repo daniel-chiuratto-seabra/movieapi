@@ -14,3 +14,5 @@ source API that sets that. For the rating operation through the `/v1/rating` end
 rate between 0 and 10 (including 0 and 10). Regarding the CSV content loading, it was decided to import it during Spring
 Boot start up process, making the application test easier than having to upload the file through an endpoint or
 something similar.
+
+[**Return to main document**](https://github.com/daniel-chiuratto-seabra/movieapi)
