@@ -22,19 +22,24 @@ other frameworks if you like; we will review the proper use of any framework or 
 
 So, taking those definitions into account, there are the following documentation files inside the `docs` folder:
 
-* **solution.md** – a short (min two lines, max half a page) description of the solution and explaining some design
-decisions
+* **[solution.md](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/src/main/resources/docs/solution.md)** -
+a short (min two lines, max half a page) description of the solution and explaining some design decisions
 
-* **how_to_run.md** - a short explanation about how to run the solution with all the needed parts
+* **[how_to_run.md](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/src/main/resources/docs/how_to_run.md)** -
+a short explanation about how to run the solution with all the needed parts
 
-* **how_to_test.md** file explaining what needs to be done to use the service.
+* **[how_to_test.md](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/src/main/resources/docs/how_to_test.md)** -
+file explaining what needs to be done to use the service.
 
-* **to_do.md** - to-do list with things you would add if you have more time or explaining what is missing and why etc
+* **[to_do.md](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/src/main/resources/docs/to_do.md)** -
+to-do list with things you would add if you have more time or explaining what is missing and why etc
 
-* **assumptions.md** – your assumptions when solving the challenge
+* **[assumptions.md](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/src/main/resources/docs/assumptions.md)** -
+your assumptions when solving the challenge
 
-* **scale.md** – a description of how it will scale when the number of users/agents/consumers grows from 100 per day to
-10000000 per day, and what changes would have to be made to keep the same quality of service
+* **[scale.md](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/src/main/resources/docs/scale.md)** -
+a description of how it will scale when the number of users/agents/consumers grows from 100 per day to 10000000 per day,
+and what changes would have to be made to keep the same quality of service
 
 ## Requirements to run the application
 
