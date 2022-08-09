@@ -45,10 +45,6 @@ logging:
 server:
   port: ${APPLICATION_PORT} # Setting the default port to access the API
 
-api:
-  server:
-    url: ${APPLICATION_URL}:${APPLICATION_PORT} # Setting the URL to be shown in the Open API Swagger-UI page
-
 omdbapi:
   api:
     key: ${APPLICATION_OMDBAPI_KEY} # OMDB API token, needed to be able to retrieve the Movie Source Data from the external Service

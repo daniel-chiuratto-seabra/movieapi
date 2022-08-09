@@ -84,17 +84,7 @@ public class MovieService {
      * @since 02/08/2022
      */
     public RatingRequestDTO saveRatingRequestDTO(final RatingRequestDTO ratingRequestDTO) {
-        // Fist the Movie Title is searched in the database
-        var movieEntity = this.movieRepository.findByTitleIgnoreCase(ratingRequestDTO.getMovieTitle());
-        if (movieEntity == null) {
-            // In case the Movie does not exist in the database, then it is requested in the external Movie Source API
-            final var movieSourceDTO = this.movieSourceService.getMovieSourceDTO(this.apiKey, ratingRequestDTO.getMovieTitle());
-            if (movieSourceDTO != null) {
-                movieEntity = this.movieMappers.movieSourceDTOToMovieEntity(movieSourceDTO);
-            } else {
-                throw new MovieNotFoundException(String.format("The searched '%s' movie cannot be found", ratingRequestDTO.getMovieTitle()));
-            }
-        }
+        final var movieEntity = this.getMovieEntityByMovieTitle(ratingRequestDTO.getMovieTitle(), false);
 
         // The logged username is retrieve, so it is used as a Rating Source
         final var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -121,11 +111,43 @@ public class MovieService {
      * @since 02/08/2022
      */
     public BestPictureMovieDTO getBestPictureMovieDTO(final String movieTitle) throws MovieNotFoundException {
+        return this.movieMappers.movieEntityToBestPictureMovieDTO(this.getMovieEntityByMovieTitle(movieTitle, true));
+    }
+
+    /**
+     * This method receives the requested Movie title and verifies in the {@link MovieRepository} if it exists or not.
+     * In case the Movie title does not exist in the database, then it is requested in the external Movie source API,
+     * where in case it exists there, it is sorted in the {@link MovieRepository} and then returned to the caller. Once
+     * the {@link MovieRepository} contains the Movie, it is ready to be rated
+     *
+     * @param movieTitle {@link String} containing the Movie title
+     * @param isToSave {@link Boolean} value that defines if the returned Movie from the external Movie source API should
+     *                                be stored in the {@link MovieRepository} or not
+     * @return {@link MovieEntity} instance related to the Movie title
+     * @throws MovieNotFoundException thrown when the requested Movie title does not exist in the external Movie source
+     *
+     * @author Daniel Chiuratto Seabra
+     * @since 09/08/2022
+     */
+    private MovieEntity getMovieEntityByMovieTitle(final String movieTitle, final boolean isToSave) throws MovieNotFoundException {
+        // First the Movie Title is searched in the database
         var movieEntity = this.movieRepository.findByTitleIgnoreCase(movieTitle);
         if (movieEntity == null) {
-            throw new MovieNotFoundException(movieTitle);
+            // In case the Movie does not exist in the database, then it is requested in the external Movie Source API
+            final var movieSourceDTO = this.movieSourceService.getMovieSourceDTO(this.apiKey, movieTitle);
+            if (movieSourceDTO != null) {
+                // If the Movie source API returns a Movie data, then it is parsed into MovieEntity and returned to the
+                // caller
+                movieEntity = this.movieMappers.movieSourceDTOToMovieEntity(movieSourceDTO);
+                if (isToSave) {
+                    this.movieRepository.save(movieEntity);
+                }
+            } else {
+                // Otherwise, a MovieNotFoundException is thrown
+                throw new MovieNotFoundException(String.format("The searched '%s' movie cannot be found", movieTitle));
+            }
         }
-        return this.movieMappers.movieEntityToBestPictureMovieDTO(movieEntity);
+        return movieEntity;
     }
 
     /**

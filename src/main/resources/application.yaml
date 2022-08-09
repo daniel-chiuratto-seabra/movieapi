@@ -31,7 +31,7 @@ spring:
       ddl-auto: create # DDL setting that the schema tool management should create the schema during startup
     generate-ddl: true # Vendor-agnostic parameter to set to JPA to create the schema for other JPA based libraries
   datasource:
-    url: jdbc:h2:mem:movietestdb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER # Datasource URL related to the database to connect with
+    url: jdbc:h2:mem:moviedb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER # Datasource URL related to the database to connect with
 
 logging:
   level:
