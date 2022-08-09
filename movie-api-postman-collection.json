@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "88d1ec8a-6683-46b2-bfae-6bf1d60d1282",
+		"_postman_id": "839f5370-f69b-4274-81ed-79293fa51280",
 		"name": "MovieAPI",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "11141650"
@@ -121,6 +121,16 @@
 		{
 			"name": "signIn",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -150,6 +160,16 @@
 		{
 			"name": "signUp",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {

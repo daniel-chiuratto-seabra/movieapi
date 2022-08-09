@@ -3,6 +3,9 @@
 **Observation**: When is mentioned *profile* in this document, it means the `-P` parameter of the `mvn` command, that
 for this project can be `dev` (default value, not needed to be explicitly set) or `prod`
 
+**Observation 2**: In order to run the application without having to wait the tests to be run, just add the parameter
+`-D skipTests`
+
 ## Through IDE
 By simply running the `main` method available in the
 `MovieApplication` class
