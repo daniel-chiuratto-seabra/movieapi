@@ -7,7 +7,6 @@ import nl.backbase.mapper.MovieMappers;
 import nl.backbase.model.MovieEntity;
 import nl.backbase.model.RatingEntity;
 import nl.backbase.repository.MovieRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,33 +39,31 @@ class MovieRestControllerTest extends IntegrationTest {
     @DisplayName("GIVEN a fake Movie collection that starts available in the database " +
                   "WHEN the Best Picture endpoint is called by each of those fake movies " +
                   "THEN the Movie information about it, including if it is an Oscar Winner or not should be returned as expected")
-    public void givenFakeMovieCollectionWhenBestPictureEndpointCalledThenMovieInformationShouldBeReturnedAsExpected() {
+    public void givenFakeMovieCollectionWhenBestPictureEndpointCalledThenMovieInformationShouldBeReturnedAsExpected() throws Exception {
         // Here the buildFakeMovieDatabase method returns a List of MovieEntity without ratings in them, where all of them
         // are stored in the database as they won the Best Picture Oscar, so all the iterated movies below are movies
         // that won as Best Picture in Oscar
-        buildFakeMovieDatabase(false).forEach(movieEntity -> {
-            try {
-                // Then it is requested to the server to retrieve if the corresponding Movie Title of the corresponding
-                // MovieEntity won a Best Picture Oscar
-                final var mvcResult = this.mockMvc.perform(get(V1_MOVIE_BEST_PICTURE_ENDPOINT).accept(MediaType.APPLICATION_JSON_VALUE)
-                                                                                                         .header(HttpHeaders.AUTHORIZATION, this.token)
-                                                                                                         .param(MOVIE_TITLE, movieEntity.getTitle()))
-                        // Here is expected a Status OK meaning that yes, the Movie won a Best Picture Oscar
-                        .andExpect(status().isOk()).andReturn();
+        final var fakeMovieEntityList = buildFakeMovieDatabase(false);
+        for (final var fakeMovieEntity : fakeMovieEntityList) {
+            // Then it is requested to the server to retrieve if the corresponding Movie Title of the corresponding
+            // MovieEntity won a Best Picture Oscar
+            final var mvcResult = this.mockMvc.perform(get(V1_MOVIE_BEST_PICTURE_ENDPOINT).accept(MediaType.APPLICATION_JSON_VALUE)
+                            .header(HttpHeaders.AUTHORIZATION, this.token)
+                            .param(MOVIE_TITLE, fakeMovieEntity.getTitle()))
+                    // Here is expected a Status OK meaning that yes, the Movie won a Best Picture Oscar
+                    .andExpect(status().isOk()).andReturn();
 
-                // Here the content is asserted as a Non-Null to avoid NullPointerException below in case anything changes in the service
-                assertNotNull(mvcResult.getResponse().getContentAsString());
-                // Here the content is asserted as a Non-Empty as well
-                assertFalse(mvcResult.getResponse().getContentAsString().trim().isEmpty());
+            mvcResult.getResponse().getOutputStream();
+            // Here the content is asserted as a Non-Null to avoid NullPointerException below in case anything changes in the service
+            assertNotNull(mvcResult.getResponse().getContentAsString());
+            // Here the content is asserted as a Non-Empty as well
+            assertFalse(mvcResult.getResponse().getContentAsString().trim().isEmpty());
 
-                // Below the returned payload is asserted to confirm if the returned movie title and oscar winner fields match as expected
-                final var movieDTO = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BestPictureMovieDTO.class);
-                assertEquals(movieEntity.getTitle(), movieDTO.getTitle());
-                assertEquals(movieEntity.getOscarWinner() ? MovieMappers.OSCAR_WINNER_YES : MovieMappers.OSCAR_WINNER_NO, movieDTO.getOscarWinner());
-            } catch (final Exception e) {
-                Assertions.fail(e.getMessage());
-            }
-        });
+            // Below the returned payload is asserted to confirm if the returned movie title and oscar winner fields match as expected
+            final var movieDTO = this.objectMapper.readValue(mvcResult.getResponse().getContentAsString(), BestPictureMovieDTO.class);
+            assertEquals(fakeMovieEntity.getTitle(), movieDTO.getTitle());
+            assertEquals(fakeMovieEntity.getOscarWinner() ? MovieMappers.OSCAR_WINNER_YES : MovieMappers.OSCAR_WINNER_NO, movieDTO.getOscarWinner());
+        }
     }
 
     @Test
