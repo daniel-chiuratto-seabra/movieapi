@@ -30,6 +30,10 @@ spring:
     generate-ddl: ${APPLICATION_JPA_GENERATE_DDL} # Vendor-agnostic parameter to set to JPA to create the schema for other JPA based libraries or not
   datasource:
     url: ${APPLICATION_JPA_DATASOURCE_URL} # Datasource URL related to the database to connect with
+  properties:
+    dialect:
+      hiberante:
+        dialect: org.hibernate.dialect.H2Dialect # This DB dialect is set by default, but is set here to facilitate future changes with other DBs
 
 logging:
   level:

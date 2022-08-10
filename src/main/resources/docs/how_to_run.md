@@ -4,7 +4,7 @@
 for this project can be `dev` (default value, not needed to be explicitly set) or `prod`
 
 **Observation 2**: In order to run the application without having to wait the tests to be run, just add the parameter
-`-D skipTests`
+`-D skipTests` (except for the `spring-boot:run` test method, that does not run the tests by default)
 
 ## Through IDE
 By simply running the `main` method available in the
@@ -67,4 +67,4 @@ libraries or not (`true` or `false`)
 
 * `APPLICATION_OMDBAPI_KEY`: OMDB API token, needed to be able to retrieve the Movie Source Data from the external Service
 
-[**Return to main document**](https://github.com/daniel-chiuratto-seabra/movieapi)
+[**Return to main document**](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/README.md)

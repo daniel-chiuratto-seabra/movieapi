@@ -32,6 +32,10 @@ spring:
     generate-ddl: true # Vendor-agnostic parameter to set to JPA to create the schema for other JPA based libraries
   datasource:
     url: jdbc:h2:mem:moviedb;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE,YEAR,USER # Datasource URL related to the database to connect with
+  properties:
+    dialect:
+      hiberante:
+        dialect: org.hibernate.dialect.H2Dialect # This DB dialect is set by default, but is set here to facilitate future changes with other DBs
 
 logging:
   level:
