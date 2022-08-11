@@ -2,6 +2,7 @@ package nl.backbase.security.filter;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import nl.backbase.dto.UserDTO;
 import nl.backbase.security.JWTMovieAuthenticationManager;
 import nl.backbase.security.service.TokenAuthenticationService;
@@ -31,6 +32,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
  * @author Daniel Chiuratto Seabra
  * @since 03/08/2022
  */
+@Slf4j
 public class JWTSignInFilter extends AbstractAuthenticationProcessingFilter {
 
     private final TokenAuthenticationService tokenAuthenticationService;
@@ -87,6 +89,7 @@ public class JWTSignInFilter extends AbstractAuthenticationProcessingFilter {
         // instance, to be set as a "Subject" claim for the JWT generation
         final var token = this.tokenAuthenticationService.buildJWTToken(authentication.getName());
         // Lastly the Authorization header is added in the response, with the token prefixed by the "Bearer" name
+        log.debug("Signing In User: {}", authentication.getName());
         response.addHeader(AUTHORIZATION, BEARER_TOKEN_PREFIX + " " + token);
     }
 }

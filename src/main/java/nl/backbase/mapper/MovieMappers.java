@@ -36,7 +36,7 @@ public class MovieMappers {
 
     /**
      * This method parses a {@link MovieEntity} instance to {@link BestPictureMovieDTO}, used when
-     * {@link MovieRestController#bestpicture(String)} is called to parse the {@link MovieEntity} into a
+     * {@link MovieRestController#bestPicture(String)} is called to parse the {@link MovieEntity} into a
      * {@link BestPictureMovieDTO} to return to the user
      *
      * @param movieEntity {@link MovieEntity} instance

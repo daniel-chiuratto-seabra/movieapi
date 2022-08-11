@@ -33,6 +33,9 @@ public class ValueParserHelper {
      *
      * @param inputStream {@link InputStream} containing the content to be converted by {@code OpenCSV}
      * @return {@link Collection<CSVData>} instance with the parsed values
+     *
+     * @author Daniel Chiuratto Seabra
+     * @since 05/08/2022
      */
     public static Collection<CSVData> getCSVDataCollectionFromInputStream(final InputStream inputStream) {
         try (final Reader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -58,6 +61,9 @@ public class ValueParserHelper {
      *
      * @param boxOffice {@link String} instance containing the {@code Box Office} value that comes from the external Movie API Service
      * @return {@link BigDecimal} parsed value representing the {@code Box Office}
+     *
+     * @author Daniel Chiuratto Seabra
+     * @since 05/08/2022
      */
     public static BigDecimal getBigDecimalFromString(final String boxOffice) {
         try {

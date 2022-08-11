@@ -1,21 +1,25 @@
 package nl.backbase.controller;
 
-import nl.backbase.IntegrationTest;
-import nl.backbase.dto.RatingRequestDTO;
-import nl.backbase.dto.source.MovieSourceDTO;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.*;
-
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Map;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import nl.backbase.IntegrationTest;
+import nl.backbase.dto.RatingRequestDTO;
+import nl.backbase.dto.source.MovieSourceDTO;
 
 /**
  * This {@link IntegrationTest} implementation, runs an integration test focusing in the "/v1/rating" endpoint, testing
@@ -24,7 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Daniel Chiuratto Seabra
  * @since 07/08/2022
  */
-class RatingRestControllerTest extends IntegrationTest {
+@SuppressWarnings("unchecked") 							 // The Mock RestTemplate is not working with specific
+class RatingRestControllerTest extends IntegrationTest { // values so generalized settings needs to be set in
+														 // order to make it return a simulated fake response,
+														 // that is why the suppression above
 
     @Test
     @DisplayName("GIVEN a Rating to be posted by the Fake User that does not exist in the database " +

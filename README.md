@@ -5,12 +5,14 @@ Movie API
 
 This project is a result of the Backbase assessment process, where the following requirement has been asked:
 
+
 ### `Overview`
 ```
 The application should Indicate whether a movie won a “Best Picture” Oscar, given a movie’s title based on this API and this CSV file that
 contains winners from 1927 until 2010. It should also allow users to give a rating to movies and provide a list of 10 top-rated movies ordered by
 box office value.
 ```
+
 
 ### `Solution`
 ```
@@ -41,13 +43,38 @@ your assumptions when solving the challenge
 a description of how it will scale when the number of users/agents/consumers grows from 100 per day to 10000000 per day,
 and what changes would have to be made to keep the same quality of service
 
+
 ## Requirements to run the application
 
-* _Eclipse_ (not forgetting to install the `Lombok` plugin from the `lombok.jar` file inside the `resources` folder) or
-_IntelliJ Idea_ (does not require any plugin for `Lombok`)
+* IDE
+  * _Eclipse_ (not forgetting to install the `Lombok` plugin from the `lombok.jar` file inside the `resources` folder)
+  * _IntelliJ Idea_ (does not require any plugin for `Lombok`)
 
 * Maven 3.8.4
 
 * Java 11.0.8+
 
 * Docker 20+
+
+
+## Used Libraries and Frameworks
+
+* Spring Boot
+
+* Spring Data (to allow the use of ORM functionalities with Hibernate)
+
+* Spring Validation (for payload validation)
+
+* Spring Doc OpenAPI UI (to provide Swagger-UI under OpenAPI `developemt profile only`)
+
+* Spring Security (to deal with JWT Token authentication process)
+
+* JJWT (to generate the JWT Token)
+
+* OpenCSV (to deserialize data from the CSV File that is loaded while starting the application)
+
+* H2 In-Memory Database (to allow easy access to database for development)
+
+* Lombok (to deal with boilerplate code through annotations)
+  
+* A `GitHub` workflow file has been added (`.github/workflows/test-execution.yaml`) in order to trigger test builds when commits are pushed into repository

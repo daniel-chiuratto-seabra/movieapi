@@ -131,15 +131,20 @@ public class MovieService {
      */
     private MovieEntity getMovieEntityByMovieTitle(final String movieTitle, final boolean isToSave) throws MovieNotFoundException {
         // First the Movie Title is searched in the database
+        log.debug("Searching movie '{}' in the database", movieTitle);
         var movieEntity = this.movieRepository.findByTitleIgnoreCase(movieTitle);
         if (movieEntity == null) {
+            log.trace("Movie '{}' not found in the database, requesting Movie source service", movieTitle);
             // In case the Movie does not exist in the database, then it is requested in the external Movie Source API
             final var movieSourceDTO = this.movieSourceService.getMovieSourceDTO(this.apiKey, movieTitle);
             if (movieSourceDTO != null) {
+                log.trace("Movie '{}' found in the external Movie source API", movieSourceDTO.getTitle());
                 // If the Movie source API returns a Movie data, then it is parsed into MovieEntity and returned to the
                 // caller
+                log.trace("Mapping returned MovieSourceDTO to MovieEntity for further database storage");
                 movieEntity = this.movieMappers.movieSourceDTOToMovieEntity(movieSourceDTO);
                 if (isToSave) {
+                    log.trace("Saving the MovieEntity into the MovieRepository: {}", movieEntity);
                     this.movieRepository.save(movieEntity);
                 }
             } else {
@@ -217,15 +222,18 @@ public class MovieService {
                 final var movieEntityCollection = new ArrayList<MovieEntity>();
                 // Now the Collection that contains the CSVData elements will be iterated
                 csvCollection.forEach(csvMovie -> {
+                    log.trace("Retrieving the movie '{}' from the database", csvMovie.getNominee());
                     // First the corresponding movie is retrieved from the Movie Repository
                     var movieEntity = this.movieRepository.findByTitleIgnoreCase(csvMovie.getNominee());
                     // If the movie does not exist in the database then the external Movie Source API is used
                     if (movieEntity == null) {
+                        log.trace("Movie '{}' not found in the database, requesting data from the external Movie source API", csvMovie.getNominee());
                         // A request is made through the Movie Source Service, passing the API key and the Movie Title
                         final var movieSourceDTO = this.movieSourceService.getMovieSourceDTOFromCSVFile(this.apiKey, csvMovie.getNominee(), csvMovie.getAdditionalInfo());
                         // Then the representation of the external API that is MovieSourceDTO is parsed into MovieEntity to be able to be saved
                         // into the database
                         if (movieSourceDTO != null) {
+                            log.trace("Movie '{}' found in the external Movie source API", movieSourceDTO.getTitle());
                             movieEntity = this.movieMappers.movieSourceDTOToMovieEntity(movieSourceDTO);
                             // The entity has the bestPictureOscarWinner property set to true, since that all movies that came from the CSV file
                             // were already filtered as Best Picture Oscar winners

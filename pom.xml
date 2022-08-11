@@ -58,11 +58,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
@@ -100,7 +95,7 @@
 					<resource>
 						<directory>src/main/resources</directory>
 						<excludes>
-							<!-- For development buildings, there is no need for the production application file be packed -->
+							<!-- For development buildings, there is no need for the production application file to be packed -->
 							<exclude>**/application-**.yaml</exclude>
 							<!-- The Eclipse Lombok JAR never should be packed -->
 							<exclude>**/lombok.jar</exclude>
@@ -145,7 +140,7 @@
 								</goals>
 								<configuration>
 									<!-- When building for production, the application file should expect values from -->
-									<!-- environment variables -->
+									<!-- environment variables, so the application-prod.yaml needs to be set in the package -->
 									<sourceFile>src/main/resources/application-prod.yaml</sourceFile>
 									<destinationFile>target/classes/application.yaml</destinationFile>
 								</configuration>

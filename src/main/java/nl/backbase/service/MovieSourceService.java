@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.Map.entry;
@@ -53,6 +54,7 @@ public class MovieSourceService {
      * @since 02/08/2022
      */
     public MovieSourceDTO getMovieSourceDTO(final String apiKey, final String movieTitle) {
+        log.trace("Requesting Movie '{}' from the Movie source API", movieTitle);
         return getMovieSourceDTOFromCSVFile(apiKey, movieTitle, null);
     }
 
@@ -92,6 +94,7 @@ public class MovieSourceService {
         try {
             // Then the exchange is actually called as a GET request with the parameters built by the RestTemplate itself (the "this.movieSourceApiUrl + urlParams" concatenation
             // actually concatenates placeholders and not values, the values will be set by RestTemplate, where they are available in the "urlParametersMap" set below)
+            log.trace("Requesting the Movie data from the Movie source API using the following: {}", urlParametersMap.entrySet().stream().map(logMap()).collect(Collectors.joining(", ")));
             var responseEntity = this.restTemplate.exchange(this.movieSourceApiUrl + urlParams, HttpMethod.GET, httpEntity, MovieSourceDTO.class, urlParametersMap);
             // If the server responds with Http Status OK we move forward, otherwise a MovieSourceServiceException is thrown because something went wrong with the request
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -99,6 +102,7 @@ public class MovieSourceService {
                 var movieSourceDTO = responseEntity.getBody();
                 // Below we verify if the variable above is not null (just to be sure to not have a horrible NullPointerException)
                 // and verify the "getResponse" if it is also different of Null, again to avoid a NullPointerException
+                log.trace("Requested returned as OK");
                 if (movieSourceDTO != null && movieSourceDTO.getResponse() != null) {
                     // Bellow we verify the getResponse value returned by the external API. When True means that the
                     // requested movie exists. When False the requested movie does not exist in their system. Using this
@@ -108,6 +112,7 @@ public class MovieSourceService {
                     // it returns the "The Metro-Goldwyn-Mayer Story" movie
                     if (Boolean.parseBoolean(movieSourceDTO.getResponse()) && movieSourceDTO.getTitle().equalsIgnoreCase(movieTitle)) {
                         // If it is all okay, then the MovieSourceDTO with the Movie data is returned
+                        log.trace("Consuming the payload: {}", movieSourceDTO);
                         return movieSourceDTO;
                     } else if (!Boolean.parseBoolean(movieSourceDTO.getResponse()) && additionalInfo != null) {
                         // This weird flow is to attend the scenarios where the Movie name is not in the Nominee column in the CSV file,
@@ -157,8 +162,21 @@ public class MovieSourceService {
      *                                                    get parameters in the URL
      * @return {@link String} representing the parameters to be concatenated in the URL in the GET request with the values
      * as placeholders
+     *
+     * @author Daniel Chiuratto Seabra
+     * @since 05/08/2022
      */
     private String buildParamsPlaceholders(final Map<String, String> urlParametersMap) {
         return "?" + urlParametersMap.keySet().stream().map(s -> String.format("%s={%s}", s, s)).collect(Collectors.joining("&"));
+    }
+
+    /**
+     * This method returns a lambda used to filter the api key value from the trace log, hidding it
+     *
+     * @author Daniel Chiuratto Seabra
+     * @since 11/08/2022
+     */
+    private Function<Map.Entry<String, String>, String> logMap() {
+        return entry -> String.format("%s: %s", entry.getKey(), API_KEY_PARAM_NAME.equals(entry.getKey()) ? "<HIDDEN>" : entry.getValue());
     }
 }

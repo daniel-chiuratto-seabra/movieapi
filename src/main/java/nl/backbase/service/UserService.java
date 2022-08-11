@@ -1,6 +1,7 @@
 package nl.backbase.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nl.backbase.controller.exception.UserAlreadyExistException;
 import nl.backbase.dto.UserDTO;
 import nl.backbase.mapper.UserMappers;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
  * @author Daniel Chiuratto Seabra
  * @since 02/08/2022
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -33,6 +35,7 @@ public class UserService {
      */
     public void saveUserDTO(final UserDTO userDTO) {
         // Before saving the User, it is verified if it already exists
+        log.debug("Searching user '{}' in the database", userDTO.getUsername());
         var userEntity = this.userRepository.findByUsername(userDTO.getUsername());
         if (userEntity != null) {
             // If the User already exists, then a UserAlreadyExistException is thrown, where this flow
@@ -41,6 +44,7 @@ public class UserService {
         }
         // If the User does not exist in the system yet, then it is parsed into
         // a UserEntity
+        log.debug("User '{}' not found in the database, creating a new one and saving into the database", userDTO.getUsername());
         userEntity = this.userMappers.userDTOToUserEntity(userDTO);
         // Then it is saved into the repository
         this.userRepository.save(userEntity);

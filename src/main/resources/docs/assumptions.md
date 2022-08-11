@@ -23,7 +23,4 @@ ordering by the rated average ones
 for production an external database should be used instead, even to allow elasticity since more than one API instance
 should be able to reach the same database (directly or non-directly, depending on the architecture choice)
 
-* Despite the choice of using `H2` for development, it would be good also maybe to implement `Testcontainers` with the
-Integration Tests to trigger external databases for testing purposes in a scenario more similar than production
-
 [**Return to main document**](https://github.com/daniel-chiuratto-seabra/movieapi/blob/main/README.md)

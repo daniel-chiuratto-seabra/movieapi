@@ -1,6 +1,7 @@
 package nl.backbase.mapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nl.backbase.dto.UserDTO;
 import nl.backbase.model.UserEntity;
 import nl.backbase.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
  * @author Daniel Chiuratto Seabra
  * @since 04/08/2022
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UserMappers {
@@ -34,9 +36,11 @@ public class UserMappers {
      */
     public UserEntity userDTOToUserEntity(final UserDTO userDTO) {
         if (userDTO == null) { return null; }
+        log.debug("Parsing the UserDTO entity: {}", userDTO);
         final var userEntity = new UserEntity();
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setPassword(this.passwordEncoder.encode(userDTO.getPassword()));
+        log.trace("Returning the parsed UserEntity: {}", userEntity);
         return userEntity;
     }
 }

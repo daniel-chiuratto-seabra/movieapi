@@ -1,7 +1,15 @@
 package nl.backbase.service;
 
-import nl.backbase.controller.exception.MovieSourceServiceException;
-import nl.backbase.dto.source.MovieSourceDTO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,15 +22,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
+import nl.backbase.controller.exception.MovieSourceServiceException;
+import nl.backbase.dto.source.MovieSourceDTO;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-class MovieSourceServiceTest {
+@SuppressWarnings("unchecked") // The Mock RestTemplate is not working with specific
+class MovieSourceServiceTest { // values so generalized settings needs to be set in
+							   // order to make it return a simulated fake response,
+							   // that is why the suppression above
 
     private MovieSourceService movieSourceService;
 
@@ -35,7 +41,7 @@ class MovieSourceServiceTest {
         this.movieSourceService = new MovieSourceService(fakeMovieSourceAPIURL, this.mockRestTemplate);
     }
 
-    @Test
+	@Test
     @DisplayName("GIVEN a MovieSourceService with fake and mocked dependencies " +
                   "WHEN the getMovieSourceDTOFromCSVFile is called with fake values " +
                    "AND the RestTemplate exchange method throws a HttpClientErrorException " +
