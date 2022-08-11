@@ -1,5 +1,5 @@
-Solution Description
-====================
+# Solution Description
+
 This application is a basic API, that receives requests from users, and depending on the operation to be made, it
 consumes data from an external API service that provides additional data about the requested Movie title. The API
 contains 5 endpoints: `/v1/signup` (for signing up), `/v1/signin` (for signing in), `/v1/movie/bestpicture` (to  request

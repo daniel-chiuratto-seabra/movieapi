@@ -76,5 +76,8 @@ and what changes would have to be made to keep the same quality of service
 * H2 In-Memory Database (to allow easy access to database for development)
 
 * Lombok (to deal with boilerplate code through annotations)
+
+* `copy-rename-maven-plugin` plugin to allow copying and renaming the `application-prod.yaml` file while packing to a
+`Production` `JAR` and also when building a `Docker image` for `Production`
   
 * A `GitHub` workflow file has been added (`.github/workflows/test-execution.yaml`) in order to trigger test builds when commits are pushed into repository

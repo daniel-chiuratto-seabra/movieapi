@@ -57,4 +57,4 @@ api:
 
 omdbapi:
   api:
-    key: f06bd2c1 # OMDB API token, needed to be able to retrieve the Movie Source Data from the external Service
+    key: <OMDB-TOKEN> # OMDB API token, needed to be able to retrieve the Movie Source Data from the external Service

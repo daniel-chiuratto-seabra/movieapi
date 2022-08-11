@@ -18,6 +18,9 @@ public class MovieApplication {
 	/**
 	 * This is the actual main method where the application is started
 	 *
+	 * ATTENTION: BEFORE RUNNING, PLEASE TAKE A LOOK AT THE "how_to_run.md" DOCUMENTATION FILE, SINCE THE OMDB API TOKEN
+	 * NEEDS TO BE SET FIRST, OTHERWISE AN ERROR WILL BE THROWN DURING STARTUP
+	 *
 	 * @param args {@link String[]} instance containing args that can be passed when starting the application
 	 *
 	 * @author Daniel Chiuratto Seabra

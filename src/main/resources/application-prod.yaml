@@ -4,7 +4,7 @@ movie:
 
 springdoc:
   api-docs:
-    enabled: false true # Setting Swagger-UI to not be accessible
+    enabled: false # Setting Swagger-UI to not be accessible
 
 security:
   jwt:
